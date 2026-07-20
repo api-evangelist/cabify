@@ -1,0 +1,48 @@
+generated: '2026-07-18'
+method: searched
+source: https://developers.cabify.com/docs/get-your-access-token
+docs: https://developers.cabify.com/docs/getting-started
+summary:
+  types:
+  - oauth2
+  - http
+  oauth2_flows:
+  - clientCredentials
+  http_schemes:
+  - bearer
+model: >-
+  Cabify uses OAuth2 client-credentials. Admin users generate an OAUTH_ID (client_id) and
+  CLIENT_SECRET from the Cabify Business admin panel (Integration section). Clients exchange these
+  for a short-lived Bearer access token, then send it on every request in the Authorization header.
+  The same credentials work for both the Ride-Hailing and Logistics APIs; production and sandbox are
+  independent environments with independent credentials.
+token_endpoint:
+  production: https://cabify.com/auth/api/authorization
+  sandbox: https://cabify-sandbox.com/auth/api/authorization
+  grant_type: client_credentials
+  request: 'POST grant_type=client_credentials&client_id=OAUTH_ID&client_secret=SECRET'
+  response_fields:
+  - token_type (Bearer)
+  - access_token
+  - expires_in (seconds; ~30 days)
+token_revocation:
+  method: DELETE
+  endpoint: /auth/api/authorization
+  header: 'Authorization: Bearer <token>'
+  success: 204
+request_header: 'Authorization: Bearer <access_token>'
+notes: >-
+  Token refresh logic is client-side: create a new token before expires_in elapses. The underlying
+  OpenAPI securitySchemes are declared as http/bearer (access_token for Ride-Hailing, bearer_token
+  for Logistics); the client-credentials issuance flow is documented in the developer portal.
+schemes:
+- name: access_token
+  type: http
+  scheme: bearer
+  sources:
+  - openapi/cabify-ride-hailing-openapi.yml
+- name: bearer_token
+  type: http
+  scheme: bearer
+  sources:
+  - openapi/cabify-logistics-openapi.yml
