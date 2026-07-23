@@ -1,0 +1,634 @@
+openapi: 3.0.0
+info:
+  description: 'Welcome to the Cabify Logistics API. This API allows you to create and manage parcel deliveries, track their status in real time, configure proof of delivery options, and receive live updates via webhooks. All requests must be authenticated using a Bearer token.
+
+    '
+  version: 1.0.0
+  title: Cabify Logistics delivery webhooks API
+  contact:
+    email: p.delivery@cabify.com
+servers:
+- url: https://logistics.api.cabify.com
+  description: Production
+- url: https://logistics.api.cabify-sandbox.com
+  description: Sandbox
+tags:
+- name: webhooks
+  description: 'Subscribe to event-driven notifications to receive live updates about parcel status changes, location updates, and proof of delivery codes.
+
+    '
+paths:
+  /v1/webhooks/{hook}:
+    delete:
+      tags:
+      - webhooks
+      summary: Unsubscribe from a webhook.
+      description: Removes the webhook subscription for the specified event type.
+      operationId: deleteWebhook
+      parameters:
+      - in: path
+        name: hook
+        description: The event type to unsubscribe from.
+        required: true
+        schema:
+          type: string
+          enum:
+          - parcel
+          - parcelLocation
+          - proofCodeGenerated
+      responses:
+        '200':
+          description: Webhook subscription removed successfully.
+        '401':
+          description: Unauthorized. Missing or invalid authentication token.
+      security:
+      - bearer_token: []
+  /v1/webhooks:
+    get:
+      tags:
+      - webhooks
+      summary: List your active webhook subscriptions.
+      description: Returns all active webhook subscriptions registered for your account.
+      operationId: getWebhook
+      responses:
+        '200':
+          description: Webhook subscriptions retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ResponseWebhookSubscriptions'
+        '401':
+          description: Unauthorized. Missing or invalid authentication token.
+      security:
+      - bearer_token: []
+    post:
+      tags:
+      - webhooks
+      summary: Subscribe to parcel update notifications.
+      description: "Register a webhook to receive real-time notifications when parcels are updated.\n\n**Securing your webhook endpoint:**\n1. Include a custom authorization header in the subscription request. Our API will forward\n   it with every notification:\n   ```\n   Authorization: Bearer <your-auth-token>\n   ```\n2. For enhanced security using OAuth (client credentials), contact us to set up authentication\n   with a `clientId` and `clientSecret`.\n"
+      operationId: subscribeWebhook
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/WebhookSubscription'
+        description: The webhook subscription details, including the event type and your callback URL.
+        required: true
+      responses:
+        '201':
+          description: Webhook subscription created successfully.
+        '400':
+          description: Bad request. One or more fields failed validation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RequestError'
+        '401':
+          description: Unauthorized. Missing or invalid authentication token.
+      security:
+      - bearer_token: []
+      callbacks:
+        parcel:
+          '{$request.body#/callback_url}':
+            post:
+              parameters:
+              - in: header
+                name: '{$request.body#/headers/name}'
+                schema:
+                  type: string
+              - in: header
+                name: '{$request.body#/headers/value}'
+                schema:
+                  type: string
+              requestBody:
+                content:
+                  application/json:
+                    schema:
+                      $ref: '#/components/schemas/ParcelStatusHook'
+              responses:
+                '200':
+                  description: Success
+        parcelLocation:
+          '{$request.body#/callback_url}':
+            post:
+              parameters:
+              - in: header
+                name: '{$request.body#/headers/name}'
+                schema:
+                  type: string
+              - in: header
+                name: '{$request.body#/headers/value}'
+                schema:
+                  type: string
+              requestBody:
+                content:
+                  application/json:
+                    schema:
+                      $ref: '#/components/schemas/ParcelLocation'
+              responses:
+                '200':
+                  description: Success
+        proofCodeGenerated:
+          '{$request.body#/callback_url}':
+            post:
+              parameters:
+              - in: header
+                name: '{$request.body#/headers/name}'
+                schema:
+                  type: string
+              - in: header
+                name: '{$request.body#/headers/value}'
+                schema:
+                  type: string
+              requestBody:
+                content:
+                  application/json:
+                    schema:
+                      $ref: '#/components/schemas/ProofCodeGenerated'
+              responses:
+                '200':
+                  description: Success
+components:
+  schemas:
+    AssetKind:
+      type: string
+      description: The type of vehicle assigned to carry the parcel.
+      enum:
+      - bicycle
+      - car
+      - moped
+      - scooter
+      - van
+    ResponseWebhookSubscription:
+      type: object
+      required:
+      - id
+      - callback_url
+      - hook
+      properties:
+        id:
+          type: number
+          description: Internal identifier of the webhook subscription.
+        hook:
+          type: string
+          enum:
+          - parcel
+          description: The event type this subscription listens to. Receive a notification for every individual parcel status change.
+        callback_url:
+          type: string
+          format: uri
+          example: http://example.com/your/callback/here
+          description: Your endpoint URL. The API will send a POST request to this URL each time the subscribed event occurs.
+        headers:
+          type: array
+          items:
+            $ref: '#/components/schemas/Header'
+          description: Custom headers included in every webhook request (e.g. for authentication).
+    PickupFailed:
+      type: object
+      description: '**Deprecated.** Use `pickup_attempt` instead. Details of a failed pickup attempt.
+
+        '
+      properties:
+        reason:
+          type: string
+          description: 'Reason why the pickup failed. See [pickup failed reasons](https://developers.cabify.com/reference/parcel-information#pickup-failed-reason) for a description of each value.
+
+            '
+          enum:
+          - sender_no_show
+          - sender_too_late
+          - address_wrong
+          - address_not_found
+          - address_unsafe
+          - parcel_suspicious
+          - parcel_packaging
+          - parcel_too_big_or_heavy
+          - payment_requested
+          - payment_fake
+          - other_with_feedback
+          - place_closed
+          - delivery_not_found
+          - already_picked_up
+          - delivery_cancelled
+          example: address_wrong
+        failed_at:
+          type: string
+          format: date-time
+          description: Timestamp of the failed pickup event, formatted according to RFC 3339, section 5.6.
+          example: '2021-12-02T10:12:07.753Z'
+        driver_comments:
+          type: string
+          description: Comments left by the driver explaining why the pickup failed.
+          example: can't find the address
+    ParcelStatusHook:
+      type: object
+      description: Payload sent to your webhook callback URL whenever a parcel's status changes.
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: System-generated UUID for this parcel.
+          example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+        external_id:
+          type: string
+          description: Your own identifier for this parcel, as provided when the parcel was created.
+          example: parcel_001
+        event_time:
+          type: string
+          format: date-time
+          description: Timestamp when the parcel state change occurred, formatted according to RFC 3339, section 5.6.
+          example: '2021-12-02T10:12:07.753Z'
+        state:
+          type: string
+          description: 'The current lifecycle state of the parcel. See [parcel states](https://developers.cabify.com/reference/logistics-introduction#parcel) for a full description of each value.
+
+            '
+          enum:
+          - ready
+          - qualifiedforpickup
+          - pickingup
+          - intransit
+          - delivering
+          - delivered
+          - returning
+          - returned
+          - incident
+          - requestercancel
+          - internalcancel
+          - pickupfailed
+          - onroutetopickup
+          - readytopickup
+          - onroutetofinalhub
+          - receivedonfinalhub
+          - readytodispatch
+          - onroutetodelivery
+          - undelivered
+          - onroutetoreturn
+          - returnrejected
+        failure_reason:
+          type: string
+          description: 'If present, indicates why the delivery was rejected. See [failure reasons](https://developers.cabify.com/reference/parcel-information#failure-reason) for a description of each value.
+
+            '
+          enum:
+          - unknown
+          - payment_method_declined
+          - no_payment_methods
+          - requester_not_found_or_unauthorized
+          - product_does_not_exist
+          - invalid_pick_up_location
+          - delivery_already_exist
+        delivery_attempt:
+          type: object
+          properties:
+            id_proof_of_delivery:
+              type: object
+              nullable: true
+              properties:
+                recipient_name:
+                  type: string
+                  description: Name of the person who received the parcel.
+                  example: Francisco
+                recipient_id_number:
+                  type: string
+                  example: 11111111T
+                  description: Identity document number of the person who received the parcel.
+            photo_proof_of_delivery:
+              type: object
+              nullable: true
+              properties:
+                photo_urls:
+                  type: array
+                  items:
+                    type: string
+                  description: List of URLs of the photos taken by the driver as proof of delivery.
+                photo_url:
+                  type: string
+                  example: https://s3.amazon.com/photo.jpg
+                  description: URL of the first photo taken by the driver as proof of delivery. Deprecated — use `photo_urls` instead.
+            comment_proof_of_delivery:
+              type: object
+              nullable: true
+              properties:
+                comment:
+                  type: string
+                  example: El paquete se ha dejado en la puerta
+                  description: Comment left by the driver as proof of delivery.
+            fail_reason:
+              type: string
+              description: 'Reason the delivery attempt failed. See [delivery attempt fail reasons](https://developers.cabify.com/reference/parcel-information#delivery-attempt-fail-reason) for a description of each value.
+
+                '
+              enum:
+              - recipient_not_found
+              - rejected
+              - wrong_address
+              - zone_unsafe
+              - invalid_proof
+              - other
+              - invalid
+              - parcel_lost
+              - parcel_unreadable_barcode
+              - parcel_damaged
+              - parcel_stolen
+              - no_delivery_attempt
+              - postponed_by_customer
+              - place_closed
+              - no_keyword
+              - fraud_suspected
+              - unknown
+            support_ticket:
+              type: string
+              nullable: true
+              description: ID of the support ticket opened by the driver when an incident occurs.
+            address:
+              type: string
+              nullable: true
+              description: Address where the delivery was attempted.
+            feedback:
+              type: string
+              nullable: true
+              description: Feedback provided by the driver when the parcel could not be delivered.
+        tracking:
+          type: object
+          nullable: true
+          properties:
+            eta_to_accept:
+              type: integer
+              nullable: true
+              description: Estimated time in seconds until a driver is assigned to this delivery.
+              example: 90
+            location:
+              type: object
+              nullable: true
+              properties:
+                lat:
+                  type: number
+                  format: float
+                  example: 40.4489254
+                lon:
+                  type: number
+                  format: float
+                  example: -3.6730293
+            routes:
+              type: object
+              properties:
+                pick_up:
+                  description: Information about the route from the driver position to the pickup point. Available before the parcel has been picked up.
+                  allOf:
+                  - $ref: '#/components/schemas/ParcelStatusRoute'
+                drop_off:
+                  description: Information about the route from the pickup point to the drop-off destination.
+                  allOf:
+                  - $ref: '#/components/schemas/ParcelStatusRoute'
+            tracking_url:
+              type: string
+              description: Public URL where the parcel's live tracking can be viewed.
+        asset:
+          $ref: '#/components/schemas/Asset'
+        driver:
+          type: object
+          nullable: true
+          description: Information about the assigned driver. Only present once a driver has been assigned.
+          properties:
+            photo_url:
+              type: string
+              description: URL of the driver's profile photo.
+              example: https://s3.amazon.com/photo.jpg
+            name:
+              type: string
+              description: Driver's full name.
+              example: Pepe
+            phone:
+              type: string
+              description: Driver's contact phone number.
+              example: '+34658478854'
+        pickup_failed:
+          deprecated: true
+          allOf:
+          - $ref: '#/components/schemas/PickupFailed'
+        pickup_attempt:
+          $ref: '#/components/schemas/PickupAttempt'
+    CommentProofOfPickUp:
+      type: object
+      description: Written note left by the driver as confirmation of the pickup.
+      properties:
+        comment:
+          type: string
+          description: Comment left by the driver at the time of pickup.
+    ParcelStatusRoute:
+      type: object
+      description: Route information between two points during a delivery.
+      required:
+      - eta
+      - path
+      properties:
+        eta:
+          type: integer
+          example: 120
+          description: Estimated time of arrival in seconds.
+        path:
+          type: string
+          example: fhdsa98fha87sdfhas76dgf8a
+          description: Encoded polyline representing the route path.
+    ParcelLocation:
+      type: object
+      description: Payload sent to your webhook callback URL with the driver's real-time location.
+      required:
+      - parcel_id
+      - location
+      - state
+      properties:
+        parcel_id:
+          type: string
+          format: uuid
+          description: UUID of the parcel being tracked.
+          example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+        external_id:
+          type: string
+          description: Your own identifier for this parcel, as provided when the parcel was created.
+          example: parcel_001
+        location:
+          type: object
+          description: Current location of the driver carrying the parcel.
+          required:
+          - latitude
+          - longitude
+          properties:
+            latitude:
+              type: number
+              format: float
+              description: Latitude in decimal degrees.
+              example: 40.4489254
+            longitude:
+              type: number
+              format: float
+              description: Longitude in decimal degrees.
+              example: -3.6730293
+        state:
+          type: string
+          description: Indicates whether the driver is on the way to collect the parcel or has already picked it up.
+          enum:
+          - onroutetopickup
+          - intransit
+    Header:
+      type: object
+      required:
+      - name
+      - value
+      properties:
+        name:
+          type: string
+          description: Header name
+          example: Authorization
+        value:
+          type: string
+          description: Header value
+          example: Bearer 000111222333444
+    WebhookSubscription:
+      type: object
+      required:
+      - callback_url
+      - hook
+      properties:
+        hook:
+          type: string
+          enum:
+          - parcel
+          - parcelLocation
+          - proofCodeGenerated
+          description: 'The event type to subscribe to: - `parcel`: Triggered on every parcel status change. - `parcelLocation`: Triggered when the driver''s location is updated. - `proofCodeGenerated`: Triggered when a proof of delivery code is generated for a parcel.
+
+            '
+        callback_url:
+          type: string
+          format: uri
+          example: http://example.com/your/callback/here
+          description: Your endpoint URL. The API will send a POST request to this URL each time the subscribed event occurs.
+        headers:
+          type: array
+          items:
+            $ref: '#/components/schemas/Header'
+          description: Custom headers to include in every webhook request sent to your endpoint (e.g. for authentication).
+    RequestError:
+      type: object
+      description: Standard error response body returned when a request fails.
+      required:
+      - errors
+      properties:
+        errors:
+          type: array
+          description: List of human-readable error messages describing what went wrong.
+          items:
+            type: string
+    PickupAttempt:
+      type: object
+      description: Details of a pickup attempt, whether successful or not.
+      required:
+      - status
+      - attempted_at
+      - address
+      properties:
+        fail_reason:
+          type: string
+          description: 'If the attempt was unsuccessful, the reason why it failed. See [pickup failed reasons](https://developers.cabify.com/reference/parcel-information#pickup-failed-reason) for a description of each value.
+
+            '
+          enum:
+          - sender_no_show
+          - sender_too_late
+          - address_wrong
+          - address_not_found
+          - address_unsafe
+          - parcel_suspicious
+          - parcel_packaging
+          - parcel_too_big_or_heavy
+          - payment_requested
+          - payment_fake
+          - other_with_feedback
+          - place_closed
+          - delivery_not_found
+          - already_picked_up
+          - delivery_cancelled
+        status:
+          type: string
+          description: Outcome of the pickup attempt.
+          enum:
+          - PickupAttemptStatusPickedUp
+          - PickupAttemptStatusPickupFailed
+        attempted_at:
+          type: string
+          format: date-time
+          description: Timestamp of the pickup attempt, formatted according to RFC 3339, section 5.6.
+          example: '2021-12-02T10:12:07.753Z'
+        address:
+          type: string
+          description: Address where the pickup attempt was made.
+          example: Calle de la Princesa, 1, 28008 Madrid
+        feedback:
+          type: string
+          description: Comments left by the driver about the pickup attempt.
+          example: can't find the address
+        photo_proof_of_pickup:
+          $ref: '#/components/schemas/PhotoProofOfPickUp'
+        comment_proof_of_pickup:
+          $ref: '#/components/schemas/CommentProofOfPickUp'
+    PhotoProofOfPickUp:
+      type: object
+      description: Photo evidence captured by the driver at the pickup location.
+      properties:
+        photo_urls:
+          type: array
+          description: List of URLs to the photos taken by the driver during pickup.
+          items:
+            type: string
+            format: url
+    ResponseWebhookSubscriptions:
+      type: object
+      required:
+      - subscriptions
+      properties:
+        subscriptions:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResponseWebhookSubscription'
+    Asset:
+      type: object
+      description: Details of the vehicle assigned to the delivery.
+      properties:
+        reg_plate:
+          type: string
+          nullable: true
+          description: Vehicle registration plate number.
+          example: 1111AAA
+        name:
+          type: string
+          description: Vehicle model name.
+          example: Audi A3
+        color:
+          type: string
+          description: Vehicle color.
+          example: black
+        asset_kind:
+          $ref: '#/components/schemas/AssetKind'
+    ProofCodeGenerated:
+      type: object
+      description: Payload sent to your webhook callback when a proof of delivery code is generated for a parcel.
+      required:
+      - parcel_id
+      - code
+      properties:
+        parcel_id:
+          type: string
+          format: uuid
+          description: UUID of the parcel this code was generated for.
+          example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+        code:
+          type: string
+          description: Four-digit code generated for the delivery. The recipient must provide this code to the driver to confirm receipt.
+          example: '1234'
+  securitySchemes:
+    bearer_token:
+      type: http
+      scheme: bearer

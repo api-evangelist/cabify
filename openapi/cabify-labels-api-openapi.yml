@@ -1,0 +1,364 @@
+openapi: 3.0.0
+info:
+  description: 'Welcome to the Cabify Logistics API. This API allows you to create and manage parcel deliveries, track their status in real time, configure proof of delivery options, and receive live updates via webhooks. All requests must be authenticated using a Bearer token.
+
+    '
+  version: 1.0.0
+  title: Cabify Logistics delivery Labels API
+  contact:
+    email: p.delivery@cabify.com
+servers:
+- url: https://logistics.api.cabify.com
+  description: Production
+- url: https://logistics.api.cabify-sandbox.com
+  description: Sandbox
+tags:
+- description: Cabify offers to its clients a feature where the client’s employees have to input a journey motive or a project or a dynamic cost center associated with the new journey before requesting it. This is usually used for financial budgeting and reporting purposes since every journey now comes with this data linked to it, in other words, clients can segment their invoices by these Labels. <br> <br> Since some companies have a lot of Labels (projects/cost centers) that need to be managed they can use our API to do so. We allow creating, modifying, and disabling them directly from, for example, the client’s ERP (SAP, NetSuite, MSDynamics, etc.).
+  name: Labels
+paths:
+  /api/v4/labels:
+    post:
+      callbacks: {}
+      description: Creates a new label.
+      operationId: createLabel
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LabelRequest'
+        description: The Label attributes
+        required: false
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LabelResponse'
+          description: Success
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+          description: Bad request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedRequest'
+          description: Unauthorized
+        '500':
+          content:
+            application/text:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal server error
+      summary: Create a Label
+      tags:
+      - Labels
+    get:
+      callbacks: {}
+      description: Fetch labels paginated
+      operationId: getLabels
+      parameters:
+      - description: Amount of labels for page
+        example: 20
+        in: query
+        name: per
+        schema:
+          default: 20
+          type: integer
+      - description: Number of page to fetch
+        example: 1
+        in: query
+        name: page
+        schema:
+          default: 1
+          type: integer
+      - description: Filter by active Labels. If not set then all Labels are returned
+        example: true
+        in: query
+        name: active
+        schema:
+          type: boolean
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedLabelResponse'
+          description: Success
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+          description: Bad request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedRequest'
+          description: Unauthorized
+        '500':
+          content:
+            application/text:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal server error
+      summary: Get labels paginated
+      tags:
+      - Labels
+    patch:
+      callbacks: {}
+      description: Modify an existing label
+      operationId: updateLabel
+      parameters:
+      - description: Id of the label
+        example: 93aba78c-8876-4a75-ae4d-3d4e31ab8334
+        in: query
+        name: id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LabelUpdateRequest'
+        description: The Label attributes
+        required: false
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LabelResponse'
+          description: Success
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+          description: Bad request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedRequest'
+          description: Unauthorized
+        '500':
+          content:
+            application/text:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal server error
+      summary: Update label
+      tags:
+      - Labels
+  /api/v4/labels/{id}:
+    get:
+      callbacks: {}
+      description: Fetch the label with the given Id
+      operationId: getLabelById
+      parameters:
+      - description: Id of the label
+        example: 93aba78c-8876-4a75-ae4d-3d4e31ab8334
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LabelResponse'
+          description: Success
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+          description: Bad request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedRequest'
+          description: Unauthorized
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFound'
+          description: Not found
+        '500':
+          content:
+            application/text:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal server error
+      summary: Get label by Id
+      tags:
+      - Labels
+components:
+  schemas:
+    NotFound:
+      description: The server did not find a current representation for the target resource
+      example:
+        error: user with provided ID does not exist
+      properties:
+        message:
+          type: string
+      title: NotFound
+      type: object
+    BadRequest:
+      description: Indicates that the server cannot or will not process the request due to something that is perceived to be a client error (for example, malformed request syntax, invalid request message framing, or deceptive request routing).
+      example:
+        error: Bad Request error message
+      properties:
+        message:
+          type: string
+      title: BadRequest
+      type: object
+    InternalServerError:
+      description: indicates that an internal server error occurred
+      example:
+        error: Something went wrong
+      properties:
+        error:
+          type: string
+      title: InternalServerError
+      type: object
+    UnauthorizedRequest:
+      description: The token used is invalid either because it is expired or because it is incorrect.
+      example:
+        error: Unauthorized
+      properties:
+        error:
+          type: string
+      title: UnauthorizedRequest
+      type: object
+    LabelResponse:
+      description: Response schema for single label
+      example:
+        active: true
+        client_id: 5ad782201d2e111dba689aa86d149702
+        description: Cabify label example
+        id: 9a0e2da7-f93a-4b24-bce4-7a8b10d3997a
+        name: ' Name of the Label'
+        slug: name-of-the-label
+      properties:
+        data:
+          $ref: '#/components/schemas/Label'
+      title: LabelResponse
+      type: object
+    LabelRequest:
+      additionalProperties: false
+      description: POST body for creating a label
+      example:
+        active: true
+        description: Some description of the label
+        name: Cabify label example
+      properties:
+        active:
+          description: If false the Label is disabled
+          type: boolean
+        description:
+          description: Description of the Label
+          type: string
+        name:
+          description: Name of the Label
+          type: string
+      required:
+      - name
+      title: LabelRequest
+      type: object
+    LabelUpdateRequest:
+      additionalProperties: false
+      description: Payload for updating a label
+      example:
+        active: true
+        description: Some description of the label
+      properties:
+        active:
+          description: If false the Label is disabled
+          type: boolean
+        description:
+          description: Description of the Label
+          type: string
+      title: LabelUpdateRequest
+      type: object
+    Label:
+      example:
+        active: true
+        client_id: 5ad782201d2e111dba689aa86d149702
+        description: Cabify label example
+        id: 9a0e2da7-f93a-4b24-bce4-7a8b10d3997a
+        name: Name of the Label
+        slug: name-of-the-label
+      properties:
+        active:
+          description: If false the Label is disabled
+          type: boolean
+        client_id:
+          description: client_id owner of the label
+          type: string
+        description:
+          description: Description of the Label
+          type: string
+        id:
+          description: id of the Label. This UUID Version 4 is a universally unique identifier.
+          type: string
+        name:
+          description: Name of the Label
+          type: string
+        slug:
+          description: ' Slug of the Label. Its autogenerated, downcasing all letters, transliterating Unicode characters into alphanumeric strings (e.g. `á` into `a`), stripping punctuation and replacing spaces with `-`'
+          type: string
+      required:
+      - client_id
+      - slug
+      title: Label
+      type: object
+    PaginatedLabelResponse:
+      description: Response schema for a list of labels
+      example:
+        data:
+        - active: true
+          client_id: 5ad782201d2e111dba689aa86d149702
+          description: Cabify label example
+          id: 9a0e2da7-f93a-4b24-bce4-7a8b10d3997a
+          name: ' Name of the Label'
+          slug: name-of-the-label
+        page: 1
+        pages: 1
+        per: 20
+        total: 3
+      properties:
+        data:
+          description: The list of labels
+          items:
+            $ref: '#/components/schemas/Label'
+          type: array
+        page:
+          description: Current page.
+          type: integer
+        pages:
+          description: Number of pages fetched.
+          type: integer
+        per:
+          description: Amount of labels per page.
+          type: integer
+        total:
+          description: total of results.
+          type: integer
+      title: PaginatedLabelResponse
+      type: object
+  securitySchemes:
+    bearer_token:
+      type: http
+      scheme: bearer

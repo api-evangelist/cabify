@@ -1,0 +1,590 @@
+openapi: 3.0.0
+info:
+  description: 'Welcome to the Cabify Logistics API. This API allows you to create and manage parcel deliveries, track their status in real time, configure proof of delivery options, and receive live updates via webhooks. All requests must be authenticated using a Bearer token.
+
+    '
+  version: 1.0.0
+  title: Cabify Logistics delivery users API
+  contact:
+    email: p.delivery@cabify.com
+servers:
+- url: https://logistics.api.cabify.com
+  description: Production
+- url: https://logistics.api.cabify-sandbox.com
+  description: Sandbox
+tags:
+- name: users
+paths:
+  /v1/users:
+    get:
+      tags:
+      - users
+      summary: List users belonging to your account.
+      description: Returns all Cabify users associated with your account.
+      operationId: getUsers
+      responses:
+        '200':
+          description: Users retrieved successfully.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/User'
+        '401':
+          description: Unauthorized. Missing or invalid authentication token.
+        '404':
+          description: No users found for this client.
+        '500':
+          description: An unexpected server error occurred.
+        '503':
+          description: The service is temporarily unavailable. Please try again later.
+      security:
+      - bearer_token: []
+  /api/v4/users:
+    post:
+      callbacks: {}
+      description: Create Users in bulk
+      operationId: createUsers
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUsersRequest'
+        description: Create Users Request
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MutationResponse'
+          description: Success
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+          description: Bad request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedRequest'
+          description: Unauthorized
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal server error
+      summary: Create Users in bulk
+      tags:
+      - users
+    get:
+      callbacks: {}
+      description: Gets multiple Users
+      operationId: getUsers
+      parameters:
+      - description: id of the User, UUIDv4 format without hyphens
+        example: active
+        in: query
+        name: state
+        schema:
+          default: active
+          enum:
+          - active
+          - pending
+          - disabled
+          type: string
+      - description: Number of page to return
+        example: 1
+        in: query
+        name: page
+        schema:
+          default: 1
+          type: number
+      - description: Number of elements per page
+        example: 20
+        in: query
+        name: per
+        schema:
+          default: 20
+          type: number
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PageResponse'
+          description: Success
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+          description: Bad request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedRequest'
+          description: Unauthorized
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal server error
+      summary: Get Users in bulk
+      tags:
+      - users
+    patch:
+      callbacks: {}
+      description: Update Users in bulk
+      operationId: updateUsers
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateUsersRequest'
+        description: UpdateUsersRequest
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MutationResponse'
+          description: Success
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+          description: Bad request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedRequest'
+          description: Unauthorized
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal server error
+      summary: Update Users in bulk
+      tags:
+      - users
+  /api/v4/users/email/{email}:
+    get:
+      callbacks: {}
+      description: Gets a User by email
+      operationId: getUserByEmail
+      parameters:
+      - description: Email of the User to search
+        example: john.doe@example.com
+        in: path
+        name: email
+        required: true
+        schema:
+          format: email
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User_2'
+          description: Success
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+          description: Bad request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedRequest'
+          description: Unauthorized
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFound'
+          description: Not found
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal server error
+      summary: Get User by email
+      tags:
+      - users
+  /api/v4/users/{id}:
+    get:
+      callbacks: {}
+      description: Get User by id
+      operationId: getUserById
+      parameters:
+      - description: ID of the User to search
+        example: 01234567890123456789012345678901
+        in: path
+        name: id
+        required: true
+        schema:
+          pattern: ^[a-f0-9]{32}$
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User_2'
+          description: Success
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+          description: Bad request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedRequest'
+          description: Unauthorized
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFound'
+          description: Not found
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal server error
+      summary: Get User by ID
+      tags:
+      - users
+components:
+  schemas:
+    CreateUser:
+      example:
+        can_manage: false
+        can_order_for_others: false
+        disabled: false
+        email: john.doe@example.com
+        mobile_cc: '34'
+        mobile_num: '612345678'
+        name: John
+        surname: Doe
+      properties:
+        can_manage:
+          description: Whether User is an admin or regular User
+          type: boolean
+        can_order_for_others:
+          description: If true, user will be able to order journeys for others
+          type: boolean
+        default_charge_code:
+          description: User's Default Charge Code
+          type: string
+        disabled:
+          description: Whether the User is enabled or disabled
+          type: boolean
+        email:
+          description: Email of User. Must be unique
+          format: email
+          type: string
+        email_cc:
+          description: List of email addresses (for journey related emails only)
+          items:
+            type: string
+          type: array
+        employee_code:
+          description: User's Employee Code, useful to map with company's code
+          type: string
+        locale:
+          description: 'User''s Locale. Syntax consists of language two-letter tag which then will be suffixed with Client''s country, e.g.: es-ES'
+          type: string
+        mobile_cc:
+          description: 'Mobile Country Code. Can be checked here: https://countrycode.org/'
+          type: string
+        mobile_num:
+          description: Mobile Number of User
+          type: string
+        name:
+          description: Name of the User
+          type: string
+        permission_group_id:
+          description: User's TravelPolicy
+          nullable: true
+          type: string
+        send_email:
+          description: If true an email will be sent to the user upon creation
+          type: boolean
+        surname:
+          description: Surname of the User
+          type: string
+      required:
+      - email
+      - name
+      - surname
+      - mobile_cc
+      - mobile_num
+      title: CreateUser
+      type: object
+    NotFound:
+      description: The server did not find a current representation for the target resource
+      example:
+        error: user with provided ID does not exist
+      properties:
+        message:
+          type: string
+      title: NotFound
+      type: object
+    CreateUsersRequest:
+      description: List of new data to create new Users with it
+      items:
+        $ref: '#/components/schemas/CreateUser'
+      minItems: 1
+      title: CreateUsersRequest
+      type: array
+    User_2:
+      example:
+        email: john.doe@example.com
+        id: 9a0e2da7f93a4b24bce47a8b10d3997a
+        mobile_cc: '34'
+        mobile_num: '612345678'
+        name: John
+        surname: Doe
+      properties:
+        can_manage:
+          description: Whether User is an admin or regular User
+          type: boolean
+        can_order_for_others:
+          description: If true, user will be able to order journeys for others
+          type: boolean
+        default_charge_code:
+          description: User's Default Charge Code
+          type: string
+        disabled:
+          description: Whether the User is enabled or disabled
+          type: boolean
+        email:
+          description: Email of User. Must be unique
+          format: email
+          type: string
+        email_cc:
+          description: List of email addresses (for journey related emails only)
+          items:
+            type: string
+          type: array
+        employee_code:
+          description: User's Employee Code, useful to map with company's code
+          type: string
+        id:
+          description: id of the User, UUIDv4 format without hyphens
+          pattern: ^[a-f0-9]{32}$
+          type: string
+        locale:
+          description: 'User''s Locale. Syntax consists of language two-letter tag which then will be suffixed with Client''s country, e.g.: es-ES'
+          type: string
+        mobile_cc:
+          description: 'Mobile Country Code. Can be checked here: https://countrycode.org/'
+          type: string
+        mobile_num:
+          description: Mobile Number of User
+          type: string
+        name:
+          description: Name of the User
+          type: string
+        permission_group_id:
+          description: User's TravelPolicy
+          nullable: true
+          type: string
+        surname:
+          description: Surname of the User
+          type: string
+      required:
+      - id
+      - email
+      - name
+      - surname
+      - mobile_cc
+      - mobile_num
+      title: User
+      type: object
+    PageResponse:
+      example:
+        data: []
+        page: 2
+        pages: 0
+        per: 1
+        total: 0
+      properties:
+        data:
+          description: List of Users
+          items:
+            $ref: '#/components/schemas/User_2'
+          type: array
+        page:
+          description: Number of page returned
+          type: number
+        pages:
+          description: Number of total available pages
+          type: number
+        per:
+          description: Number of elements per page
+          type: number
+        total:
+          description: Number of total available elements
+          type: number
+      required:
+      - data
+      - per
+      - page
+      - total
+      - pages
+      title: PageResponse
+      type: object
+    InternalServerError:
+      description: indicates that an internal server error occurred
+      example:
+        error: Something went wrong
+      properties:
+        error:
+          type: string
+      title: InternalServerError
+      type: object
+    BadRequest:
+      description: Indicates that the server cannot or will not process the request due to something that is perceived to be a client error (for example, malformed request syntax, invalid request message framing, or deceptive request routing).
+      example:
+        error: Bad Request error message
+      properties:
+        message:
+          type: string
+      title: BadRequest
+      type: object
+    UnauthorizedRequest:
+      description: The token used is invalid either because it is expired or because it is incorrect.
+      example:
+        error: Unauthorized
+      properties:
+        error:
+          type: string
+      title: UnauthorizedRequest
+      type: object
+    UpdateUser:
+      example:
+        email: john.doe@example.com
+        id: 9a0e2da7f93a4b24bce47a8b10d3997a
+        mobile_cc: '34'
+        mobile_num: '612345678'
+        name: John
+        surname: Doe
+      properties:
+        can_manage:
+          description: Whether User is an admin or regular User
+          type: boolean
+        can_order_for_others:
+          description: If true, user will be able to order journeys for others
+          type: boolean
+        default_charge_code:
+          description: User's Default Charge Code
+          type: string
+        disabled:
+          description: Whether the User is enabled or disabled
+          type: boolean
+        email:
+          description: Email of User. Must be unique
+          format: email
+          type: string
+        email_cc:
+          description: List of email addresses (for journey related emails only)
+          items:
+            type: string
+          type: array
+        employee_code:
+          description: User's Employee Code, useful to map with company's code
+          type: string
+        id:
+          description: id of the User, UUIDv4 format without hyphens
+          pattern: ^[a-f0-9]{32}$
+          type: string
+        locale:
+          description: 'User''s Locale. Syntax consists of language two-letter tag which then will be suffixed with Client''s country, e.g.: es-ES'
+          type: string
+        mobile_cc:
+          description: 'Mobile Country Code. Can be checked here: https://countrycode.org/'
+          type: string
+        mobile_num:
+          description: Mobile Number of User
+          type: string
+        name:
+          description: Name of the User
+          type: string
+        permission_group_id:
+          description: User's TravelPolicy
+          nullable: true
+          type: string
+        surname:
+          description: Surname of the User
+          type: string
+      required:
+      - id
+      title: UpdateUser
+      type: object
+    MutationResponse:
+      description: Response coming either from a Create or Update request
+      example:
+        job_id: 7e3b1f8a4c92d5e0a6b17c3f
+      properties:
+        job_id:
+          description: id of job processing the update. The results will be sent asynchronously to predefined webhooks URL upon job termination
+          pattern: ^[a-f0-9]{24}$
+          type: string
+      required:
+      - job_id
+      title: MutationResponse
+      type: object
+    User:
+      type: object
+      description: A Cabify user associated with a client account.
+      properties:
+        id:
+          type: string
+          description: Unique identifier of the Cabify user.
+          example: 4f627a06d74011ec97dd06d73193996d
+        name:
+          type: string
+          description: Full name of the Cabify user.
+          example: Name Surname
+        email:
+          type: string
+          description: Email address of the Cabify user.
+          example: example@example.com
+        payment_method_available:
+          type: boolean
+          description: Whether the user has a valid payment method configured.
+          example: true
+    UpdateUsersRequest:
+      description: List of Users update data
+      items:
+        $ref: '#/components/schemas/UpdateUser'
+      minItems: 1
+      title: UpdateUsersRequest
+      type: array
+  securitySchemes:
+    bearer_token:
+      type: http
+      scheme: bearer

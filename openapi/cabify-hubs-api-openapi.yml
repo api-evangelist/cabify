@@ -1,0 +1,400 @@
+openapi: 3.0.0
+info:
+  description: 'Welcome to the Cabify Logistics API. This API allows you to create and manage parcel deliveries, track their status in real time, configure proof of delivery options, and receive live updates via webhooks. All requests must be authenticated using a Bearer token.
+
+    '
+  version: 1.0.0
+  title: Cabify Logistics delivery hubs API
+  contact:
+    email: p.delivery@cabify.com
+servers:
+- url: https://logistics.api.cabify.com
+  description: Production
+- url: https://logistics.api.cabify-sandbox.com
+  description: Sandbox
+tags:
+- name: hubs
+  description: 'A hub is a physical location (such as a warehouse or store) where parcels are stored until they are ready to be picked up by a driver. You can reference a hub in pickup or drop-off information using its external ID.
+
+    '
+paths:
+  /v1/hubs:
+    get:
+      tags:
+      - hubs
+      summary: List all client hubs.
+      description: Returns all hubs associated with your account.
+      responses:
+        '200':
+          description: Hubs retrieved successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                description: A collection of client hubs.
+                required:
+                - client_hubs
+                properties:
+                  client_hubs:
+                    type: array
+                    items:
+                      $ref: '#/paths/~1v1~1hubs~1none~1%7Bhub_external_id%7D/get/responses/200/content/application~1json/schema'
+      security:
+      - bearer_token: []
+    post:
+      tags:
+      - hubs
+      summary: Create a new client hub.
+      description: 'Creates a new hub associated with your account. Hubs represent physical locations (such as stores or warehouses) from which parcels can be picked up or delivered to.
+
+        '
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              description: Request body for creating a new client hub.
+              required:
+              - external_id
+              - address
+              properties:
+                external_id:
+                  type: string
+                  description: A unique identifier you define to reference this hub. This ID is used in parcel pickup and drop-off configurations.
+                address:
+                  type: string
+                  description: Full street address of the hub.
+                location:
+                  type: object
+                  description: A geographic coordinate expressed as latitude and longitude.
+                  required:
+                  - lat
+                  - lon
+                  properties:
+                    lat:
+                      type: number
+                      format: float
+                      description: Latitude in decimal degrees.
+                      example: 40.4489254
+                    lon:
+                      type: number
+                      format: float
+                      description: Longitude in decimal degrees.
+                      example: -3.6730293
+                instructions:
+                  type: string
+                  description: Additional instructions for drivers arriving at this hub (e.g. access codes, gate numbers).
+                contact:
+                  type: object
+                  description: Primary contact person at this hub.
+                  properties:
+                    name:
+                      type: string
+                      description: Full name of the contact person.
+                    phone:
+                      type: string
+                      description: Phone number of the contact person.
+      responses:
+        '200':
+          description: Hub created successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                description: Response returned after successfully creating a hub.
+                properties:
+                  id:
+                    type: string
+                    description: System-generated ID of the newly created hub.
+                    example: 4f627a06d74011ec97dd06d73193996d
+        '401':
+          description: Unauthorized. Missing or invalid authentication token.
+      security:
+      - bearer_token: []
+  /v1/hubs/none/{hub_external_id}:
+    get:
+      tags:
+      - hubs
+      summary: Get a client hub by its external ID.
+      description: Returns the details of a specific hub identified by your external ID.
+      parameters:
+      - in: path
+        name: hub_external_id
+        description: The external ID you assigned to the hub.
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Hub retrieved successfully.
+          content:
+            application/json:
+              schema:
+                type: object
+                description: Full details of a client hub.
+                properties:
+                  hub_id:
+                    type: string
+                    description: System-generated ID of the hub.
+                  external_id:
+                    type: string
+                    description: Your external ID for this hub.
+                  address:
+                    type: string
+                    description: Full street address of the hub.
+                  location:
+                    $ref: '#/paths/~1v1~1hubs/post/requestBody/content/application~1json/schema/properties/location'
+                  instructions:
+                    type: string
+                    description: Additional instructions for drivers arriving at this hub.
+                  contact:
+                    type: object
+                    description: Primary contact person at this hub.
+                    properties:
+                      name:
+                        type: string
+                        description: Full name of the contact person.
+                      phone:
+                        type: string
+                        description: Phone number of the contact person.
+        '401':
+          description: Unauthorized. Missing or invalid authentication token.
+        '404':
+          description: No hub found with the given external ID.
+      security:
+      - bearer_token: []
+    put:
+      tags:
+      - hubs
+      summary: Update a client hub by its external ID.
+      description: Updates the details of a specific hub identified by your external ID.
+      parameters:
+      - in: path
+        name: hub_external_id
+        description: The external ID you assigned to the hub.
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              description: Request body for updating an existing client hub. Only included fields will be modified.
+              properties:
+                address:
+                  type: string
+                  description: Updated full street address of the hub.
+                location:
+                  $ref: '#/paths/~1v1~1hubs/post/requestBody/content/application~1json/schema/properties/location'
+                instructions:
+                  type: string
+                  description: Updated instructions for drivers arriving at this hub.
+                contact:
+                  type: object
+                  description: Updated primary contact person at this hub.
+                  properties:
+                    name:
+                      type: string
+                      description: Full name of the contact person.
+                    phone:
+                      type: string
+                      description: Phone number of the contact person.
+      responses:
+        '200':
+          description: Hub updated successfully.
+        '401':
+          description: Unauthorized. Missing or invalid authentication token.
+      security:
+      - bearer_token: []
+  /api/v4/hub:
+    get:
+      callbacks: {}
+      description: 'Look up hub meeting-point data for a given set of coordinates.
+
+
+        A **hub** is a large venue (e.g. airport, train station) with designated pick-up/drop-off meeting points. Use this endpoint to determine if a location is within a hub and retrieve the available meeting points.
+
+
+        ## Response
+
+
+        - If a hub exists at the given coordinates, returns the hub with its meeting points (uid, title, coordinates, images, and localized instructions).
+
+        - If no hub exists or the lookup fails, returns `{ "data": null }`.
+
+
+        ## Usage
+
+
+        This endpoint is useful when you want to look up hub data independently from the estimation flow. For example:
+
+        1. User enters a pickup address
+
+        2. Call this endpoint with the address coordinates
+
+        3. If a hub is returned, present the meeting points to the user
+
+        4. Include the selected meeting point **and** the hub''s `location_id` in the corresponding stop of the `POST /api/v4/journey` request
+
+
+        > 📘 Hub data in Estimates
+
+        >
+
+        > Hub data is also returned as part of the `POST /api/v4/estimates` response (best-effort, origin stop only).
+
+        > Use this standalone endpoint when you need hub data without creating an estimate, or when the estimate did not resolve hub data in time.
+
+        '
+      operationId: getHub
+      parameters:
+      - description: Latitude of the location to look up.
+        in: query
+        name: latitude
+        required: true
+        schema:
+          type: number
+      - description: Longitude of the location to look up.
+        in: query
+        name: longitude
+        required: true
+        schema:
+          type: number
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HubResponse'
+          description: Success
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+          description: Bad request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedRequest'
+          description: Unauthorized
+      summary: Get Hub by coordinates
+      tags:
+      - hubs
+components:
+  schemas:
+    HubObject:
+      description: A hub is a large venue (e.g. airport, train station) with designated pick-up/drop-off meeting points.
+      example:
+        active: true
+        location_id: location-4
+        meeting_points:
+        - bottom_image_url: https://example.com/t1-bottom.png
+          coordinates:
+            latitude: 40.4722
+            longitude: -3.5608
+          header_image_url: https://example.com/t1-header.png
+          instructions:
+          - en: Head to the main gate of Terminal 1
+            es: Dirígete a la puerta principal de la Terminal 1
+            step_image_url: https://example.com/step1.png
+          title:
+            en: Terminal 1
+            es: Terminal 1
+          uid: mp-loc4-1
+        title:
+          en: Madrid Barajas
+          es: Madrid Barajas
+        uid: hub-loc4
+      nullable: true
+      properties:
+        active:
+          description: Whether the hub is currently active.
+          type: boolean
+        location_id:
+          description: Location identifier used to look up this hub.
+          type: string
+        meeting_points:
+          description: Designated pick-up/drop-off points within the hub. Present one of these to the user as their boarding location.
+          items:
+            properties:
+              bottom_image_url:
+                description: URL for the bottom image of the meeting point.
+                nullable: true
+                type: string
+              coordinates:
+                description: GPS coordinates of the meeting point.
+                properties:
+                  latitude:
+                    type: number
+                  longitude:
+                    type: number
+                type: object
+              header_image_url:
+                description: URL for the header image of the meeting point.
+                nullable: true
+                type: string
+              instructions:
+                description: Step-by-step instructions to reach the meeting point.
+                items:
+                  properties:
+                    en:
+                      type: string
+                    es:
+                      type: string
+                    step_image_url:
+                      nullable: true
+                      type: string
+                  type: object
+                type: array
+              title:
+                additionalProperties:
+                  type: string
+                description: Localized name of the meeting point, keyed by BCP 47 language tag.
+                type: object
+              uid:
+                description: Unique identifier of the meeting point.
+                type: string
+            type: object
+          type: array
+        title:
+          additionalProperties:
+            type: string
+          description: Localized name of the hub, keyed by BCP 47 language tag.
+          type: object
+        uid:
+          description: Unique identifier of the hub.
+          type: string
+      title: HubObject
+      type: object
+    BadRequest:
+      description: Indicates that the server cannot or will not process the request due to something that is perceived to be a client error (for example, malformed request syntax, invalid request message framing, or deceptive request routing).
+      example:
+        error: Bad Request error message
+      properties:
+        message:
+          type: string
+      title: BadRequest
+      type: object
+    UnauthorizedRequest:
+      description: The token used is invalid either because it is expired or because it is incorrect.
+      example:
+        error: Unauthorized
+      properties:
+        error:
+          type: string
+      title: UnauthorizedRequest
+      type: object
+    HubResponse:
+      description: Hub information for a given set of coordinates. Returns null inside the data field when no hub exists at those coordinates.
+      properties:
+        data:
+          $ref: '#/components/schemas/HubObject'
+      title: HubResponse
+      type: object
+  securitySchemes:
+    bearer_token:
+      type: http
+      scheme: bearer

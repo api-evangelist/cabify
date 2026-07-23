@@ -1,0 +1,1007 @@
+openapi: 3.0.0
+info:
+  description: 'Welcome to the Cabify Logistics API. This API allows you to create and manage parcel deliveries, track their status in real time, configure proof of delivery options, and receive live updates via webhooks. All requests must be authenticated using a Bearer token.
+
+    '
+  version: 1.0.0
+  title: Cabify Logistics delivery parcels API
+  contact:
+    email: p.delivery@cabify.com
+servers:
+- url: https://logistics.api.cabify.com
+  description: Production
+- url: https://logistics.api.cabify-sandbox.com
+  description: Sandbox
+tags:
+- name: parcels
+  description: 'A parcel is the package you need to ship. Each parcel is identified by a unique ID and contains a pickup point (where the driver collects the package) and a drop-off point (the destination). Parcels must be created before they can be shipped.
+
+    '
+paths:
+  /v1/parcels:
+    post:
+      tags:
+      - parcels
+      summary: Create new parcels.
+      description: 'Create one or more parcels to be shipped. Note that creating a parcel does not trigger a delivery — you must call `/v1/parcels/ship` afterwards to schedule the pickup.
+
+
+        Each parcel requires a pickup and a drop-off location. You can provide a location using one of the following fields in the `pickup_info` or `dropoff_info` schemas: `loc` (coordinates), `addr` (address string), or `hub_external_id` (reference to a registered hub).
+
+        '
+      operationId: addParcels
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NewParcels'
+        description: List of parcels you want to create.
+        required: true
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Parcels'
+        '400':
+          description: Bad request. One or more fields failed validation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RequestError'
+        '401':
+          description: Unauthorized. Missing or invalid authentication token.
+        '409':
+          description: Conflict. A parcel with the provided `external_id` already exists.
+        '422':
+          description: Unprocessable entity. The request is well-formed but contains semantic errors.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RequestError'
+      security:
+      - bearer_token: []
+    get:
+      tags:
+      - parcels
+      summary: List parcels filtered by state.
+      description: Returns a paginated list of parcels that match the specified states.
+      operationId: getParcels
+      parameters:
+      - name: states
+        in: query
+        description: 'Filter results by one or more parcel states. See [parcel states](https://developers.cabify.com/reference/logistics-introduction#parcel) for a description of each value.
+
+          '
+        required: true
+        schema:
+          type: array
+          items:
+            type: string
+            description: 'The current lifecycle state of a parcel. See [parcel states](https://developers.cabify.com/reference/logistics-introduction#parcel) for a full description of each value.
+
+              '
+            enum:
+            - ready
+            - qualifiedforpickup
+            - onroutetopickup
+            - pickingup
+            - intransit
+            - delivering
+            - delivered
+            - returning
+            - returned
+            - incident
+            - requestercancel
+            - internalcancel
+            - pickupfailed
+            - ready_to_pickup
+            - on_route_to_final_hub
+            - received_on_final_hub
+            - ready_to_dispatch
+            - on_route_to_delivery
+            - undelivered
+            - onroutetoreturn
+            - returnrejected
+      - name: page
+        in: query
+        description: Page number to retrieve (0-based).
+        required: true
+        schema:
+          type: number
+      responses:
+        '200':
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedParcels'
+        '400':
+          description: Bad request. One or more query parameters failed validation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RequestError'
+        '401':
+          description: Unauthorized. Missing or invalid authentication token.
+      security:
+      - bearer_token: []
+  /v1/parcels/{parcel_id}/proof_configuration:
+    post:
+      tags:
+      - parcels
+      summary: Set proof of delivery configuration for a parcel.
+      description: Creates or replaces the proof of delivery methods configured for the specified parcel.
+      operationId: createProofConfigurationParcel
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateProofConfiguration'
+      parameters:
+      - in: path
+        name: parcel_id
+        description: UUID of the parcel to configure proof of delivery for.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Configuration saved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProofConfiguration'
+        '401':
+          description: Unauthorized. Missing or invalid authentication token.
+        '404':
+          description: No parcel found with the given ID.
+      security:
+      - bearer_token: []
+    get:
+      tags:
+      - parcels
+      summary: Get proof of delivery configuration for a parcel.
+      description: Returns the proof of delivery methods currently configured for the specified parcel.
+      operationId: proofConfigurationParcel
+      parameters:
+      - in: path
+        name: parcel_id
+        description: UUID of the parcel whose proof of delivery configuration you want to retrieve.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Proof of delivery configuration retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ProofConfiguration'
+        '401':
+          description: Unauthorized. Missing or invalid authentication token.
+        '404':
+          description: No parcel found with the given ID.
+      security:
+      - bearer_token: []
+  /v1/parcels/delete:
+    post:
+      tags:
+      - parcels
+      summary: Delete parcels by ID.
+      description: 'Permanently deletes the specified parcels. Only parcels that have not yet been shipped can be deleted. This is an **all-or-nothing** operation — if any parcel cannot be deleted, none of the parcels in the request will be deleted.
+
+        '
+      operationId: deleteParcels
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DeleteParcels'
+      responses:
+        '202':
+          description: All specified parcels were successfully deleted.
+        '401':
+          description: Unauthorized. Missing or invalid authentication token.
+        '404':
+          description: One or more parcels were not found.
+      security:
+      - bearer_token: []
+  /v1/parcels/{parcel_id}:
+    get:
+      tags:
+      - parcels
+      summary: Get a parcel by ID.
+      description: Returns the full details of a parcel identified by its UUID.
+      operationId: getParcel
+      parameters:
+      - in: path
+        name: parcel_id
+        description: UUID of the parcel to retrieve.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Parcel found and returned successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Parcel'
+        '401':
+          description: Unauthorized. Missing or invalid authentication token.
+        '404':
+          description: No parcel found with the given ID.
+      security:
+      - bearer_token: []
+    put:
+      tags:
+      - parcels
+      summary: Update a parcel by ID.
+      description: 'Update editable fields of an existing parcel. The set of fields that can be modified depends on the parcel''s current state:
+
+
+        **All fields** can be updated when the parcel is in one of these states: `ready`, `pickupfailed`, `requestercancel`, or `returnedtoorigin`.
+
+
+        **Instructions only** (`pickup_info.instr`, `dropoff_info.instr`) can be updated in all other active states.
+
+        '
+      operationId: updateParcel
+      parameters:
+      - in: path
+        name: parcel_id
+        description: UUID of the parcel to update.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateParcel'
+        description: Fields of the parcel you want to update. Only the provided fields will be changed.
+        required: true
+      responses:
+        '200':
+          description: Parcel updated successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Parcel'
+        '400':
+          description: Bad request. One or more fields failed validation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RequestError'
+        '401':
+          description: Unauthorized. Missing or invalid authentication token.
+        '403':
+          description: This parcel does not belong to your account.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RequestError'
+        '409':
+          description: The parcel cannot be updated in its current state.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RequestError'
+        '422':
+          description: Unprocessable entity. The request is well-formed but contains semantic errors.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RequestError'
+      security:
+      - bearer_token: []
+  /v1/parcels/{parcel_id}/tip:
+    get:
+      tags:
+      - parcels
+      summary: Get the tip for a parcel.
+      description: '> **Note:** This feature is not available to all clients. Please contact us before using it.
+
+
+        Returns the tip configured for the specified parcel, if one exists.
+
+        '
+      operationId: getTipParcel
+      parameters:
+      - name: parcel_id
+        in: path
+        description: UUID of the parcel whose tip you want to retrieve.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Tip retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tip'
+        '204':
+          description: No tip exists for the specified parcel.
+        '401':
+          description: Unauthorized. Missing or invalid authentication token.
+        '403':
+          description: This parcel does not belong to your account, or your account is not allowed to use the tipping feature.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RequestError'
+        '404':
+          description: No parcel found with the given ID.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RequestError'
+      security:
+      - bearer_token: []
+    post:
+      tags:
+      - parcels
+      summary: Add a tip for a parcel delivery.
+      description: '> **Note:** This feature is not available to all clients. Please contact us before using it.
+
+
+        Adds a tip for the driver in the event of a successful delivery. The tip can be set at any
+
+        point before the parcel is delivered. The tip amount must be formatted according to ISO 4217
+
+        (e.g. €6.30 → `630` in EUR).
+
+        '
+      operationId: tipParcel
+      parameters:
+      - name: parcel_id
+        in: path
+        description: UUID of the parcel to tip.
+        required: true
+        style: simple
+        explode: false
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        description: 'The tip amount to create for the parcel. The amount must follow the ISO 4217 standard (e.g. €6.30 → `630` in EUR).
+
+          '
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateTip'
+        required: true
+      responses:
+        '200':
+          description: Tip created successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Tip'
+        '401':
+          description: Unauthorized. Missing or invalid authentication token.
+        '403':
+          description: This parcel does not belong to your account, or your account is not allowed to use the tipping feature.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RequestError'
+        '404':
+          description: No parcel found with the given ID.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RequestError'
+        '409':
+          description: A tip already exists for this parcel.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RequestError'
+        '429':
+          description: The parcel's current state does not allow adding a tip.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RequestError'
+      security:
+      - bearer_token: []
+  /v1/parcels/{parcel_id}/label:
+    get:
+      tags:
+      - parcels
+      summary: Get the shipping label for a parcel.
+      description: 'Returns the shipping label for the specified parcel as a PDF. This label is scanned by the driver during pickup and delivery operations.
+
+        '
+      operationId: labelParcel
+      parameters:
+      - in: path
+        name: parcel_id
+        description: UUID of the parcel.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Returns the parcel label as a PDF file.
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+        '401':
+          description: Unauthorized. Missing or invalid authentication token.
+        '403':
+          description: This parcel does not belong to your account.
+        '404':
+          description: No parcel found with the given ID.
+      security:
+      - bearer_token: []
+  /v1/parcels/{parcel_id}/notify:
+    post:
+      tags:
+      - parcels
+      summary: Notify an event for the given parcel.
+      description: 'Sends an event notification for the specified parcel. Currently, only the `ready_to_pickup`
+
+        event is supported.
+
+
+        This event is typically used in food delivery workflows to signal that an order is prepared
+
+        and ready to be collected by a driver.
+
+        '
+      operationId: notifyParcel
+      parameters:
+      - name: parcel_id
+        in: path
+        required: true
+        schema:
+          type: string
+          format: uuid
+        description: UUID of the parcel to notify an event for.
+      requestBody:
+        content:
+          application/json:
+            schema:
+              type: object
+              description: Request body for sending an event notification for a parcel.
+              required:
+              - event
+              properties:
+                event:
+                  type: string
+                  description: 'The event to notify. Currently, only `ready_to_pickup` is supported, which signals that the order is prepared and ready to be collected by a driver.
+
+                    '
+                  enum:
+                  - ready_to_pickup
+                  example: ready_to_pickup
+      responses:
+        '202':
+          description: Event accepted and queued for processing.
+        '400':
+          description: Bad request. One or more fields failed validation.
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  errors:
+                    type: array
+                    items:
+                      type: string
+        '403':
+          description: This parcel does not belong to your account.
+          content:
+            application/json:
+              schema:
+                $ref: '#/paths/~1v1~1parcels~1%7Bparcel_id%7D~1notify/post/responses/400/content/application~1json/schema'
+        '404':
+          description: No parcel found with the given ID.
+          content:
+            application/json:
+              schema:
+                $ref: '#/paths/~1v1~1parcels~1%7Bparcel_id%7D~1notify/post/responses/400/content/application~1json/schema'
+        '409':
+          description: The parcel has not yet been assigned to a modality, or the assigned modality does not support this event.
+          content:
+            application/json:
+              schema:
+                $ref: '#/paths/~1v1~1parcels~1%7Bparcel_id%7D~1notify/post/responses/400/content/application~1json/schema'
+        '422':
+          description: Unprocessable entity. The request is well-formed but contains semantic errors.
+          content:
+            application/json:
+              schema:
+                $ref: '#/paths/~1v1~1parcels~1%7Bparcel_id%7D~1notify/post/responses/400/content/application~1json/schema'
+        '500':
+          description: An unexpected server error occurred.
+      security:
+      - bearer_token: []
+components:
+  schemas:
+    Tip:
+      type: object
+      properties:
+        parcel_id:
+          type: string
+          format: uuid
+          description: UUID of the parcel this tip is associated with.
+          example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+        amount:
+          minimum: 0
+          type: integer
+          description: 'Tip amount in the smallest currency unit, following the ISO 4217 standard (e.g. €6.30 → `630`).
+
+            '
+          example: 100
+        currency:
+          type: string
+          description: ISO 4217 currency code.
+          example: ARS
+    NewParcelPickupContact:
+      type: object
+      properties:
+        name:
+          type: string
+          nullable: true
+          description: Name of the contact person at the pickup location.
+          example: John
+        phone:
+          type: string
+          nullable: true
+          description: Phone number of the contact person at the pickup location.
+          example: '+34666000000'
+    Price:
+      type: object
+      description: Price information for the parcel, used in cash-on-delivery scenarios.
+      properties:
+        declared_value:
+          type: integer
+          description: 'Declared value of the parcel''s contents, in the smallest currency unit following the ISO 4217 standard (e.g. €6.30 → `630`).
+
+            '
+          example: 630
+        collected_value:
+          type: integer
+          description: 'Amount to be collected from the recipient upon delivery, in the smallest currency unit following the ISO 4217 standard (e.g. €6.30 → `630`).
+
+            '
+          example: 630
+        currency:
+          type: string
+          description: ISO 4217 currency code.
+          example: EUR
+    Point:
+      type: object
+      description: A geographic coordinate expressed as latitude and longitude.
+      required:
+      - lat
+      - lon
+      properties:
+        lat:
+          type: number
+          format: float
+          description: Latitude in decimal degrees.
+          example: 40.4489254
+        lon:
+          type: number
+          format: float
+          description: Longitude in decimal degrees.
+          example: -3.6730293
+    ParcelPointPickupInfo:
+      type: object
+      required:
+      - contact
+      description: 'Information about the pickup point. You must provide exactly one of the following location fields: `loc` (coordinates), `addr` (address string), or `hub_external_id` (reference to a registered hub).
+
+        '
+      properties:
+        addr:
+          type: string
+          description: Full address where the parcel should be picked up.
+          example: Calle de Pradillo, 42, Madrid
+        contact:
+          $ref: '#/components/schemas/NewParcelPickupContact'
+        instr:
+          type: string
+          nullable: true
+          description: Additional instructions for the driver at the pickup location.
+          example: Knock the door three times
+        loc:
+          $ref: '#/components/schemas/Point'
+        code:
+          type: string
+          nullable: true
+          description: 'Alphanumeric code (typically 4–6 characters) shown to the driver to confirm the pickup. Only one code is shown per delivery, so only use this field when the delivery consists of a single parcel.
+
+            '
+          example: ABC123
+        hub_external_id:
+          type: string
+          description: External ID of a client hub to use as the pickup location.
+          example: magic_store_santa_fe
+    NewParcelDropoffContact:
+      type: object
+      properties:
+        name:
+          type: string
+          description: Name of the recipient at the drop-off location.
+          example: John
+        phone:
+          type: string
+          nullable: true
+          description: Phone number of the recipient at the drop-off location.
+          example: '+34666000000'
+    ProofConfiguration:
+      type: object
+      description: The proof of delivery methods configured for a parcel.
+      required:
+      - parcel_id
+      - delivered_proofs
+      properties:
+        parcel_id:
+          type: string
+          format: uuid
+          description: UUID of the parcel this configuration applies to.
+          example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+        delivered_proofs:
+          type: object
+          required:
+          - code_proof
+          - ic_proof
+          - photo_proof
+          - comment_proof
+          description: Configuration for each available proof of delivery method.
+          properties:
+            code_proof:
+              type: object
+              required:
+              - active
+              description: Configuration for code-based proof of delivery.
+              properties:
+                active:
+                  type: boolean
+                  description: Whether this proof method is active for the parcel.
+                  example: true
+                code:
+                  type: string
+                  description: Four-digit code shown to the driver (only present if no `hashed_code` was provided).
+                  example: '1234'
+                hashed_code:
+                  type: string
+                  description: SHA-256 hash of the code (only present if a hashed code was supplied).
+                  example: 6eef362598bc0d76139d3c4df61347a7faad5fa0a535347e46420214c68558a7
+            ic_proof:
+              type: object
+              required:
+              - active
+              description: Configuration for identity card (IC) based proof of delivery.
+              properties:
+                active:
+                  type: boolean
+                  description: Whether this proof method is active for the parcel.
+                  example: true
+            photo_proof:
+              type: object
+              required:
+              - active
+              description: Configuration for photo-based proof of delivery.
+              properties:
+                active:
+                  type: boolean
+                  description: Whether this proof method is active for the parcel.
+                  example: true
+            comment_proof:
+              type: object
+              required:
+              - active
+              description: Configuration for comment-based proof of delivery.
+              properties:
+                active:
+                  type: boolean
+                  description: Whether this proof method is active for the parcel.
+                  example: true
+    CreateProofConfiguration:
+      type: object
+      description: Request body for creating or replacing proof of delivery configuration for a parcel.
+      properties:
+        delivered_proofs:
+          type: object
+          description: Configuration for each proof of delivery method. Methods not included in the request will be set to inactive.
+          properties:
+            code_proof:
+              type: object
+              description: 'Configuration for code-based proof of delivery. Omitting this field sets the method as inactive. This method is **mutually exclusive** with the other proof methods — it can only be activated on its own.
+
+                '
+              properties:
+                active:
+                  type: boolean
+                  description: Activates or deactivates this proof method. Defaults to `false` if omitted.
+                  example: true
+                hashed_code:
+                  type: string
+                  description: 'SHA-256 hash of the verification code. If omitted, a 4-digit code will be automatically generated and returned in the response.
+
+                    '
+                  example: 6eef362598bc0d76139d3c4df61347a7faad5fa0a535347e46420214c68558a7
+            ic_proof:
+              type: object
+              description: Configuration for identity card (IC) based proof of delivery. Omitting this field sets the method as inactive.
+              properties:
+                active:
+                  type: boolean
+                  description: Activates or deactivates this proof method. Defaults to `false` if omitted.
+                  example: true
+            photo_proof:
+              type: object
+              description: Configuration for photo-based proof of delivery. Omitting this field sets the method as inactive.
+              properties:
+                active:
+                  type: boolean
+                  description: Activates or deactivates this proof method. Defaults to `false` if omitted.
+                  example: true
+            comment_proof:
+              type: object
+              description: Configuration for comment-based proof of delivery. Omitting this field sets the method as inactive.
+              properties:
+                active:
+                  type: boolean
+                  description: Activates or deactivates this proof method. Defaults to `false` if omitted.
+                  example: true
+    DeleteParcels:
+      type: object
+      required:
+      - parcel_ids
+      properties:
+        parcel_ids:
+          type: array
+          description: List of parcels to be deleted
+          items:
+            type: string
+            format: uuid
+    NewParcels:
+      type: object
+      required:
+      - parcels
+      properties:
+        parcels:
+          type: array
+          items:
+            $ref: '#/components/schemas/NewParcel'
+    PaginatedParcels:
+      type: object
+      required:
+      - parcels
+      - page
+      - page_size
+      - more_pages
+      properties:
+        parcels:
+          type: array
+          items:
+            $ref: '#/components/schemas/Parcel'
+        page:
+          type: number
+          description: The current page number returned.
+          example: 2
+        page_size:
+          type: number
+          description: The number of parcels returned per page.
+          example: 20
+        more_pages:
+          type: boolean
+          description: Whether additional pages of results are available.
+          example: true
+    CreateTip:
+      required:
+      - amount
+      type: object
+      properties:
+        amount:
+          minimum: 0
+          type: integer
+          description: 'Tip amount in the smallest currency unit, following the ISO 4217 standard (e.g. €6.30 → `630`).
+
+            '
+          example: 100
+    ParcelWeight:
+      type: object
+      description: Weight of the parcel.
+      properties:
+        value:
+          type: integer
+          minimum: 0
+          example: 1500
+        unit:
+          type: string
+          description: Unit of weight. Defaults to `g` (grams) if omitted or set to an invalid value.
+          enum:
+          - g
+    UpdateParcel:
+      type: object
+      description: Fields that can be updated on an existing parcel. Only fields included in the request will be modified.
+      properties:
+        external_id:
+          type: string
+          description: Your own identifier for this parcel. Must be unique across all your parcels.
+          example: parcel_001
+        pickup_info:
+          $ref: '#/components/schemas/ParcelPointPickupInfo'
+        dropoff_info:
+          $ref: '#/components/schemas/ParcelPointDropoffInfo'
+        dimensions:
+          $ref: '#/components/schemas/ParcelDimensions'
+        weight:
+          $ref: '#/components/schemas/ParcelWeight'
+        delivery_from:
+          type: string
+          format: date-time
+          description: 'Start of the requested delivery time window, formatted according to RFC 3339, section 5.6. The parcel will not be delivered before this time.
+
+            '
+          example: '2021-12-02T10:12:07.753Z'
+        delivery_to:
+          type: string
+          format: date-time
+          description: 'End of the requested delivery time window, formatted according to RFC 3339, section 5.6. The parcel should be delivered before this time.
+
+            '
+          example: '2021-12-02T10:12:07.753Z'
+        price:
+          $ref: '#/components/schemas/Price'
+    ParcelDimensions:
+      type: object
+      description: Physical dimensions of the parcel.
+      properties:
+        height:
+          type: integer
+          minimum: 0
+          example: 10
+        length:
+          type: integer
+          minimum: 0
+          example: 10
+        width:
+          type: integer
+          minimum: 0
+          example: 10
+        unit:
+          type: string
+          description: Unit of measure for the dimensions. Defaults to `cm` if omitted or set to an invalid value.
+          enum:
+          - cm
+    ParcelPointDropoffInfo:
+      type: object
+      required:
+      - contact
+      description: 'Information about the drop-off (destination) point. You must provide exactly one of the following location fields: `loc` (coordinates), `addr` (address string), or `hub_external_id` (reference to a registered hub).
+
+        '
+      properties:
+        addr:
+          type: string
+          description: Full address where the parcel should be delivered.
+          example: Calle de Pradillo, 42, Madrid
+        contact:
+          $ref: '#/components/schemas/NewParcelDropoffContact'
+        instr:
+          type: string
+          nullable: true
+          description: Additional instructions for the driver at the drop-off location.
+          example: Knock the door three times
+        loc:
+          $ref: '#/components/schemas/Point'
+        hub_external_id:
+          type: string
+          description: External ID of a client hub to use as the drop-off location.
+          example: magic_store_santa_fe
+    Parcels:
+      type: object
+      required:
+      - parcels
+      properties:
+        parcels:
+          type: array
+          items:
+            $ref: '#/components/schemas/Parcel'
+    Parcel:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: System-generated UUID for this parcel.
+          example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+        external_id:
+          type: string
+          description: Your own identifier for this parcel, as provided when the parcel was created.
+          example: parcel_001
+        pickup_info:
+          $ref: '#/components/schemas/ParcelPointPickupInfo'
+        dropoff_info:
+          $ref: '#/components/schemas/ParcelPointDropoffInfo'
+        dimensions:
+          $ref: '#/components/schemas/ParcelDimensions'
+        weight:
+          $ref: '#/components/schemas/ParcelWeight'
+        price:
+          $ref: '#/components/schemas/Price'
+        created_at:
+          type: string
+          format: date-time
+          description: Timestamp when the parcel was created, formatted according to RFC 3339, section 5.6.
+          example: '2021-12-02T10:12:07.753Z'
+        updated_at:
+          type: string
+          format: date-time
+          description: Timestamp of the most recent update to the parcel, formatted according to RFC 3339, section 5.6.
+          example: '2021-12-02T10:12:07.753Z'
+    RequestError:
+      type: object
+      description: Standard error response body returned when a request fails.
+      required:
+      - errors
+      properties:
+        errors:
+          type: array
+          description: List of human-readable error messages describing what went wrong.
+          items:
+            type: string
+    NewParcel:
+      type: object
+      required:
+      - pickup_info
+      - dropoff_info
+      properties:
+        external_id:
+          type: string
+          description: 'Your own identifier for this parcel. Use this field to correlate parcels in the Cabify system with records in your own system. Must be unique across all your parcels.
+
+            '
+          example: parcel_001
+        pickup_info:
+          $ref: '#/components/schemas/ParcelPointPickupInfo'
+        dropoff_info:
+          $ref: '#/components/schemas/ParcelPointDropoffInfo'
+        dimensions:
+          $ref: '#/components/schemas/ParcelDimensions'
+        weight:
+          $ref: '#/components/schemas/ParcelWeight'
+        price:
+          $ref: '#/components/schemas/Price'
+        delivery_from:
+          type: string
+          format: date-time
+          description: 'Start of the requested delivery time window, formatted according to RFC 3339, section 5.6. The parcel will not be delivered before this time.
+
+            '
+          example: '2021-12-02T10:12:07.753Z'
+        delivery_to:
+          type: string
+          format: date-time
+          description: 'End of the requested delivery time window, formatted according to RFC 3339, section 5.6. The parcel should be delivered before this time.
+
+            '
+          example: '2021-12-02T10:12:07.753Z'
+  securitySchemes:
+    bearer_token:
+      type: http
+      scheme: bearer

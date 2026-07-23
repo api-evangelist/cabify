@@ -1,0 +1,368 @@
+openapi: 3.0.0
+info:
+  description: 'Welcome to the Cabify Logistics API. This API allows you to create and manage parcel deliveries, track their status in real time, configure proof of delivery options, and receive live updates via webhooks. All requests must be authenticated using a Bearer token.
+
+    '
+  version: 1.0.0
+  title: Cabify Logistics delivery shipment API
+  contact:
+    email: p.delivery@cabify.com
+servers:
+- url: https://logistics.api.cabify.com
+  description: Production
+- url: https://logistics.api.cabify-sandbox.com
+  description: Sandbox
+tags:
+- name: shipment
+paths:
+  /v3/parcels/estimate:
+    post:
+      tags:
+      - shipment
+      summary: Estimate the cost and timing of a shipment.
+      description: 'Calculates the estimated price, pickup time, and delivery time for the given parcels using the specified shipping type.
+
+        '
+      operationId: EstimateShipParcels
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EstimateV3Request'
+      responses:
+        '200':
+          description: Estimation calculated successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EstimateV3Response'
+        '400':
+          description: Bad request. One or more fields failed validation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RequestError'
+        '401':
+          description: Unauthorized. Missing or invalid authentication token.
+        '404':
+          description: The estimation could not be calculated. Check that the provided locations are within an operating area.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RequestError'
+        '409':
+          description: The server state does not currently allow processing this estimation request.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RequestError'
+        '503':
+          description: The service is temporarily unavailable. Please try again later.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RequestError'
+      security:
+      - bearer_token: []
+  /v1/parcels/ship:
+    post:
+      tags:
+      - shipment
+      summary: Ship the specified parcels.
+      description: 'Marks the given parcels as ready to ship using the specified shipping type.
+
+
+        The available shipping types for your account and location can be retrieved from the
+
+        [GET /v1/shipping_types/available](https://developers.cabify.com/reference/shippingtypesavailable) endpoint.
+
+        '
+      operationId: shipParcels
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/ShipParcels'
+      responses:
+        '202':
+          description: Shipment request accepted and is being processed.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ShipParcelsResponse'
+        '400':
+          description: Bad request. One or more fields failed validation.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RequestError'
+        '401':
+          description: Unauthorized. Missing or invalid authentication token.
+        '403':
+          description: This parcel does not belong to your account, or the chosen shipping type is not available for your account.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RequestError'
+        '404':
+          description: 'The parcel or shipping type could not be found. To find valid shipping type IDs, use [GET /v1/shipping_types/available](https://developers.cabify.com/reference/shippingtypesavailable).
+
+            '
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RequestError'
+        '409':
+          description: One or more parcels are in a state that does not allow them to be shipped.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RequestError'
+      security:
+      - bearer_token: []
+components:
+  schemas:
+    AssetKind:
+      type: string
+      description: The type of vehicle assigned to carry the parcel.
+      enum:
+      - bicycle
+      - car
+      - moped
+      - scooter
+      - van
+    Address:
+      type: object
+      required:
+      - address
+      properties:
+        address:
+          type: string
+          description: Address of the location
+          example: Calle de la Princesa, 1, 28008 Madrid
+    ParcelWeight:
+      type: object
+      description: Weight of the parcel.
+      properties:
+        value:
+          type: integer
+          minimum: 0
+          example: 1500
+        unit:
+          type: string
+          description: Unit of weight. Defaults to `g` (grams) if omitted or set to an invalid value.
+          enum:
+          - g
+    EstimateV3Request:
+      type: object
+      required:
+      - parcels
+      - shipping_type_id
+      properties:
+        parcels:
+          type: array
+          description: List of parcels to estimate shipping for.
+          items:
+            $ref: '#/components/schemas/EstimateLocation'
+        shipping_type_id:
+          type: string
+          format: uuid
+          description: 'UUID of the shipping type to estimate. Use [GET /v1/shipping_types/available](https://developers.cabify.com/reference/shippingtypesavailable) to retrieve valid IDs.
+
+            '
+        pickup_time:
+          type: string
+          format: date-time
+          description: Desired pickup time, formatted according to RFC 3339, section 5.6.
+          example: '2021-12-02T10:12:07.753Z'
+    ShipParcelsResponse:
+      type: object
+      required:
+      - parcels
+      - shipping_type_id
+      properties:
+        parcels:
+          type: array
+          description: List of parcels with their assigned tracking URLs.
+          items:
+            $ref: '#/components/schemas/ParcelShipment'
+        shipping_type_id:
+          type: string
+          format: uuid
+          description: UUID of the shipping type used for this shipment.
+    EstimateV3Response:
+      type: object
+      required:
+      - deliveries
+      properties:
+        deliveries:
+          type: array
+          items:
+            $ref: '#/components/schemas/DeliveryEstimate'
+    ParcelDimensions:
+      type: object
+      description: Physical dimensions of the parcel.
+      properties:
+        height:
+          type: integer
+          minimum: 0
+          example: 10
+        length:
+          type: integer
+          minimum: 0
+          example: 10
+        width:
+          type: integer
+          minimum: 0
+          example: 10
+        unit:
+          type: string
+          description: Unit of measure for the dimensions. Defaults to `cm` if omitted or set to an invalid value.
+          enum:
+          - cm
+    ShipParcels:
+      type: object
+      required:
+      - parcel_ids
+      - shipping_type_id
+      properties:
+        parcel_ids:
+          type: array
+          description: IDs of the parcels to ship.
+          items:
+            type: string
+            format: uuid
+        shipping_type_id:
+          type: string
+          description: 'UUID of the shipping type to use. Use [GET /v1/shipping_types/available](https://developers.cabify.com/reference/shippingtypesavailable) to retrieve valid IDs.
+
+            '
+        pickup_time:
+          type: string
+          format: date-time
+          description: 'Desired pickup time. Only applicable for the `express` modality. Formatted according to RFC 3339, section 5.6.
+
+            '
+          example: '2021-12-02T10:12:07.753Z'
+    DeliveryEstimation:
+      type: object
+      description: Estimated cost and timing details for a single parcel delivery.
+      required:
+      - price
+      properties:
+        price:
+          $ref: '#/components/schemas/Money'
+        asset_kind:
+          $ref: '#/components/schemas/AssetKind'
+        eta_to_pickup:
+          type: string
+          format: date-time
+          description: Estimated time when the driver will arrive at the pickup location.
+          example: '2021-12-02T10:12:07.753Z'
+        eta_to_delivery:
+          type: string
+          format: date-time
+          description: Estimated time when the parcel will be delivered to the recipient.
+          example: '2021-12-02T10:12:47.753Z'
+    DeliveryEstimate:
+      type: object
+      required:
+      - estimation
+      properties:
+        parcels:
+          type: array
+          items:
+            $ref: '#/components/schemas/EstimateLocation'
+        estimation:
+          $ref: '#/components/schemas/DeliveryEstimation'
+    RequestError:
+      type: object
+      description: Standard error response body returned when a request fails.
+      required:
+      - errors
+      properties:
+        errors:
+          type: array
+          description: List of human-readable error messages describing what went wrong.
+          items:
+            type: string
+    ParcelShipment:
+      type: object
+      description: Summary of a parcel after it has been submitted for shipment.
+      required:
+      - id
+      - shipping_type_id
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: System-generated UUID for this parcel.
+          example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+        tracking_url:
+          type: string
+          description: Public URL where the parcel's live tracking can be viewed.
+          example: https://logistics.follow.cabify.com/abcdefghi/e
+          format: url
+    Money:
+      type: object
+      description: A monetary amount represented in the smallest currency unit (e.g. cents).
+      required:
+      - amount
+      - currency
+      properties:
+        amount:
+          description: 'Amount in the smallest currency unit, following the ISO 4217 standard (e.g. €6.30 → `630`).
+
+            '
+          type: integer
+          example: 630
+        currency:
+          type: string
+          description: ISO 4217 currency code.
+          example: EUR
+    EstimateLocation:
+      type: object
+      description: A single parcel's pickup and drop-off locations used to calculate a shipping estimate.
+      required:
+      - pickup_location
+      - dropoff_location
+      properties:
+        external_id:
+          type: string
+          description: Your own identifier for this parcel. Used to correlate estimate results with your own records.
+          example: parcel_001
+        pickup_location:
+          description: Pickup location. Provide either geographic coordinates or a text address.
+          oneOf:
+          - $ref: '#/components/schemas/Point'
+          - $ref: '#/components/schemas/Address'
+        dropoff_location:
+          description: Drop-off location. Provide either geographic coordinates or a text address.
+          oneOf:
+          - $ref: '#/components/schemas/Point'
+          - $ref: '#/components/schemas/Address'
+        dimensions:
+          $ref: '#/components/schemas/ParcelDimensions'
+        weight:
+          $ref: '#/components/schemas/ParcelWeight'
+    Point:
+      type: object
+      description: A geographic coordinate expressed as latitude and longitude.
+      required:
+      - lat
+      - lon
+      properties:
+        lat:
+          type: number
+          format: float
+          description: Latitude in decimal degrees.
+          example: 40.4489254
+        lon:
+          type: number
+          format: float
+          description: Longitude in decimal degrees.
+          example: -3.6730293
+  securitySchemes:
+    bearer_token:
+      type: http
+      scheme: bearer

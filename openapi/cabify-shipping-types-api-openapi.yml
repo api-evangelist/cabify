@@ -1,0 +1,89 @@
+openapi: 3.0.0
+info:
+  description: 'Welcome to the Cabify Logistics API. This API allows you to create and manage parcel deliveries, track their status in real time, configure proof of delivery options, and receive live updates via webhooks. All requests must be authenticated using a Bearer token.
+
+    '
+  version: 1.0.0
+  title: Cabify Logistics delivery shipping_types API
+  contact:
+    email: p.delivery@cabify.com
+servers:
+- url: https://logistics.api.cabify.com
+  description: Production
+- url: https://logistics.api.cabify-sandbox.com
+  description: Sandbox
+tags:
+- name: shipping_types
+paths:
+  /v1/shipping_types/available:
+    get:
+      tags:
+      - shipping_types
+      summary: List available shipping types for a location.
+      description: 'Returns the shipping types available to your account for a given pickup location. The available options are determined by your account configuration and the geographic region of the provided coordinates.
+
+        '
+      operationId: shippingTypesAvailable
+      parameters:
+      - in: query
+        name: location
+        description: Geographic coordinates of the pickup point, formatted as `latitude,longitude`.
+        required: true
+        example: 40.456367,-3.690587
+        schema:
+          type: string
+      responses:
+        '200':
+          description: Available shipping types retrieved successfully.
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/ShippingType'
+        '401':
+          description: Unauthorized. Missing or invalid authentication token.
+        '404':
+          description: No shipping types are available for the given location.
+      security:
+      - bearer_token: []
+components:
+  schemas:
+    Modality:
+      type: string
+      description: 'The delivery modality determines the timing and service level of the shipment. - `express`: On-demand delivery, typically within 1 hour. - `same_day`: Delivery scheduled for the same calendar day. - `next_day`: Delivery scheduled for the following calendar day. - `groceries`: Optimised for grocery and fresh-food deliveries.
+
+        '
+      example: same_day
+      enum:
+      - express
+      - same_day
+      - next_day
+      - groceries
+    ShippingType:
+      type: object
+      required:
+      - id
+      - name
+      - modality
+      - description
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: UUID of the shipping type.
+          example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+        name:
+          type: string
+          description: Display name of the shipping type.
+          example: Same day default
+        modality:
+          $ref: '#/components/schemas/Modality'
+        description:
+          type: string
+          description: Human-readable description of the shipping type.
+          example: Same day delivery
+  securitySchemes:
+    bearer_token:
+      type: http
+      scheme: bearer

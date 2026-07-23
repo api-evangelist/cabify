@@ -1,0 +1,56 @@
+openapi: 3.0.0
+info:
+  description: 'Welcome to the Cabify Logistics API. This API allows you to create and manage parcel deliveries, track their status in real time, configure proof of delivery options, and receive live updates via webhooks. All requests must be authenticated using a Bearer token.
+
+    '
+  version: 1.0.0
+  title: Cabify Logistics delivery label API
+  contact:
+    email: p.delivery@cabify.com
+servers:
+- url: https://logistics.api.cabify.com
+  description: Production
+- url: https://logistics.api.cabify-sandbox.com
+  description: Sandbox
+tags:
+- name: label
+paths:
+  /v1/parcels/{parcel_id}/warehouse/label:
+    get:
+      tags:
+      - label
+      summary: Get the warehouse label for a parcel (deprecated).
+      description: '**This endpoint is deprecated.** Please use [GET /v1/parcels/{parcel_id}/label](https://developers.cabify.com/reference/labelparcel) instead.
+
+        '
+      operationId: warehouseLabelParcel
+      parameters:
+      - in: path
+        name: parcel_id
+        description: UUID of the parcel.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Returns the parcel label as a PDF file.
+          content:
+            application/pdf:
+              schema:
+                type: string
+                format: binary
+        '401':
+          description: Unauthorized. Missing or invalid authentication token.
+        '403':
+          description: This parcel does not belong to your account.
+        '404':
+          description: No parcel found with the given ID.
+      security:
+      - bearer_token: []
+      deprecated: true
+components:
+  securitySchemes:
+    bearer_token:
+      type: http
+      scheme: bearer

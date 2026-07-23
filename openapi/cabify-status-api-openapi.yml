@@ -1,0 +1,428 @@
+openapi: 3.0.0
+info:
+  description: 'Welcome to the Cabify Logistics API. This API allows you to create and manage parcel deliveries, track their status in real time, configure proof of delivery options, and receive live updates via webhooks. All requests must be authenticated using a Bearer token.
+
+    '
+  version: 1.0.0
+  title: Cabify Logistics delivery status API
+  contact:
+    email: p.delivery@cabify.com
+servers:
+- url: https://logistics.api.cabify.com
+  description: Production
+- url: https://logistics.api.cabify-sandbox.com
+  description: Sandbox
+tags:
+- name: status
+  description: Track the real-time status and location of your parcels at any point during their delivery.
+paths:
+  /v1/parcels/{parcel_id}/status:
+    get:
+      tags:
+      - status
+      summary: Get the current status of a parcel.
+      description: Returns the current state and tracking information for the specified parcel.
+      operationId: statusParcel
+      parameters:
+      - in: path
+        name: parcel_id
+        description: UUID of the parcel to track.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Parcel status retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ParcelStatus'
+        '401':
+          description: Unauthorized. Missing or invalid authentication token.
+        '404':
+          description: No parcel found with the given ID.
+      security:
+      - bearer_token: []
+  /v1/parcels/{parcel_id}/timeline:
+    get:
+      tags:
+      - status
+      summary: Get the state history of a parcel.
+      description: 'Returns the ordered list of state-change events for the specified parcel. Only parcels updated within the last 30 days can be queried.
+
+        '
+      operationId: timelineParcel
+      parameters:
+      - in: path
+        name: parcel_id
+        description: UUID of the parcel whose history you want to retrieve.
+        required: true
+        schema:
+          type: string
+          format: uuid
+      responses:
+        '200':
+          description: Timeline retrieved successfully.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ParcelTimeline'
+        '401':
+          description: Unauthorized. Missing or invalid authentication token.
+        '403':
+          description: This parcel does not belong to your account.
+        '404':
+          description: No parcel found with the given ID.
+      security:
+      - bearer_token: []
+components:
+  schemas:
+    AssetKind:
+      type: string
+      description: The type of vehicle assigned to carry the parcel.
+      enum:
+      - bicycle
+      - car
+      - moped
+      - scooter
+      - van
+    PickupFailed:
+      type: object
+      description: '**Deprecated.** Use `pickup_attempt` instead. Details of a failed pickup attempt.
+
+        '
+      properties:
+        reason:
+          type: string
+          description: 'Reason why the pickup failed. See [pickup failed reasons](https://developers.cabify.com/reference/parcel-information#pickup-failed-reason) for a description of each value.
+
+            '
+          enum:
+          - sender_no_show
+          - sender_too_late
+          - address_wrong
+          - address_not_found
+          - address_unsafe
+          - parcel_suspicious
+          - parcel_packaging
+          - parcel_too_big_or_heavy
+          - payment_requested
+          - payment_fake
+          - other_with_feedback
+          - place_closed
+          - delivery_not_found
+          - already_picked_up
+          - delivery_cancelled
+          example: address_wrong
+        failed_at:
+          type: string
+          format: date-time
+          description: Timestamp of the failed pickup event, formatted according to RFC 3339, section 5.6.
+          example: '2021-12-02T10:12:07.753Z'
+        driver_comments:
+          type: string
+          description: Comments left by the driver explaining why the pickup failed.
+          example: can't find the address
+    ParcelStatus:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: System-generated UUID for this parcel.
+          example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+        external_id:
+          type: string
+          description: Your own identifier for this parcel, as provided when the parcel was created.
+          example: parcel_001
+        state:
+          type: string
+          description: 'The current lifecycle state of the parcel. See [parcel states](https://developers.cabify.com/reference/logistics-introduction#parcel) for a full description of each value.
+
+            '
+          enum:
+          - ready
+          - qualifiedforpickup
+          - pickingup
+          - intransit
+          - delivering
+          - delivered
+          - returning
+          - returned
+          - incident
+          - requestercancel
+          - internalcancel
+          - pickupfailed
+          - onroutetopickup
+          - readytopickup
+          - onroutetofinalhub
+          - receivedonfinalhub
+          - readytodispatch
+          - onroutetodelivery
+          - undelivered
+          - onroutetoreturn
+          - returnrejected
+        failure_reason:
+          type: string
+          description: 'If present, indicates why the delivery was rejected. See [failure reasons](https://developers.cabify.com/reference/parcel-information#failure-reason) for a description of each value.
+
+            '
+          enum:
+          - unknown
+          - payment_method_declined
+          - no_payment_methods
+          - requester_not_found_or_unauthorized
+          - product_does_not_exist
+          - invalid_pick_up_location
+          - delivery_already_exist
+        delivery_attempt:
+          type: object
+          properties:
+            id_proof_of_delivery:
+              type: object
+              nullable: true
+              properties:
+                recipient_name:
+                  type: string
+                  description: Name of the person who received the parcel.
+                  example: Francisco
+                recipient_id_number:
+                  type: string
+                  example: 11111111T
+                  description: Identity document number of the person who received the parcel.
+            photo_proof_of_delivery:
+              type: object
+              nullable: true
+              properties:
+                photo_urls:
+                  type: array
+                  items:
+                    type: string
+                  description: List of URLs of the photos taken by the driver as proof of delivery.
+                photo_url:
+                  type: string
+                  example: https://s3.amazon.com/photo.jpg
+                  description: URL of the first photo taken by the driver as proof of delivery. Deprecated — use `photo_urls` instead.
+            comment_proof_of_delivery:
+              type: object
+              nullable: true
+              properties:
+                comment:
+                  type: string
+                  example: El paquete se ha dejado en la puerta
+                  description: Comment left by the driver as proof of delivery.
+            fail_reason:
+              type: string
+              description: 'Reason the delivery attempt failed. See [delivery attempt fail reasons](https://developers.cabify.com/reference/parcel-information#delivery-attempt-fail-reason) for a description of each value.
+
+                '
+              enum:
+              - recipient_not_found
+              - rejected
+              - wrong_address
+              - zone_unsafe
+              - invalid_proof
+              - other
+              - invalid
+              - parcel_lost
+              - parcel_unreadable_barcode
+              - parcel_damaged
+              - parcel_stolen
+              - no_delivery_attempt
+              - postponed_by_customer
+              - place_closed
+              - no_keyword
+              - fraud_suspected
+              - unknown
+            support_ticket:
+              type: string
+              nullable: true
+              description: ID of the support ticket opened by the driver when an incident occurs.
+            address:
+              type: string
+              nullable: true
+              description: Address where the delivery was attempted.
+            feedback:
+              type: string
+              nullable: true
+              description: Feedback provided by the driver when the parcel could not be delivered.
+        tracking:
+          type: object
+          nullable: true
+          properties:
+            eta_to_accept:
+              type: integer
+              nullable: true
+              description: Estimated time in seconds until a driver is assigned to this delivery.
+              example: 90
+            location:
+              type: object
+              nullable: true
+              properties:
+                lat:
+                  type: number
+                  format: float
+                  example: 40.4489254
+                lon:
+                  type: number
+                  format: float
+                  example: -3.6730293
+            routes:
+              type: object
+              properties:
+                pick_up:
+                  description: Information about the route from the driver position to the pickup point. Available before the parcel has been picked up.
+                  allOf:
+                  - $ref: '#/components/schemas/ParcelStatusRoute'
+                drop_off:
+                  description: Information about the route from the pickup point to the drop-off destination.
+                  allOf:
+                  - $ref: '#/components/schemas/ParcelStatusRoute'
+            tracking_url:
+              type: string
+              description: Public URL where the parcel's live tracking can be viewed.
+        asset:
+          $ref: '#/components/schemas/Asset'
+        driver:
+          type: object
+          nullable: true
+          description: Information about the assigned driver. Only present once a driver has been assigned.
+          properties:
+            photo_url:
+              type: string
+              description: URL of the driver's profile photo.
+              example: https://s3.amazon.com/photo.jpg
+            name:
+              type: string
+              description: Driver's full name.
+              example: Pepe
+            phone:
+              type: string
+              description: Driver's contact phone number.
+              example: '+34658478854'
+        pickup_failed:
+          $ref: '#/components/schemas/PickupFailed'
+        shipping_type:
+          type: object
+          nullable: true
+          description: The shipping type selected for this parcel's delivery.
+          properties:
+            id:
+              type: string
+              format: uuid
+              description: UUID of the shipping type.
+              example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+            name:
+              type: string
+              description: Display name of the shipping type.
+              example: Same day default
+            modality:
+              $ref: '#/components/schemas/Modality'
+    Modality:
+      type: string
+      description: 'The delivery modality determines the timing and service level of the shipment. - `express`: On-demand delivery, typically within 1 hour. - `same_day`: Delivery scheduled for the same calendar day. - `next_day`: Delivery scheduled for the following calendar day. - `groceries`: Optimised for grocery and fresh-food deliveries.
+
+        '
+      example: same_day
+      enum:
+      - express
+      - same_day
+      - next_day
+      - groceries
+    TimelineEvent:
+      type: object
+      required:
+      - state
+      - state_updated_at
+      properties:
+        state:
+          type: string
+          description: 'The lifecycle state the parcel transitioned into. See [parcel states](https://developers.cabify.com/reference/logistics-introduction#parcel) for a full description of each value.
+
+            '
+          enum:
+          - ready
+          - qualifiedforpickup
+          - pickingup
+          - intransit
+          - delivering
+          - delivered
+          - returning
+          - returned
+          - incident
+          - requestercancel
+          - internalcancel
+          - pickupfailed
+          - onroutetopickup
+          - readytopickup
+          - onroutetofinalhub
+          - receivedonfinalhub
+          - readytodispatch
+          - onroutetodelivery
+          - undelivered
+          - onroutetoreturn
+          - returnrejected
+        state_updated_at:
+          type: string
+          format: date-time
+          description: Timestamp when the parcel transitioned into this state, formatted according to RFC 3339, section 5.6.
+          example: '2021-12-02T10:12:07.753Z'
+    ParcelStatusRoute:
+      type: object
+      description: Route information between two points during a delivery.
+      required:
+      - eta
+      - path
+      properties:
+        eta:
+          type: integer
+          example: 120
+          description: Estimated time of arrival in seconds.
+        path:
+          type: string
+          example: fhdsa98fha87sdfhas76dgf8a
+          description: Encoded polyline representing the route path.
+    ParcelTimeline:
+      type: object
+      required:
+      - id
+      - timeline
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: System-generated UUID for this parcel.
+          example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+        external_id:
+          type: string
+          description: Your own identifier for this parcel, as provided when the parcel was created.
+          example: parcel_001
+        timeline:
+          type: array
+          description: Chronological list of state-change events for this parcel.
+          items:
+            $ref: '#/components/schemas/TimelineEvent'
+    Asset:
+      type: object
+      description: Details of the vehicle assigned to the delivery.
+      properties:
+        reg_plate:
+          type: string
+          nullable: true
+          description: Vehicle registration plate number.
+          example: 1111AAA
+        name:
+          type: string
+          description: Vehicle model name.
+          example: Audi A3
+        color:
+          type: string
+          description: Vehicle color.
+          example: black
+        asset_kind:
+          $ref: '#/components/schemas/AssetKind'
+  securitySchemes:
+    bearer_token:
+      type: http
+      scheme: bearer

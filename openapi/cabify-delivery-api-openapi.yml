@@ -1,0 +1,114 @@
+openapi: 3.0.0
+info:
+  description: 'Welcome to the Cabify Logistics API. This API allows you to create and manage parcel deliveries, track their status in real time, configure proof of delivery options, and receive live updates via webhooks. All requests must be authenticated using a Bearer token.
+
+    '
+  version: 1.0.0
+  title: Cabify Logistics delivery API
+  contact:
+    email: p.delivery@cabify.com
+servers:
+- url: https://logistics.api.cabify.com
+  description: Production
+- url: https://logistics.api.cabify-sandbox.com
+  description: Sandbox
+tags:
+- name: delivery
+  description: 'Operations for managing the delivery lifecycle. Use these endpoints to trigger a shipment, cancel an active delivery, or check whether a pickup location falls within an operating area.
+
+    '
+paths:
+  /v1/parcels/deliver/cancel:
+    post:
+      tags:
+      - delivery
+      summary: Cancel the delivery of the specified parcels.
+      description: 'Cancels an in-progress delivery for the given parcels, when cancellation is still permitted. Delivery cannot be cancelled once the parcel has been picked up. Cancellation is allowed in the following states: `qualifiedforpickup`, `onroutetopickup`, and `pickingup`. Please note that cancellation may incur costs.
+
+        '
+      operationId: cancelParcels
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CancelParcels'
+      responses:
+        '202':
+          description: Cancellation request accepted and is being processed.
+        '401':
+          description: Unauthorized. Missing or invalid authentication token.
+        '404':
+          description: One or more parcels were not found.
+        '409':
+          description: 'One or more parcels cannot be cancelled due to their current state. Cancellation is only allowed in the `qualifiedforpickup`, `onroutetopickup`, or `pickingup` states.
+
+            '
+      security:
+      - bearer_token: []
+  /v1/parcels/deliver/pickup:
+    get:
+      tags:
+      - delivery
+      summary: Check whether a pickup location is within an operating area.
+      description: 'Verifies that the given pickup location is covered by the delivery service. You can provide either a text address (`address`) or geographic coordinates (`pickup_point`).
+
+        '
+      parameters:
+      - in: query
+        name: address
+        description: 'Full address to check (e.g. `Calle Pradillo 42, Madrid`). You must provide either `address` or `pickup_point` (or both).
+
+          '
+        required: false
+        example: Calle%20Pradillo%2042%2C%20Madrid (Calle Pradillo 42, Madrid)
+        schema:
+          type: string
+      - in: query
+        name: pickup_point
+        description: 'Geographic coordinates of the pickup location, formatted as `latitude,longitude`. You must provide either `address` or `pickup_point` (or both).
+
+          '
+        required: false
+        example: 40.456367,-3.690587
+        schema:
+          type: string
+      operationId: deliverPickup
+      responses:
+        '200':
+          description: The pickup location is within an operating area.
+        '404':
+          description: The pickup location is not within any operating area.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/RequestError'
+      security:
+      - bearer_token: []
+components:
+  schemas:
+    CancelParcels:
+      type: object
+      required:
+      - parcel_ids
+      properties:
+        parcel_ids:
+          type: array
+          description: List of parcels to be cancelled
+          items:
+            type: string
+            format: uuid
+    RequestError:
+      type: object
+      description: Standard error response body returned when a request fails.
+      required:
+      - errors
+      properties:
+        errors:
+          type: array
+          description: List of human-readable error messages describing what went wrong.
+          items:
+            type: string
+  securitySchemes:
+    bearer_token:
+      type: http
+      scheme: bearer
