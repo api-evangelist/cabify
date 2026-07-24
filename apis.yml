@@ -1,27 +1,354 @@
 aid: cabify
 name: Cabify
-description: Cabify is a company surfaced as a portfolio company of 500-global, hv-capital and added to
-  the API Evangelist network as a stub for enrichment. This profile is a lead awaiting the enrichment
-  pipeline.
+description: >-
+  Cabify is a Spanish multi-mobility company founded in 2011 and headquartered in Madrid, operating
+  ride-hailing, corporate mobility, and last-mile logistics across Spain and Latin America (6+
+  countries and 40+ cities). Its public developer platform exposes two authenticated REST APIs: a
+  Ride-Hailing API (v4) for price estimation, journey booking, real-time state tracking, rider and
+  label management, and sales reporting; and a Logistics API (v1) for creating, shipping, tracking,
+  and configuring proof of delivery for parcels, including ecommerce integrations with Shopify,
+  Tiendanube, and VTEX. Both APIs authenticate with OAuth2 client-credentials access tokens
+  (Bearer), publish independent sandbox environments, and deliver asynchronous updates via webhooks.
 url: https://raw.githubusercontent.com/api-evangelist/cabify/refs/heads/main/apis.yml
 x-type: company
 x-source: vc-portfolio
 x-backed-by:
 - 500-global
 - hv-capital
-x-tier: stub
-x-tier-reason: portfolio-lead
+accessModel:
+  pricing: unknown
+  onboarding: self-serve
+  trial: false
+  try_now: false
+  public: false
+  label: Self-serve signup
+  confidence: medium
+  source:
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://cabify.com/static/head/cover.png
 specificationVersion: '0.20'
 created: '2026-07-17'
-modified: '2026-07-17'
+modified: '2026-07-18'
 tags:
 - Company
-apis: []
+- Transportation
+- Ride Hailing
+- Mobility
+- Logistics
+- Delivery
+- Last Mile Delivery
+- Webhooks
+- OAuth
 maintainers:
 - FN: Kin Lane
   email: kin@apievangelist.com
 - FN: APIs.json
   email: info@apis.io
+apis:
+- aid: cabify:cabify-delivery-api
+  name: Cabify delivery API
+  description: >-
+    Operations for managing the delivery lifecycle. Use these endpoints to trigger a shipment, cancel
+    an active delivery, or check whether a pickup location falls within an operating area.
+  humanURL: https://developers.cabify.com/docs/ride-hailing
+  baseURL: https://cabify.com/api/v4
+  tags:
+  - delivery
+  properties:
+  - type: OpenAPI
+    url: openapi/cabify-delivery-api-openapi.yml
+  - type: APIReference
+    url: https://developers.cabify.com/reference/createjourney
+  - type: ChangeLog
+    url: https://developers.cabify.com/docs/ride-hailing-changelog
+  - type: APIReference
+    url: https://developers.cabify.com/reference/addparcels
+- aid: cabify:cabify-estimates-api
+  name: Cabify Estimates API
+  description: >-
+    This method returns prices, Id's and all the information for products that are available at the origin
+    point. Before requesting a journey as a first step it is necessary to obtain the different products
+    configured in your account in order to select the one that fits your needs and keep the Id that will
+    be used in the Journey.
+  humanURL: https://developers.cabify.com/docs/ride-hailing
+  baseURL: https://cabify.com/api/v4
+  tags:
+  - Estimates
+  properties:
+  - type: OpenAPI
+    url: openapi/cabify-estimates-api-openapi.yml
+  - type: APIReference
+    url: https://developers.cabify.com/reference/createjourney
+  - type: ChangeLog
+    url: https://developers.cabify.com/docs/ride-hailing-changelog
+  - type: APIReference
+    url: https://developers.cabify.com/reference/addparcels
+- aid: cabify:cabify-hubs-api
+  name: Cabify hubs API
+  description: >-
+    A hub is a physical location (such as a warehouse or store) where parcels are stored until they are
+    ready to be picked up by a driver. You can reference a hub in pickup or drop-off information using
+    its external ID.
+  humanURL: https://developers.cabify.com/docs/ride-hailing
+  baseURL: https://cabify.com/api/v4
+  tags:
+  - hubs
+  properties:
+  - type: OpenAPI
+    url: openapi/cabify-hubs-api-openapi.yml
+  - type: APIReference
+    url: https://developers.cabify.com/reference/createjourney
+  - type: ChangeLog
+    url: https://developers.cabify.com/docs/ride-hailing-changelog
+  - type: APIReference
+    url: https://developers.cabify.com/reference/addparcels
+- aid: cabify:cabify-journeys-api
+  name: Cabify Journeys API
+  description: >-
+    This section covers the mobility solution for all companies looking to transport their employees in
+    a simple, safe and comfortable way. We offer different types of vehicles with private drivers and
+    provide everything you need to enjoy your journey, such as a good driver and a top-of-the-range car.
+  humanURL: https://developers.cabify.com/docs/ride-hailing
+  baseURL: https://cabify.com/api/v4
+  tags:
+  - Journeys
+  properties:
+  - type: OpenAPI
+    url: openapi/cabify-journeys-api-openapi.yml
+  - type: APIReference
+    url: https://developers.cabify.com/reference/createjourney
+  - type: ChangeLog
+    url: https://developers.cabify.com/docs/ride-hailing-changelog
+  - type: APIReference
+    url: https://developers.cabify.com/reference/addparcels
+- aid: cabify:cabify-label-api
+  name: Cabify label API
+  description: The label API from Cabify — 1 operation(s) for label.
+  humanURL: https://developers.cabify.com/docs/ride-hailing
+  baseURL: https://cabify.com/api/v4
+  tags:
+  - label
+  properties:
+  - type: OpenAPI
+    url: openapi/cabify-label-api-openapi.yml
+  - type: APIReference
+    url: https://developers.cabify.com/reference/createjourney
+  - type: ChangeLog
+    url: https://developers.cabify.com/docs/ride-hailing-changelog
+  - type: APIReference
+    url: https://developers.cabify.com/reference/addparcels
+- aid: cabify:cabify-labels-api
+  name: Cabify Labels API
+  description: >-
+    Cabify offers to its clients a feature where the client’s employees have to input a journey motive
+    or a project or a dynamic cost center associated with the new journey before requesting it. This is
+    usually used for financial budgeting and reporting purposes since every journey now comes with this
+    data linked to it, in other words, clients can segment their invoices by these Labels. <br> <br> Since
+    some companies have a lot of Labels (projects/cost centers) that need to be managed they can use our
+    API to do so. We allow creating, modifying, and disabling them directly from, for example, the client’s
+    ERP (SAP, NetSuite, MSDynamics, etc.).
+  humanURL: https://developers.cabify.com/docs/ride-hailing
+  baseURL: https://cabify.com/api/v4
+  tags:
+  - Labels
+  properties:
+  - type: OpenAPI
+    url: openapi/cabify-labels-api-openapi.yml
+  - type: APIReference
+    url: https://developers.cabify.com/reference/createjourney
+  - type: ChangeLog
+    url: https://developers.cabify.com/docs/ride-hailing-changelog
+  - type: APIReference
+    url: https://developers.cabify.com/reference/addparcels
+- aid: cabify:cabify-parcels-api
+  name: Cabify parcels API
+  description: >-
+    A parcel is the package you need to ship. Each parcel is identified by a unique ID and contains a
+    pickup point (where the driver collects the package) and a drop-off point (the destination). Parcels
+    must be created before they can be shipped.
+  humanURL: https://developers.cabify.com/docs/ride-hailing
+  baseURL: https://cabify.com/api/v4
+  tags:
+  - parcels
+  properties:
+  - type: OpenAPI
+    url: openapi/cabify-parcels-api-openapi.yml
+  - type: APIReference
+    url: https://developers.cabify.com/reference/createjourney
+  - type: ChangeLog
+    url: https://developers.cabify.com/docs/ride-hailing-changelog
+  - type: APIReference
+    url: https://developers.cabify.com/reference/addparcels
+- aid: cabify:cabify-sales-api
+  name: Cabify Sales API
+  description: >-
+    Sales objects are created once a journey transitions into the terminated state and they are associated
+    with the user who requested the journey (which not necessarily is the rider).
+                <br> <br>The transition to terminated happens automatically after 2 hours in production
+    (10 minutes in sandbox environment).
+                <br> <br>You can request them per user (requester of the journey), the client (all of
+    your sales), or journey (all Sales associated to a specific journey which in most cases is just one).
+  humanURL: https://developers.cabify.com/docs/ride-hailing
+  baseURL: https://cabify.com/api/v4
+  tags:
+  - Sales
+  properties:
+  - type: OpenAPI
+    url: openapi/cabify-sales-api-openapi.yml
+  - type: APIReference
+    url: https://developers.cabify.com/reference/createjourney
+  - type: ChangeLog
+    url: https://developers.cabify.com/docs/ride-hailing-changelog
+  - type: APIReference
+    url: https://developers.cabify.com/reference/addparcels
+- aid: cabify:cabify-shipment-api
+  name: Cabify shipment API
+  description: The shipment API from Cabify — 2 operation(s) for shipment.
+  humanURL: https://developers.cabify.com/docs/ride-hailing
+  baseURL: https://cabify.com/api/v4
+  tags:
+  - shipment
+  properties:
+  - type: OpenAPI
+    url: openapi/cabify-shipment-api-openapi.yml
+  - type: APIReference
+    url: https://developers.cabify.com/reference/createjourney
+  - type: ChangeLog
+    url: https://developers.cabify.com/docs/ride-hailing-changelog
+  - type: APIReference
+    url: https://developers.cabify.com/reference/addparcels
+- aid: cabify:cabify-shipping-types-api
+  name: Cabify shipping_types API
+  description: The shipping_types API from Cabify — 1 operation(s) for shipping_types.
+  humanURL: https://developers.cabify.com/docs/ride-hailing
+  baseURL: https://cabify.com/api/v4
+  tags:
+  - shipping_types
+  properties:
+  - type: OpenAPI
+    url: openapi/cabify-shipping-types-api-openapi.yml
+  - type: APIReference
+    url: https://developers.cabify.com/reference/createjourney
+  - type: ChangeLog
+    url: https://developers.cabify.com/docs/ride-hailing-changelog
+  - type: APIReference
+    url: https://developers.cabify.com/reference/addparcels
+- aid: cabify:cabify-status-api
+  name: Cabify status API
+  description: >-
+    Track the real-time status and location of your parcels at any point during their delivery.
+  humanURL: https://developers.cabify.com/docs/ride-hailing
+  baseURL: https://cabify.com/api/v4
+  tags:
+  - status
+  properties:
+  - type: OpenAPI
+    url: openapi/cabify-status-api-openapi.yml
+  - type: APIReference
+    url: https://developers.cabify.com/reference/createjourney
+  - type: ChangeLog
+    url: https://developers.cabify.com/docs/ride-hailing-changelog
+  - type: APIReference
+    url: https://developers.cabify.com/reference/addparcels
+- aid: cabify:cabify-users-api
+  name: Cabify users API
+  description: The users API from Cabify — 4 operation(s) for users.
+  humanURL: https://developers.cabify.com/docs/ride-hailing
+  baseURL: https://cabify.com/api/v4
+  tags:
+  - users
+  properties:
+  - type: OpenAPI
+    url: openapi/cabify-users-api-openapi.yml
+  - type: APIReference
+    url: https://developers.cabify.com/reference/createjourney
+  - type: ChangeLog
+    url: https://developers.cabify.com/docs/ride-hailing-changelog
+  - type: APIReference
+    url: https://developers.cabify.com/reference/addparcels
+- aid: cabify:cabify-webhooks-api
+  name: Cabify webhooks API
+  description: >-
+    Subscribe to event-driven notifications to receive live updates about parcel status changes, location
+    updates, and proof of delivery codes.
+  humanURL: https://developers.cabify.com/docs/ride-hailing
+  baseURL: https://cabify.com/api/v4
+  tags:
+  - webhooks
+  properties:
+  - type: OpenAPI
+    url: openapi/cabify-webhooks-api-openapi.yml
+  - type: APIReference
+    url: https://developers.cabify.com/reference/createjourney
+  - type: ChangeLog
+    url: https://developers.cabify.com/docs/ride-hailing-changelog
+  - type: APIReference
+    url: https://developers.cabify.com/reference/addparcels
 common:
 - type: Website
   url: https://cabify.com
+- type: DeveloperPortal
+  url: https://developers.cabify.com
+- type: Documentation
+  url: https://developers.cabify.com/docs/getting-started
+- type: GettingStarted
+  url: https://developers.cabify.com/docs/quickstart
+- type: APIReference
+  url: https://developers.cabify.com/reference/createjourney
+- type: Authentication
+  url: authentication/cabify-authentication.yml
+- type: Sandbox
+  url: sandbox/cabify-sandbox.yml
+- type: Webhooks
+  url: asyncapi/cabify-webhooks.yml
+- type: ChangeLog
+  url: changelog/cabify-changelog.yml
+- type: Lifecycle
+  url: lifecycle/cabify-lifecycle.yml
+- type: StatusPage
+  url: https://cabify.statuspage.io
+- type: MCPServer
+  url: mcp/cabify-mcp.yml
+- type: LLMsTxt
+  url: llms/cabify-llms.txt
+- type: WellKnown
+  url: well-known/cabify-well-known.yml
+- type: SecurityTxt
+  url: well-known/cabify-security.txt
+- type: Conventions
+  url: conventions/cabify-conventions.yml
+- type: ErrorCatalog
+  url: errors/cabify-problem-types.yml
+- type: ErrorCatalog
+  url: errors/cabify-operation-errors.yml
+- type: Conformance
+  url: conformance/cabify-conformance.yml
+- type: DataModel
+  url: data-model/cabify-data-model.yml
+- type: AgenticAccess
+  url: agentic-access/cabify-agentic-access.yml
+- type: DomainSecurity
+  url: security/cabify-domain-security.yml
+- type: VulnerabilityDisclosure
+  url: security/cabify-vulnerability-disclosure.yml
+- type: Security
+  url: https://cabify.com/.well-known/security.txt
+- type: AgentSkill
+  url: skills/_index.yml
+- type: GitHubOrganization
+  url: https://github.com/cabify
+- type: Support
+  url: https://developers.cabify.com/page/cabify-api-support
+- type: TermsOfService
+  url: https://cabify.com/en/legal
+- type: PrivacyPolicy
+  url: https://cabify.com/en/legal/privacy
+- type: SignUp
+  url: https://cabify.com/app
+x-enrichment:
+  date: '2026-07-19'
+  status: backfilled
+  pass: local-v1
+  note: backfilled from .gitignore signal + verified work evidence

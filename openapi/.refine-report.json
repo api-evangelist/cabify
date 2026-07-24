@@ -1,0 +1,41 @@
+{
+  "provider": "cabify",
+  "sources": [
+    "cabify-delivery-api-openapi.yml",
+    "cabify-estimates-api-openapi.yml",
+    "cabify-hubs-api-openapi.yml",
+    "cabify-journeys-api-openapi.yml",
+    "cabify-label-api-openapi.yml",
+    "cabify-labels-api-openapi.yml",
+    "cabify-parcels-api-openapi.yml",
+    "cabify-sales-api-openapi.yml",
+    "cabify-shipment-api-openapi.yml",
+    "cabify-shipping-types-api-openapi.yml",
+    "cabify-status-api-openapi.yml",
+    "cabify-users-api-openapi.yml",
+    "cabify-webhooks-api-openapi.yml"
+  ],
+  "outputs": [
+    "cabify-delivery-api-openapi.yml",
+    "cabify-estimates-api-openapi.yml",
+    "cabify-hubs-api-openapi.yml",
+    "cabify-journeys-api-openapi.yml",
+    "cabify-label-api-openapi.yml",
+    "cabify-labels-api-openapi.yml",
+    "cabify-parcels-api-openapi.yml",
+    "cabify-sales-api-openapi.yml",
+    "cabify-shipment-api-openapi.yml",
+    "cabify-shipping-types-api-openapi.yml",
+    "cabify-status-api-openapi.yml",
+    "cabify-users-api-openapi.yml",
+    "cabify-webhooks-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [
+    "cabify-hubs-api-openapi.yml: dangling $ref: #/paths/~1v1~1hubs~1none~1%7Bhub_external_id%7D/get/responses/200/content/application~1json/schema",
+    "cabify-parcels-api-openapi.yml: dangling $ref: #/paths/~1v1~1parcels~1%7Bparcel_id%7D~1notify/post/responses/400/content/application~1json/schema"
+  ],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}

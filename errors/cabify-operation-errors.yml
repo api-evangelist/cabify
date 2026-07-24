@@ -1,0 +1,21 @@
+generated: '2026-07-18'
+method: searched
+source: https://developers.cabify.com/docs/error-handling
+scope: Cabify Logistics API — operational (delivery-lifecycle) errors reported via webhooks and the parcel
+  status endpoint
+fields:
+- field: failure_reason
+  stage: deliver parcel request
+- field: pickup_failed.reason
+  stage: picking up a parcel
+- field: delivery_attempt.fail_reason
+  stage: delivering a parcel
+deliver_request_errors:
+- code: payment_method_declined
+  meaning: A problem with the payment method; the delivery was not accepted.
+- code: no_payment_methods
+  meaning: No payment method configured for the account.
+- code: requester_no_found_or_unauthorized
+  meaning: The requester sent in the request is not valid.
+- code: invalid_pick_up_location
+  meaning: No fleet available for the delivery area, or it is not properly configured.

@@ -1,0 +1,74 @@
+generated: '2026-07-18'
+method: derived
+source: openapi/ 4xx-5xx responses; https://developers.cabify.com/docs/error-handling
+format: custom
+notes: 'Cabify returns standard HTTP status codes. Error bodies use custom schemas (Ride-Hailing: BadRequest/UnauthorizedRequest/NotFound/Conflict/InternalServerError;
+  Logistics: RequestError) rather than RFC 9457 application/problem+json. Retry policies should react
+  to 5xx only; 4xx requires request changes.'
+problems:
+- status: 400
+  title: Bad request — incorrect syntax; do not retry without modification
+  occurrences: 26
+  example_operations:
+  - openapi/cabify-ride-hailing-openapi.yml#cancelJourney
+  - openapi/cabify-ride-hailing-openapi.yml#getJourneyState
+  - openapi/cabify-ride-hailing-openapi.yml#createJourney
+  - openapi/cabify-ride-hailing-openapi.yml#createLabel
+- status: 401
+  title: Unauthorized — access token expired or invalid
+  occurrences: 43
+  example_operations:
+  - openapi/cabify-ride-hailing-openapi.yml#cancelJourney
+  - openapi/cabify-ride-hailing-openapi.yml#getJourneyState
+  - openapi/cabify-ride-hailing-openapi.yml#createJourney
+  - openapi/cabify-ride-hailing-openapi.yml#createLabel
+- status: 403
+  title: Forbidden — request requires valid user authentication information
+  occurrences: 8
+  example_operations:
+  - openapi/cabify-logistics-openapi.yml#updateParcel
+  - openapi/cabify-logistics-openapi.yml#getTipParcel
+  - openapi/cabify-logistics-openapi.yml#tipParcel
+  - openapi/cabify-logistics-openapi.yml#labelParcel
+- status: 404
+  title: Not found — the requested resource does not exist
+  occurrences: 26
+  example_operations:
+  - openapi/cabify-ride-hailing-openapi.yml#getJourneyState
+  - openapi/cabify-ride-hailing-openapi.yml#createJourney
+  - openapi/cabify-ride-hailing-openapi.yml#getJourneySales
+  - openapi/cabify-ride-hailing-openapi.yml#getLabelById
+- status: 409
+  title: Conflict — request conflicts with the current state of the resource
+  occurrences: 8
+  example_operations:
+  - openapi/cabify-ride-hailing-openapi.yml#cancelJourney
+  - openapi/cabify-logistics-openapi.yml#addParcels
+  - openapi/cabify-logistics-openapi.yml#cancelParcels
+  - openapi/cabify-logistics-openapi.yml#EstimateShipParcels
+- status: 422
+  title: Unprocessable entity — content type/syntax understood but request cannot be processed
+  occurrences: 3
+  example_operations:
+  - openapi/cabify-logistics-openapi.yml#addParcels
+  - openapi/cabify-logistics-openapi.yml#updateParcel
+  - openapi/cabify-logistics-openapi.yml#notifyParcel
+- status: 429
+  title: Too many requests — rate limit exceeded
+  occurrences: 1
+  example_operations:
+  - openapi/cabify-logistics-openapi.yml#tipParcel
+- status: 500
+  title: Internal server error — unexpected condition
+  occurrences: 20
+  example_operations:
+  - openapi/cabify-ride-hailing-openapi.yml#cancelJourney
+  - openapi/cabify-ride-hailing-openapi.yml#getJourneyState
+  - openapi/cabify-ride-hailing-openapi.yml#createJourney
+  - openapi/cabify-ride-hailing-openapi.yml#createLabel
+- status: 503
+  title: Service unavailable — server not ready to handle the request
+  occurrences: 2
+  example_operations:
+  - openapi/cabify-logistics-openapi.yml#EstimateShipParcels
+  - openapi/cabify-logistics-openapi.yml#getUsers

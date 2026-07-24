@@ -1,0 +1,39 @@
+generated: '2026-07-18'
+method: searched
+type: Webhooks
+source:
+- https://developers.cabify.com/docs/webhooks
+- https://developers.cabify.com/docs/journey-updates-webhook
+- https://developers.cabify.com/reference/subscribewebhook
+note: >-
+  Cabify documents webhooks but publishes no AsyncAPI document. This captures the webhook/event
+  surface. Delivery is at-least-once — duplicate events are possible; clients must deduplicate
+  (e.g. journey_id + state for Ride-Hailing).
+ride_hailing:
+  configuration: Server-side; provide your endpoint URL to Cabify via the API support page.
+  events:
+  - name: journey-state-updates
+    docs: https://developers.cabify.com/docs/journey-events
+    description: Journey lifecycle state changes (hire → hired → arrived → pick up → drop off → terminated).
+  - name: journey-location-updates
+    docs: https://developers.cabify.com/docs/location-updates
+    description: Real-time driver/vehicle location updates during an active journey.
+  - name: journey-public-info-updates
+    docs: https://developers.cabify.com/docs/public-info-updates
+    description: Updates to publicly shareable journey info.
+  - name: asynchronous-jobs
+    docs: https://developers.cabify.com/docs/asynchronous-jobs
+    description: Results of asynchronous/batch operations.
+  headers_docs: https://developers.cabify.com/docs/webhook-headers
+logistics:
+  configuration: Self-service subscription.
+  operations:
+  - subscribe: POST /v1/webhooks (openapi/cabify-logistics-openapi.yml#subscribeWebhook)
+  - list: GET /v1/webhooks (openapi/cabify-logistics-openapi.yml#getWebhook)
+  - unsubscribe: DELETE /v1/webhooks/{hook} (openapi/cabify-logistics-openapi.yml#deleteWebhook)
+  security: >-
+    Custom Authorization header forwarded with every notification; OAuth client-credentials
+    (clientId/clientSecret) available on request.
+  events:
+  - name: parcel-update
+    description: Real-time parcel state changes and delivery-lifecycle notifications (includes failure reasons — see errors/cabify-operation-errors.yml).

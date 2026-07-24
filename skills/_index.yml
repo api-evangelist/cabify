@@ -1,0 +1,12 @@
+generated: '2026-07-18'
+method: generated
+source: openapi/cabify-ride-hailing-openapi.yml, openapi/cabify-logistics-openapi.yml
+skills:
+- file: cabify-book-and-track-journey.md
+  name: Book and track a Cabify journey
+  api: openapi/cabify-ride-hailing-openapi.yml
+  operations: [getEstimation, createJourney, getJourneyState, getJourney, keepSearching, cancelJourney]
+- file: cabify-create-and-ship-parcel.md
+  name: Create and ship a Cabify parcel
+  api: openapi/cabify-logistics-openapi.yml
+  operations: [shippingTypesAvailable, EstimateShipParcels, addParcels, shipParcels, statusParcel, timelineParcel, cancelParcels]

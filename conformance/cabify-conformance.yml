@@ -1,0 +1,34 @@
+generated: '2026-07-18'
+method: derived
+source: openapi/ + https://developers.cabify.com/docs/getting-started
+standards:
+- id: oauth2-client-credentials
+  conforms: true
+  evidence: Docs document an OAuth2 client-credentials token endpoint (/auth/api/authorization) issuing Bearer tokens with revocation.
+- id: oauth2-token-revocation
+  conforms: true
+  evidence: DELETE /auth/api/authorization revokes an access token (RFC 7009-style revocation), returning 204.
+- id: http-bearer
+  conforms: true
+  evidence: Both OpenAPI specs declare http/bearer securitySchemes applied globally.
+- id: rest
+  conforms: true
+  evidence: Resource-oriented JSON over HTTP with standard status codes.
+- id: webhooks
+  conforms: true
+  evidence: Journey-state and parcel-update webhooks; Logistics self-service subscription endpoint.
+- id: graphql
+  conforms: true
+  evidence: Legacy Ride-Hailing v3 GraphQL retained at /api/v3/graphql.
+- id: rfc9457-problem-details
+  conforms: false
+  evidence: Error bodies use custom schemas (BadRequest/RequestError), not application/problem+json.
+- id: rfc8594-sunset-header
+  conforms: false
+  evidence: No Sunset/Deprecation header support documented.
+- id: iso4217-money
+  conforms: true
+  evidence: Monetary amounts expressed in ISO 4217 minor units.
+- id: idempotency-key
+  conforms: false
+  evidence: No Idempotency-Key header; webhook delivery is at-least-once with client-side dedupe.

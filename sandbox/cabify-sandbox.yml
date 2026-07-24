@@ -1,0 +1,36 @@
+generated: '2026-07-18'
+method: searched
+source: https://developers.cabify.com/docs/sandbox-environment
+docs:
+- https://developers.cabify.com/docs/sandbox-environment
+- https://developers.cabify.com/docs/quickstart
+model: >-
+  Production and sandbox are fully independent environments, each managing its own data (user IDs
+  differ between them). Creating a sandbox API key auto-provisions a sandbox account for the same
+  admin user. No separate sandbox signup is required — a production account can mint keys for both.
+environments:
+  sandbox:
+    web_app: https://cabify-sandbox.com/app
+    token: https://cabify-sandbox.com/auth/api/authorization
+    ride_hailing: https://cabify-sandbox.com/api/v4
+    logistics: https://logistics.api.cabify-sandbox.com
+  production:
+    web_app: https://cabify.com/app
+    token: https://cabify.com/auth/api/authorization
+    ride_hailing: https://cabify.com/api/v4
+    logistics: https://logistics.api.cabify.com
+test_constraints:
+  do_not_use_real_data: true
+  ride_hailing:
+    simulated_drivers: >-
+      A driver-simulation service moves virtual drivers around central Madrid, accepts nearby
+      journeys, drives to pickup, and completes drop-off in real time (visible in the web app).
+    pickup_area: Central Madrid only (~40.4361, -3.7014)
+    simulation_polygon:
+    - {point: 1, lat: 40.439693, lng: -3.715771}
+    - {point: 2, lat: 40.413493, lng: -3.711308}
+    - {point: 3, lat: 40.414342, lng: -3.694828}
+notes: >-
+  No test card numbers or magic identifiers are published (Cabify is a mobility/logistics platform,
+  not a card acquirer). The geographic simulation zone is the sandbox's "magic" fixture: journeys
+  must originate inside the Madrid polygon for simulated drivers to accept them.

@@ -1,0 +1,2981 @@
+info:
+  contact:
+    email: ridehailing.api@cabify.support
+  license:
+    name: Cabify Api support
+    url: https://cabify.com
+  title: Cabify Ride-Hailing API
+  version: '4.0'
+openapi: 3.0.0
+security:
+- access_token: []
+servers:
+- url: https://cabify.com
+  description: Production
+- url: https://cabify-sandbox.com
+  description: Sandbox
+tags:
+- description: This section covers the mobility solution for all companies looking to transport their
+    employees in a simple, safe and comfortable way. We offer different types of vehicles with private
+    drivers and provide everything you need to enjoy your journey, such as a good driver and a top-of-the-range
+    car.
+  name: Journeys
+- description: Cabify offers to its clients a feature where the client’s employees have to input a journey
+    motive or a project or a dynamic cost center associated with the new journey before requesting it.
+    This is usually used for financial budgeting and reporting purposes since every journey now comes
+    with this data linked to it, in other words, clients can segment their invoices by these Labels. <br>
+    <br> Since some companies have a lot of Labels (projects/cost centers) that need to be managed they
+    can use our API to do so. We allow creating, modifying, and disabling them directly from, for example,
+    the client’s ERP (SAP, NetSuite, MSDynamics, etc.).
+  name: Labels
+- description: This method returns prices, Id's and all the information for products that are available
+    at the origin point. Before requesting a journey as a first step it is necessary to obtain the different
+    products configured in your account in order to select the one that fits your needs and keep the Id
+    that will be used in the Journey.
+  name: Estimates
+- description: "Sales objects are created once a journey transitions into the terminated state and they\
+    \ are associated with the user who requested the journey (which not necessarily is the rider).\n \
+    \           <br> <br>The transition to terminated happens automatically after 2 hours in production\
+    \ (10 minutes in sandbox environment).\n            <br> <br>You can request them per user (requester\
+    \ of the journey), the client (all of your sales), or journey (all Sales associated to a specific\
+    \ journey which in most cases is just one)."
+  name: Sales
+paths:
+  /api/v4/journey/{id}/state:
+    post:
+      callbacks: {}
+      description: 'Cancels an active journey. Journeys can only be cancelled free of charge before a
+        driver has been assigned. After assignment, cancellation fees may apply if the courtesy period
+        has elapsed (this varies by operating zone).
+
+
+        Returns `409 Conflict` if the journey has already been completed, terminated, or is in a state
+        that does not allow cancellation.
+
+        '
+      operationId: cancelJourney
+      parameters:
+      - description: Id of the journey
+        example: f0397896-19aa-11ed-b6fe-7aaea8067492
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JourneyResponse'
+          description: Success
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+          description: Bad request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedRequest'
+          description: Unauthorized
+        '409':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Conflict'
+          description: Journey cannot be cancelled (already terminated or in a non-cancellable state)
+        '500':
+          content:
+            application/text:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal server error
+      summary: Cancel Journey
+      tags:
+      - Journeys
+    get:
+      callbacks: {}
+      description: 'Returns the real-time operational state of an active journey: assigned driver, vehicle,
+        and
+
+        the route waypoints collected so far.
+
+
+        Use this endpoint for live tracking while a journey is in progress. It provides the data
+
+        needed to show the driver''s position on a map and display vehicle/driver details to the rider.
+
+
+        **Typical use cases:**
+
+        - Show the assigned driver''s name, phone number, and avatar.
+
+        - Display the vehicle plate, model, and color so the rider can identify it.
+
+        - Plot the driver''s route on a map using the waypoints array.
+
+
+        **Availability:**
+
+        - Returns data once a driver is assigned (`hired` state onward).
+
+        - Returns empty waypoints for journeys in `terminated` state (route data is archived).
+
+        - Returns `404` if the journey does not exist or does not belong to the authenticated client.
+
+
+        > ⚠️ Stop polling once you receive an end state
+
+        >
+
+        > End states are terminal, the journey will never transition to another state. Once you receive
+        an
+
+        > end state (via this endpoint or a webhook), stop polling. Continued polling returns `200` with
+
+        > `state: terminated` indefinitely but carries no new information.
+
+        >
+
+        > For reliable state delivery without polling, configure
+
+        > [Journey State Updates webhooks](https://developers.cabify.com/docs/journey-updates-webhook).
+
+
+        > 📘 Looking for booking details or pricing?
+
+        >
+
+        > To retrieve stops, cost breakdown, or lifecycle status, use the
+
+        > [Get Journey Details](#operation/getJourney) endpoint instead.
+
+        >
+
+        > To receive state changes in real time without polling, configure
+
+        > [Webhooks](https://developers.cabify.com/docs/journey-updates-webhook).
+
+        '
+      operationId: getJourneyState
+      parameters:
+      - description: UUID of the journey
+        example: f0397896-19aa-11ed-b6fe-7aaea8067492
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      - description: ID of the user who requested the journey
+        example: 6f80363aa84fa61a58dc5720
+        in: query
+        name: requester_id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JourneyState'
+          description: Success
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+          description: Bad request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedRequest'
+          description: Unauthorized
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFound'
+          description: Not found
+        '500':
+          content:
+            application/text:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal server error
+      summary: Get Journey State
+      tags:
+      - Journeys
+  /api/v4/journey:
+    post:
+      callbacks: {}
+      description: 'Creates a new journey request for a ride.
+
+
+        > ❗️ Prerequisites
+
+        >
+
+        > Before creating a journey, you **must** call the `/estimates` endpoint and use the returned
+
+        > `product.id` as `product_id` in this request. This guarantees that the product is available
+
+        > at the pickup location and provides accurate pricing shown to drivers.
+
+        >
+
+        > The estimate should be created within **5 minutes** of the journey request.
+
+
+        ## Journey States
+
+
+        After creation, the journey progresses through these states:
+
+        1. `hire` - Searching for available drivers
+
+        2. `hired` - Driver assigned and en route
+
+        3. `arrived` - Driver at pickup location
+
+        4. `pick up` - Passenger in vehicle
+
+        5. `drop off` - Journey completed
+
+        6. `terminated` - Receipt generated (after ~2 hours)
+
+        For a detailed explanation of journey states and their transitions, see [Journey States](https://developers.cabify.com/docs/journey-states).
+
+
+        > 📘 Booking a Journey (Reservation)
+
+        >
+
+        > Creating a reservation is similar to creating an ASAP journey, except for the `start_at` field,
+
+        > which should contain a future date-time value in the format "YYYY-MM-DD HH:MM:SS", expressed
+
+        > in the local time of the pickup location.
+
+        >
+
+        > **Use the same `start_at` value you provided to the `/estimates` endpoint** to ensure consistent
+
+        > product availability and pricing between the estimate and the journey creation.
+
+        >
+
+        > **Important constraints:**
+
+        > - Reservations must be created at least **30 minutes** before the start time
+
+        > - Reservations can be scheduled up to **60 days** in advance
+
+
+        > ⚠️ Sandbox Testing
+
+        >
+
+        > In the sandbox environment, pickup locations must be within central Madrid (approximately 40.4361°,
+        -3.7014°).
+
+        > See [Sandbox Environment](https://developers.cabify.com/docs/sandbox-environment) for details.
+
+        '
+      operationId: createJourney
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/JourneyRequest'
+        description: Journey request
+        required: false
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JourneyResponse'
+          description: Success
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+          description: Bad request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedRequest'
+          description: Unauthorized
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFound'
+          description: Not found
+        '500':
+          content:
+            application/text:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal server error
+      summary: Create a journey
+      tags:
+      - Journeys
+  /api/v4/labels:
+    post:
+      callbacks: {}
+      description: Creates a new label.
+      operationId: createLabel
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LabelRequest'
+        description: The Label attributes
+        required: false
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LabelResponse'
+          description: Success
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+          description: Bad request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedRequest'
+          description: Unauthorized
+        '500':
+          content:
+            application/text:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal server error
+      summary: Create a Label
+      tags:
+      - Labels
+    get:
+      callbacks: {}
+      description: Fetch labels paginated
+      operationId: getLabels
+      parameters:
+      - description: Amount of labels for page
+        example: 20
+        in: query
+        name: per
+        schema:
+          default: 20
+          type: integer
+      - description: Number of page to fetch
+        example: 1
+        in: query
+        name: page
+        schema:
+          default: 1
+          type: integer
+      - description: Filter by active Labels. If not set then all Labels are returned
+        example: true
+        in: query
+        name: active
+        schema:
+          type: boolean
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PaginatedLabelResponse'
+          description: Success
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+          description: Bad request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedRequest'
+          description: Unauthorized
+        '500':
+          content:
+            application/text:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal server error
+      summary: Get labels paginated
+      tags:
+      - Labels
+    patch:
+      callbacks: {}
+      description: Modify an existing label
+      operationId: updateLabel
+      parameters:
+      - description: Id of the label
+        example: 93aba78c-8876-4a75-ae4d-3d4e31ab8334
+        in: query
+        name: id
+        required: true
+        schema:
+          type: string
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LabelUpdateRequest'
+        description: The Label attributes
+        required: false
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LabelResponse'
+          description: Success
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+          description: Bad request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedRequest'
+          description: Unauthorized
+        '500':
+          content:
+            application/text:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal server error
+      summary: Update label
+      tags:
+      - Labels
+  /api/v4/users:
+    post:
+      callbacks: {}
+      description: Create Users in bulk
+      operationId: createUsers
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateUsersRequest'
+        description: Create Users Request
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MutationResponse'
+          description: Success
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+          description: Bad request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedRequest'
+          description: Unauthorized
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal server error
+      summary: Create Users in bulk
+      tags:
+      - Users
+    get:
+      callbacks: {}
+      description: Gets multiple Users
+      operationId: getUsers
+      parameters:
+      - description: id of the User, UUIDv4 format without hyphens
+        example: active
+        in: query
+        name: state
+        schema:
+          default: active
+          enum:
+          - active
+          - pending
+          - disabled
+          type: string
+      - description: Number of page to return
+        example: 1
+        in: query
+        name: page
+        schema:
+          default: 1
+          type: number
+      - description: Number of elements per page
+        example: 20
+        in: query
+        name: per
+        schema:
+          default: 20
+          type: number
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PageResponse'
+          description: Success
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+          description: Bad request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedRequest'
+          description: Unauthorized
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal server error
+      summary: Get Users in bulk
+      tags:
+      - Users
+    patch:
+      callbacks: {}
+      description: Update Users in bulk
+      operationId: updateUsers
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateUsersRequest'
+        description: UpdateUsersRequest
+        required: true
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MutationResponse'
+          description: Success
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+          description: Bad request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedRequest'
+          description: Unauthorized
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal server error
+      summary: Update Users in bulk
+      tags:
+      - Users
+  /api/v4/estimates:
+    post:
+      callbacks: {}
+      description: 'Obtain prices, product IDs, and all the information for products that are available
+        at the origin point.
+
+
+        > ❗️ Important
+
+        >
+
+        > You **must** call this endpoint before creating a Journey. The response provides the `product.id`
+
+        > that should be passed to the journey creation endpoint.
+
+        >
+
+        > For **reserved** journeys, pass the same `start_at` used here to the journey creation request
+
+        > to guarantee consistent product availability and pricing.
+
+        >
+
+        > We recommend estimating no more than **5 minutes** before creating the journey.
+
+
+        ## Response
+
+
+        The response contains an array of available products, each with:
+
+        - `product.id` — pass as `product_id` when creating a journey
+
+        - Estimated price and currency
+
+        - ETA (estimated time of arrival)
+
+        - Vehicle category information
+
+
+        ## Hub Information
+
+
+        When the origin is within a large venue (airport, train station, etc.), each estimation object
+        may include a `hub` field containing:
+
+        - Hub metadata (uid, title, location_id)
+
+        - A list of **meeting points** — designated pick-up locations with coordinates, images, and localized
+        instructions
+
+
+        The `hub` field is resolved on a best-effort basis in parallel with pricing. It may be `null`
+        if hub resolution does not complete in time or no hub exists at the origin.
+
+
+        > 📘 Using Hub Data
+
+        >
+
+        > When a hub is present, present the meeting points to the user for selection and include the
+        chosen one in the journey creation request via the `meeting_point` field in the origin stop.
+
+        > Alternatively, use `GET /api/v4/hub` to look up hub data independently.
+
+        '
+      operationId: getEstimation
+      parameters: []
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EstimateRequest'
+        description: Estimate request
+        required: false
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EstimateResponse'
+          description: Success
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+          description: Bad request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedRequest'
+          description: Unauthorized
+        '500':
+          content:
+            application/text:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal server error
+      summary: Create estimation
+      tags:
+      - Estimates
+  /api/v4/hub:
+    get:
+      callbacks: {}
+      description: 'Look up hub meeting-point data for a given set of coordinates.
+
+
+        A **hub** is a large venue (e.g. airport, train station) with designated pick-up/drop-off meeting
+        points. Use this endpoint to determine if a location is within a hub and retrieve the available
+        meeting points.
+
+
+        ## Response
+
+
+        - If a hub exists at the given coordinates, returns the hub with its meeting points (uid, title,
+        coordinates, images, and localized instructions).
+
+        - If no hub exists or the lookup fails, returns `{ "data": null }`.
+
+
+        ## Usage
+
+
+        This endpoint is useful when you want to look up hub data independently from the estimation flow.
+        For example:
+
+        1. User enters a pickup address
+
+        2. Call this endpoint with the address coordinates
+
+        3. If a hub is returned, present the meeting points to the user
+
+        4. Include the selected meeting point **and** the hub''s `location_id` in the corresponding stop
+        of the `POST /api/v4/journey` request
+
+
+        > 📘 Hub data in Estimates
+
+        >
+
+        > Hub data is also returned as part of the `POST /api/v4/estimates` response (best-effort, origin
+        stop only).
+
+        > Use this standalone endpoint when you need hub data without creating an estimate, or when the
+        estimate did not resolve hub data in time.
+
+        '
+      operationId: getHub
+      parameters:
+      - description: Latitude of the location to look up.
+        in: query
+        name: latitude
+        required: true
+        schema:
+          type: number
+      - description: Longitude of the location to look up.
+        in: query
+        name: longitude
+        required: true
+        schema:
+          type: number
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HubResponse'
+          description: Success
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+          description: Bad request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedRequest'
+          description: Unauthorized
+      summary: Get Hub by coordinates
+      tags:
+      - Hubs
+  /api/v4/journey/{journey_id}:
+    get:
+      callbacks: {}
+      description: 'Returns the booking-level details of a journey: stops, pricing, timestamps, and lifecycle
+        status.
+
+
+        Use this endpoint to check whether a journey is finished, retrieve its cost breakdown, or read
+
+        the stops that were requested. The response is stable once the journey is created and only
+
+        changes when the journey ends (populating `end_state`, `end_at`, and `totals`).
+
+
+        **Typical use cases:**
+
+        - Display a journey''s origin/destination and scheduled time.
+
+        - Check if a journey has finished and why (`end_state`).
+
+        - Retrieve the price summary after a journey is terminated.
+
+
+        > 📘 Looking for real-time tracking data?
+
+        >
+
+        > To get the driver''s current location, vehicle details, or route waypoints while a journey is
+
+        > in progress, use the [Get Journey State](#operation/getJourneyState) endpoint instead.
+
+        '
+      operationId: getJourney
+      parameters:
+      - description: UUID of the journey
+        example: f0397896-19aa-11ed-b6fe-7aaea8067492
+        in: path
+        name: journey_id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Journey'
+          description: Success
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+          description: Bad request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedRequest'
+          description: Unauthorized
+        '500':
+          content:
+            application/text:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal server error
+      summary: Get Journey details
+      tags:
+      - Journeys
+  /api/v4/journey/{journey_id}/sales:
+    get:
+      callbacks: {}
+      description: Fetch the sales of the journey
+      operationId: getJourneySales
+      parameters:
+      - description: Id of the journey
+        example: 6f80363aa84fa61a58dc5720
+        in: path
+        name: journey_id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                items:
+                  $ref: '#/components/schemas/Sale'
+                type: array
+          description: Success
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+          description: Bad request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedRequest'
+          description: Unauthorized
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFound'
+          description: Not found
+        '500':
+          content:
+            application/text:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal server error
+      summary: Get journey's sales
+      tags:
+      - Sales
+  /api/v4/labels/{id}:
+    get:
+      callbacks: {}
+      description: Fetch the label with the given Id
+      operationId: getLabelById
+      parameters:
+      - description: Id of the label
+        example: 93aba78c-8876-4a75-ae4d-3d4e31ab8334
+        in: path
+        name: id
+        required: true
+        schema:
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/LabelResponse'
+          description: Success
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+          description: Bad request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedRequest'
+          description: Unauthorized
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFound'
+          description: Not found
+        '500':
+          content:
+            application/text:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal server error
+      summary: Get label by Id
+      tags:
+      - Labels
+  /api/v4/sales:
+    get:
+      callbacks: {}
+      description: Get sales paginated
+      operationId: getSales
+      parameters:
+      - description: Start date
+        example: '2021-12-01'
+        in: query
+        name: from
+        required: true
+        schema:
+          format: date
+          pattern: '[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])'
+          type: string
+      - description: End date
+        example: '2021-12-01'
+        in: query
+        name: to
+        required: true
+        schema:
+          format: date
+          pattern: '[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])'
+          type: string
+      - description: Currency of the sale
+        example: EUR
+        in: query
+        name: currency
+        required: true
+        schema:
+          default: EUR
+          enum:
+          - EUR
+          - CLP
+          - PEN
+          - MXN
+          - COP
+          - USD
+          - BRL
+          - ARS
+          type: string
+      - description: Number of page to fetch
+        example: 1
+        in: query
+        name: page
+        required: true
+        schema:
+          default: 1
+          type: integer
+      - description: Amount of sales per page
+        example: 20
+        in: query
+        name: per
+        required: true
+        schema:
+          default: 20
+          type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Expense'
+          description: Success
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+          description: Bad request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedRequest'
+          description: Unauthorized
+        '500':
+          content:
+            application/text:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal server error
+      summary: Fetch client's sales paginated
+      tags:
+      - Sales
+  /api/v4/users/email/{email}:
+    get:
+      callbacks: {}
+      description: Gets a User by email
+      operationId: getUserByEmail
+      parameters:
+      - description: Email of the User to search
+        example: john.doe@example.com
+        in: path
+        name: email
+        required: true
+        schema:
+          format: email
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: Success
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+          description: Bad request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedRequest'
+          description: Unauthorized
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFound'
+          description: Not found
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal server error
+      summary: Get User by email
+      tags:
+      - Users
+  /api/v4/users/{id}:
+    get:
+      callbacks: {}
+      description: Get User by id
+      operationId: getUserById
+      parameters:
+      - description: ID of the User to search
+        example: 01234567890123456789012345678901
+        in: path
+        name: id
+        required: true
+        schema:
+          pattern: ^[a-f0-9]{32}$
+          type: string
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: Success
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+          description: Bad request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedRequest'
+          description: Unauthorized
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFound'
+          description: Not found
+        '500':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal server error
+      summary: Get User by ID
+      tags:
+      - Users
+  /api/v4/user/{user_id}/sales:
+    get:
+      callbacks: {}
+      description: Fetch user's sales paginated
+      operationId: getUserSales
+      parameters:
+      - description: Id of the user
+        example: 6f80363aa84fa61a58dc5720
+        in: path
+        name: user_id
+        required: true
+        schema:
+          type: string
+      - description: Start date
+        example: '2021-12-01'
+        in: query
+        name: from
+        required: true
+        schema:
+          format: date
+          pattern: '[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])'
+          type: string
+      - description: End date
+        example: '2021-12-01'
+        in: query
+        name: to
+        required: true
+        schema:
+          format: date
+          pattern: '[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1])'
+          type: string
+      - description: Currency of the sale
+        example: EUR
+        in: query
+        name: currency
+        required: true
+        schema:
+          default: EUR
+          enum:
+          - EUR
+          - CLP
+          - PEN
+          - MXN
+          - COP
+          - USD
+          - BRL
+          - ARS
+          type: string
+      - description: Number of page to fetch
+        example: 1
+        in: query
+        name: page
+        required: true
+        schema:
+          default: 1
+          type: integer
+      - description: Amount of sales per page
+        example: 20
+        in: query
+        name: per
+        required: true
+        schema:
+          default: 20
+          type: integer
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Expense'
+          description: Success
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+          description: Bad request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedRequest'
+          description: Unauthorized
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFound'
+          description: Not found
+        '500':
+          content:
+            application/text:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal server error
+      summary: Get user's sales paginated
+      tags:
+      - Sales
+  /api/v4/journey/{id}/keep_searching:
+    post:
+      callbacks: {}
+      description: "If there are no drivers available after having created a journey (meaning you receive\
+        \ a\n 'not found' state via webhooks or via the GET journey/state endpoints), with this\n endpoint,\
+        \ you can continue searching for drivers for the same exact journey without the\n  need of a new\
+        \ estimation.\n\nThe journey will enter again in the 'hire' state for another 5 minutes (this\
+        \ time cannot be changed).\n\n"
+      operationId: keepSearching
+      parameters:
+      - description: Id of the journey
+        in: path
+        name: id
+        required: true
+        schema:
+          format: uuid
+          type: string
+      responses:
+        '204':
+          description: Empty Response
+        '400':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BadRequest'
+          description: Bad request
+        '401':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/UnauthorizedRequest'
+          description: Unauthorized
+        '404':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NotFound'
+          description: Not found
+        '500':
+          content:
+            application/text:
+              schema:
+                $ref: '#/components/schemas/InternalServerError'
+          description: Internal server error
+      summary: Keep searching drivers for a journey
+      tags:
+      - Journeys
+components:
+  schemas:
+    BadRequest:
+      description: Indicates that the server cannot or will not process the request due to something that
+        is perceived to be a client error (for example, malformed request syntax, invalid request message
+        framing, or deceptive request routing).
+      example:
+        error: Bad Request error message
+      properties:
+        message:
+          type: string
+      title: BadRequest
+      type: object
+    Conflict:
+      description: The request conflicts with the current state of the resource. For journey cancellation,
+        this means the journey has already been cancelled, terminated, or is in a non-cancellable state.
+      example:
+        error: journey has already been terminated
+      properties:
+        error:
+          type: string
+      title: Conflict
+      type: object
+    UnauthorizedRequest:
+      description: The token used is invalid either because it is expired or because it is incorrect.
+      example:
+        error: Unauthorized
+      properties:
+        error:
+          type: string
+      title: UnauthorizedRequest
+      type: object
+    JourneyResponse:
+      example:
+        id: 0397896-19aa-11ed-b6fe-7aaea8067492
+      properties:
+        id:
+          description: journey_id of the current operation.
+          type: string
+      title: JourneyResponse
+      type: object
+    InternalServerError:
+      description: indicates that an internal server error occurred
+      example:
+        error: Something went wrong
+      properties:
+        error:
+          type: string
+      title: InternalServerError
+      type: object
+    Rider:
+      description: Input data defining the rider of a journey.
+      example:
+        email: riderEmail@example.com
+        locale: ES
+        mobile:
+          mobile_cc: '34'
+          mobile_num: '123456789'
+        name: John Doe
+      properties:
+        email:
+          description: Rider's email.
+          format: email
+          nullable: true
+          type: string
+        id:
+          description: Id of the Rider that will travel, if the Rider is a User of your company this will
+            be the User's id (can be same as requester_id to request a journey for yourself). Leave empty
+            when the Rider is external to your company.
+          pattern: ^[a-f0-9]{32}$
+          type: string
+        locale:
+          description: Rider's Locale. Syntax consists of language two-letter tag which then will be suffixed
+            with Client's country.
+          nullable: true
+          type: string
+        mobile:
+          $ref: '#/components/schemas/Mobile'
+        name:
+          description: Rider's name. Required when the rider is external.
+          type: string
+      title: Rider
+      type: object
+    NotFound:
+      description: The server did not find a current representation for the target resource
+      example:
+        error: user with provided ID does not exist
+      properties:
+        message:
+          type: string
+      title: NotFound
+      type: object
+    MeetingPoint:
+      description: A specific meeting point within a hub location (e.g. a terminal at an airport). Obtained
+        from the hub data returned in the estimates response.
+      example:
+        id: mp_001
+        loc:
+        - 40.4722
+        - -3.5608
+        name: Terminal 1 - Puerta de llegadas
+      properties:
+        id:
+          description: Unique identifier of the meeting point.
+          type: string
+        loc:
+          description: Coordinates of the meeting point as [latitude, longitude].
+          items:
+            format: float
+            type: number
+          maxItems: 2
+          minItems: 2
+          type: array
+        name:
+          description: Display name of the meeting point.
+          type: string
+      required:
+      - id
+      - loc
+      - name
+      title: MeetingPoint
+      type: object
+    JourneyRequest:
+      additionalProperties: false
+      description: 'Input object needed to create a new journey.
+
+
+        > ⚠️ Always estimate before creating a journey
+
+        >
+
+        > You **must** call `/estimates` before creating a journey. The estimation response provides:
+
+        > - `product.id` — the product to book
+
+        > - Pricing and availability information valid at the time of the estimate
+
+        >
+
+        > Pass `product.id` as `product_id` in this request. For **reserved** journeys, also pass the
+        same
+
+        > `start_at` you used in the estimation request to guarantee consistent pricing and availability.
+
+        >
+
+        > We recommend estimating no more than **5 minutes** before creating the journey.
+
+        '
+      example:
+        label_slug: null
+        message: Test message for driver
+        product_id: 75dd566797369d1f0927102e5356ce59
+        reason: Test reason for driver
+        requester_id: 081a70a52cfc11ecbb03a25a490feee4
+        rider:
+          email: riderEmail@example.com
+          locale: ES
+          mobile:
+            mobile_cc: '34'
+            mobile_num: '123456789'
+          name: Jhon Doe
+        start_at: '2022-07-01 10:00:00'
+        stops:
+        - addr: Madrid Barajas T1
+          city: Madrid
+          contact:
+            mobile_cc: '34'
+            mobile_num: '123456789'
+            name: Jhon Doe
+            stop_action: pickup
+          country: ES
+          loc:
+          - 40.4722
+          - -3.5608
+          location_id: location-4
+          meeting_point:
+            id: mp-loc4-1
+            loc:
+            - 40.4722
+            - -3.5608
+            name: Terminal 1
+          name: Work
+          num: '1428'
+        - addr: Calle de la cruz
+          city: Madrid
+          country: ES
+          loc:
+          - 40.4169335
+          - -3.7061872
+      properties:
+        label_slug:
+          description: If your company has the labels feature enabled (used to categorize expenses, receipts)
+            than a valid label can be provided and it will be associated to a journey for later financial
+            reporting purposes. Custom string which does not allow an empty string value '' Note that
+            it can have a null value.
+          nullable: true
+          type: string
+        message:
+          description: A message that be associated to a journey that driver can see after they accept
+            the ride. It's usually used to give any extra information that might help the driver in the
+            pickup or to give any information that might help improving the journey experience.
+          nullable: true
+          type: string
+        preferred_driver_id:
+          description: Id of the preferred driver for this journey (UUID without hyphens). Only available
+            for clients that have their own driver fleet.
+          nullable: true
+          type: string
+        product_id:
+          description: The product/vehicle category to book. **Must** come from a recent `/estimates`
+            response (`product.id`). Products are dynamic and vary by location and time — never hardcode
+            IDs. Always estimate first to discover available products.
+          nullable: false
+          type: string
+        reason:
+          description: Free text explaining the motive of the journey. It is available later in all expenditure
+            reports together with the label (if used). Note that this has to be a valid string if the
+            company decides to have this field as mandatory.
+          nullable: true
+          type: string
+        requester_id:
+          description: It represents the person who creates the ride and is also the passenger of the
+            ride. Nevertheless if the rider object is provided then the passenger (rider) is a different
+            person (check rider attribute for more info). The value of requesterIdshould correspond to
+            a user.id of an registered user in the account.
+          nullable: false
+          pattern: ^[a-f0-9]{32}$
+          type: string
+        rider:
+          $ref: '#/components/schemas/Rider'
+        start_at:
+          description: "Defines when the journey should start. Format: `YYYY-MM-DD HH:MM:SS` (local time\
+            \ of the pickup location).\n\n- **ASAP rides**: Leave as `null` (or omit the field).\n- **Reservations**:\
+            \ Set to a future time. **Use the same `start_at` value you provided in the `/estimates` request**\
+            \ to ensure consistent product availability and pricing.\n  - Minimum: 30 minutes from now\n\
+            \  - Maximum: 60 days in advance\n"
+          nullable: true
+          pattern: '[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1]) (2[0-3]|[01][0-9]):[0-5][0-9]:[0-5][0-9]'
+          type: string
+        stops:
+          items:
+            $ref: '#/components/schemas/StopRequest'
+          maxItems: 15
+          minItems: 2
+          type: array
+      required:
+      - product_id
+      - requester_id
+      - rider
+      - stops
+      title: JourneyRequest
+      type: object
+    Contact:
+      description: Contact details on each Stop. Include this object if you want the Driver to see additional
+        Contact details on each Stop.
+      example:
+        mobile_cc: '34'
+        mobile_num: '123456789'
+        name: Jhon Doe
+        stop_action: pickup
+      properties:
+        mobile_cc:
+          description: Mobile Country Code of the Contact of the Stop passed when creating the Journey.
+          type: string
+        mobile_num:
+          description: Mobile Number of the Contact of the Stop passed when creating the Journey.
+          type: string
+        name:
+          description: Name of the Contact of the Stop passed when creating the Journey.
+          type: string
+        stop_action:
+          description: 'Action to be performed on the Stop. Possible values: ''pickup'', ''dropoff''.
+            Ignored when it is included in the `contact` field (`stop/contact`), i.e. only taken into
+            account when specific for the contacts within `stop/contacts`.'
+          enum:
+          - pickup
+          - dropoff
+          nullable: false
+          type: string
+      title: Contact
+      type: object
+    Mobile:
+      description: Input Mobile Number. Required when the rider is external. Journey's SMS state updates
+        will arrive to this mobile.
+      example:
+        mobile_cc: '34'
+        mobile_num: '123456789'
+      properties:
+        mobile_cc:
+          description: Mobile Country Code. Required if mobileNum is provided.
+          nullable: false
+          pattern: ^\+?\d+$
+          type: string
+        mobile_num:
+          description: Rider's phone number.
+          nullable: false
+          pattern: ^[0-9]+$
+          type: string
+      required:
+      - mobile_cc
+      - mobile_num
+      title: Mobile
+      type: object
+    StopRequest:
+      description: 'Stop of a journey. A journey needs to have at least 2 stops: the first one is considered
+        the pickup point the last one the destination.'
+      example:
+        addr: Calle de la cruz
+        city: Madrid
+        contact:
+          mobile_cc: '34'
+          mobile_num: '123456789'
+          name: Jhon Doe
+          stop_action: pickup
+        country: ES
+        loc:
+        - 40.4169335
+        - -3.7061872
+        location_id: location-4
+        meeting_point:
+          id: mp-loc4-1
+          loc:
+          - 40.4169335
+          - -3.7061872
+          name: Terminal 1
+        name: Work
+        num: '1428'
+        postal_code: '28002'
+      properties:
+        addr:
+          description: If an address was provided when creating the journey this field will have its value.
+          type: string
+        city:
+          description: City name where the address is located, e.g. Madrid.
+          type: string
+        contact:
+          $ref: '#/components/schemas/Contact'
+        contacts:
+          description: List of contacts for the stop. Only one of `contact` or `contacts` should be provided.
+          items:
+            $ref: '#/components/schemas/Contact'
+          type: array
+        country:
+          description: Country name where the address is located, e.g. Spain.
+          type: string
+        instr:
+          description: Set of instructions for the Driver.
+          type: string
+        loc:
+          default: []
+          description: The actual coordinates of the address. Required floats per location latitude and
+            longitude.
+          items:
+            format: float
+            type: number
+          maxItems: 2
+          minItems: 2
+          type: array
+        location_id:
+          description: Internal location identifier for hub stops. Required when a meeting_point is provided.
+            Obtained from the hub data returned by GET /hub or POST /estimates.
+          type: string
+        meeting_point:
+          $ref: '#/components/schemas/MeetingPoint'
+        name:
+          description: A short name for previously stored addresses. These can be viewed in places.
+          type: string
+        num:
+          description: Street number.
+          type: string
+        postal_code:
+          description: Postal code of the address.
+          type: string
+      required:
+      - loc
+      title: StopRequest
+      type: object
+    LabelResponse:
+      description: Response schema for single label
+      example:
+        active: true
+        client_id: 5ad782201d2e111dba689aa86d149702
+        description: Cabify label example
+        id: 9a0e2da7-f93a-4b24-bce4-7a8b10d3997a
+        name: ' Name of the Label'
+        slug: name-of-the-label
+      properties:
+        data:
+          $ref: '#/components/schemas/Label'
+      title: LabelResponse
+      type: object
+    LabelRequest:
+      additionalProperties: false
+      description: POST body for creating a label
+      example:
+        active: true
+        description: Some description of the label
+        name: Cabify label example
+      properties:
+        active:
+          description: If false the Label is disabled
+          type: boolean
+        description:
+          description: Description of the Label
+          type: string
+        name:
+          description: Name of the Label
+          type: string
+      required:
+      - name
+      title: LabelRequest
+      type: object
+    Label:
+      example:
+        active: true
+        client_id: 5ad782201d2e111dba689aa86d149702
+        description: Cabify label example
+        id: 9a0e2da7-f93a-4b24-bce4-7a8b10d3997a
+        name: Name of the Label
+        slug: name-of-the-label
+      properties:
+        active:
+          description: If false the Label is disabled
+          type: boolean
+        client_id:
+          description: client_id owner of the label
+          type: string
+        description:
+          description: Description of the Label
+          type: string
+        id:
+          description: id of the Label. This UUID Version 4 is a universally unique identifier.
+          type: string
+        name:
+          description: Name of the Label
+          type: string
+        slug:
+          description: ' Slug of the Label. Its autogenerated, downcasing all letters, transliterating
+            Unicode characters into alphanumeric strings (e.g. `á` into `a`), stripping punctuation and
+            replacing spaces with `-`'
+          type: string
+      required:
+      - client_id
+      - slug
+      title: Label
+      type: object
+    MutationResponse:
+      description: Response coming either from a Create or Update request
+      example:
+        job_id: 7e3b1f8a4c92d5e0a6b17c3f
+      properties:
+        job_id:
+          description: id of job processing the update. The results will be sent asynchronously to predefined
+            webhooks URL upon job termination
+          pattern: ^[a-f0-9]{24}$
+          type: string
+      required:
+      - job_id
+      title: MutationResponse
+      type: object
+    CreateUsersRequest:
+      description: List of new data to create new Users with it
+      items:
+        $ref: '#/components/schemas/CreateUser'
+      minItems: 1
+      title: CreateUsersRequest
+      type: array
+    CreateUser:
+      example:
+        can_manage: false
+        can_order_for_others: false
+        disabled: false
+        email: john.doe@example.com
+        mobile_cc: '34'
+        mobile_num: '612345678'
+        name: John
+        surname: Doe
+      properties:
+        can_manage:
+          description: Whether User is an admin or regular User
+          type: boolean
+        can_order_for_others:
+          description: If true, user will be able to order journeys for others
+          type: boolean
+        default_charge_code:
+          description: User's Default Charge Code
+          type: string
+        disabled:
+          description: Whether the User is enabled or disabled
+          type: boolean
+        email:
+          description: Email of User. Must be unique
+          format: email
+          type: string
+        email_cc:
+          description: List of email addresses (for journey related emails only)
+          items:
+            type: string
+          type: array
+        employee_code:
+          description: User's Employee Code, useful to map with company's code
+          type: string
+        locale:
+          description: 'User''s Locale. Syntax consists of language two-letter tag which then will be
+            suffixed with Client''s country, e.g.: es-ES'
+          type: string
+        mobile_cc:
+          description: 'Mobile Country Code. Can be checked here: https://countrycode.org/'
+          type: string
+        mobile_num:
+          description: Mobile Number of User
+          type: string
+        name:
+          description: Name of the User
+          type: string
+        permission_group_id:
+          description: User's TravelPolicy
+          nullable: true
+          type: string
+        send_email:
+          description: If true an email will be sent to the user upon creation
+          type: boolean
+        surname:
+          description: Surname of the User
+          type: string
+      required:
+      - email
+      - name
+      - surname
+      - mobile_cc
+      - mobile_num
+      title: CreateUser
+      type: object
+    EstimateRequest:
+      additionalProperties: false
+      description: 'Request an estimate before creating a journey.
+
+
+        The estimation response provides the `product.id` value that **must** be passed to the journey
+
+        creation endpoint. For **reserved** journeys, also pass the same `start_at` used here to the
+
+        journey creation request to ensure consistent pricing and availability.
+
+
+        We recommend requesting a new estimate no more than **5 minutes** before creating a journey.
+
+        '
+      example:
+        requester_id: 0d3cd443da5f11eb89d7ea639ff4befb
+        start_at: '2022-07-01 10:00:00'
+        start_type: asap
+        stops:
+        - loc:
+          - 40.4169335
+          - -3.7061872
+        - loc:
+          - 40.4169335
+          - -3.7061872
+      properties:
+        requester_id:
+          description: User to which the estimates would be scoped.
+          nullable: false
+          pattern: ^[a-f0-9]{32}$
+          type: string
+        start_at:
+          description: When using startType RESERVED this attribute defines the date and time of the reservation.
+            Accepted format must be YYYY-MM-DD HH:MM:SS. It should be in the local time of the pick up
+            location.
+          nullable: true
+          pattern: ^([0-9]+(-[0-9]+)+)\s+([0-9]+(:[0-9]+)+)$
+          type: string
+        start_type:
+          description: Specifies whether the journey should start right now or it should be a reservation
+            later in time. Note that if the value is RESERVED startAt attribute has to be a valid date.
+            If ASAP startAt will be ignored.
+          enum:
+          - asap
+          - reserved
+          nullable: false
+          type: string
+        stops:
+          default: []
+          description: The actual coordinates of the address. Required two floats per location latitude
+            and longitude.
+          items:
+            properties:
+              loc:
+                items:
+                  type: number
+                maxItems: 2
+                minItems: 2
+                type: array
+            type: object
+          minItems: 2
+          type: array
+      required:
+      - start_type
+      - requester_id
+      - stops
+      title: EstimateRequest
+      type: object
+    EstimateResponse:
+      description: 'List of available products with pricing for the requested route.
+
+
+        Each item contains the `product.id` needed to create a journey. Use this value as `product_id`
+
+        in the journey creation request.
+
+        '
+      example:
+      - distance: 1831
+        duration: 1260
+        eta:
+          formatted: 10 min
+          low_availability: true
+        product:
+          description: The standard option, with all the usual perkss
+          id: d79565b5b64d9d46549925c254793937
+          name: Cabify Executive.
+          service_type: WIP
+          slug: slug_code_1000
+        route: ukbvFnjhU[c@k@m@_@[SOMKKGKIIGGKW]???GAEAC?AAAAAIIIEGCI?I?MLELCHCJAJARDREXG`@AFELa@jBMp@i@~BKd@GZo@vCQt@GPOf@??SEUAS?SDSDSHQLONCBCDCDCBCDCDCDCDM^ANCNAPAR?P?T@P@RHb@J\NZ]r@GLCHMRMTMVYj@Yd@y@|AWf@qA`CU`@Yf@OZSZO\mAzBU\ELGJGJEH]p@Wd@kAvBm@fAABOXWd@W`@m@jAeAlBwAjCW^mAzBWf@S^OTA@C@CBCBE@KF??UMYQSGo@w@w@y@WYwA}ACCWY[][]AAYYo@o@CC]_@CCOG??IKOOiAwAMOY]a@c@c@c@i@k@SQKK_A}@gA_As@k@USCAy@o@cAs@_@W]YIIc@a@AAc@[iAaA[Y_@]o@g@gA}@AAc@]_@W]UOKOIQKe@UIE_@QA?OGOGa@OA?OEOEYIICA?OEUEa@GYGWCKASCi@Gk@Cs@CG?WAg@AA?i@AA?e@?c@?c@Ac@?I?G?U?I?]@o@@W?K@W?c@@c@@c@@C?_@A[AG?EAOAM?AAG?OAIA_@EA?c@GOAw@MCAc@KMEOA[Kw@Uc@O}@]m@WKEc@Uy@e@o@a@QMgAw@OMAA]We@_@q@m@ECIIIIGECEw@s@[[yAsAi@i@AAEEYWCAUSOMMIGGWSGEECSOCAQMECKGQIAAYMSKKE]O[Kg@QWIc@Ky@SQCq@KMCG?_@GAA_@Em@I{G}@]Ga@IMEg@Mm@Qm@WWKOIe@WUK[Qa@Qk@]KGy@g@oAs@k@]i@]}AiA_@[GEmAcAo@m@EAGCKKWU[Ua@[g@Y}@e@ECuCkA[MGEGA[Ou@]sAu@??UAC?YQy@g@i@_@IGc@]cA_AMKm@m@aAeAEAQASYo@_AsAoBsA}B[m@[m@GMOYMYYo@u@iBu@oBg@}AEMq@}BKa@I]GWQq@GYWsAQiAM{@Gk@AIKu@AQE_@Em@Gk@Cm@C]AOEcACmACoA?wA?O?G?M@K?m@@o@Bo@HwAFcAB[?ANaBBY@OD[PwANaA?EJs@V{AJi@DQ?ABSx@qEPoANkALkALaBBY?A@[NaCDsAB}ABoB?oBAuBEuBGuBIgBM}BEUM_BQeBKw@MaAKw@Im@]oB_@mBUcASaAMe@c@eBe@_BGSUq@CGWy@Qi@Wq@m@yAc@gAQ_@Ue@Wi@m@kAYg@a@o@cAaBgBiC_@g@IKGKKKGI}@aAEGu@y@e@e@e@c@o@k@e@a@e@a@g@a@a@Yi@a@o@a@A?qAy@[Qe@We@Us@_@_@OUI[MEAk@UICQGOGKCcFqAoAWkAScAOmAMo@Gm@EYCu@CWAYAwAAa@?c@?c@?A?_B@qAB_CDE?a@@w@@W@wB@cA?cB@c@AaAAC?g@AgAGg@CYEA?WEKAUEUEA?YEUEQE[GOESEMEWGCAA?UIOEUIWIa@Ou@[[O]Ou@a@WO}@k@WSCAm@e@e@_@KIQQCAACWUs@s@k@m@MQKKq@{@QUCECCw@kAuAwBoCoE_@m@We@sCqE[i@uAyBS]AAGMMQIOaBiCmB}CsF{IGKOWa@o@iDqFOWKOe@w@mAqBGKc@q@EIi@{@Wc@QUGKa@q@g@s@AAW[UYEGOQIKKMOOIIYYUUm@m@KI]Y}@w@wCyB{@o@o@e@gC_BCC_@UQKy@e@w@c@o@]i@WsDgBoBy@oAg@g@QkAc@u@UEC[IA?]MwBk@oBg@MCi@MuDs@}@QOCw@I[E[EcAQmDc@??OQAAOEa@IoAQoAOa@G_@GQCSEQGEACCg@[UUGG[]g@g@UOQK]OEASE_@Ei@EMAA?MD??{EUeCOMCw@G??YMECEECAMS??AK?MAKAKCIEIEIIGAAAAA?AAAAA?A?AAA?AAA?A?A?A?IAE?G@GDIDEFGFEHCHAJALAH?J@J@JBHBHDFFFFBHDGd@?@?@@HADKf@GZETEJKNEFIDIBOBM?MCi@Ku@QYCUAW?W@_@Be@Bc@BA?[BG?MACAECGEA?IKOQ??FIBC@EBMCWCMEECCGCIAI@A@C@GDEFEN?P@F@DJNA^AL?@?D?FBHBHDHBBVPJDZJDBDFBB@P@B?BALAHCFADCBCDCBABGDCBA@_@VCDYLA@_@R_@PIDc@TSLOHQL[VIDSL[NIDKDSFoCr@g@N_AV[HgAVSFYFe@L]HcAL[D]Ho@LKBM?O?KA_@A_@BKD???AAA?AAA?AA??AC?A?A?C?A?A@A?A@A@?@A@CBA@ABA@?BA@?BA@?B?B?@?B?@?B@@C@ORCBWr@CH{@tB?@Sh@GPERCRGX?FC`@Ej@CNEPIVO\_AvB]t@GNK\c@z@Wh@MXEJWl@MXg@lA]v@s@~AUh@KV?@ADABAD?BAD?B?BAD?D@B?D?BBr@?BDv@D`ABX@N@H@J@FBF@FBJDNDJ@D@BNZLRT^^j@@@BD@D@BBD@F@D@F@N@H@H?J?D?F?JAF?DAFAHAFi@dCQv@UjASbAPzA?FDZLzA?@Dl@Dj@Bp@Dl@Bt@@LD`A?D?h@Al@Af@?FAv@Ad@??LOJOBAPc@@ARo@z@eCFSTu@BE@C@CBABE@ABCBABADCDABAVC\?H?fAFb@Bb@BF?D?F@H?BA
+        supplements:
+        - kind: toll
+          name: toll name
+          pay_to_driver: true
+          price:
+            amount: 2332
+            currency: EUR
+        total:
+          amount: 2332
+          currency: EUR
+      items:
+        description: Supplements of a Journey.
+        properties:
+          distance:
+            description: Calculated distance to travel in meters.
+            type: integer
+          duration:
+            description: Estimated duration of the journey in seconds.
+            type: integer
+          eta:
+            description: Estimated Time of Arrival.
+            properties:
+              formatted:
+                description: 'ETA formatted as a string with the format: ''{minutes} min'''
+                type: string
+              low_availability:
+                description: Is there low availability?.
+                type: boolean
+            type: object
+          hub:
+            $ref: '#/components/schemas/HubObject'
+          product:
+            description: Estimated product details.
+            properties:
+              description:
+                description: Description of the product in english.
+                type: string
+              id:
+                description: Unique identifier of the product. Pass this value as `product_id` when creating
+                  a journey.
+                type: string
+              name:
+                description: Name of the product in english
+                type: string
+              service_type:
+                description: WIP.
+                type: string
+              slug:
+                description: Slug of the Label.
+                type: string
+            type: object
+          route:
+            description: List of estimated routes. These are in Google's PolylinFormat. See <a href='https://developers.cabify.com/docs/polyline-algorithm'>this
+              section</a> for more info
+            type: string
+          supplements:
+            description: List of supplements included in the estimation.
+            items:
+              description: Supplements of a Journey.
+              properties:
+                kind:
+                  description: Kind of the Supplement.
+                  type: string
+                name:
+                  description: Name of the Supplement.
+                  type: string
+                pay_to_driver:
+                  description: Whether it should be paid to the Driver.
+                  type: boolean
+                price:
+                  description: Total of the estimate.
+                  properties:
+                    amount:
+                      description: Amount in cents. *For CLP this field is in currency units.
+                      type: integer
+                    currency:
+                      description: Currency Code in ISO_4217 format.
+                      type: string
+                  type: object
+              type: object
+            type: array
+          total:
+            description: Supplements of a Journey.
+            properties:
+              amount:
+                description: Amount in cents. *For CLP this field is in currency units.
+                type: integer
+              currency:
+                description: Currency Code in ISO_4217 format.
+                type: string
+            type: object
+        type: object
+      title: EstimateResponse
+      type: array
+    HubObject:
+      description: A hub is a large venue (e.g. airport, train station) with designated pick-up/drop-off
+        meeting points.
+      example:
+        active: true
+        location_id: location-4
+        meeting_points:
+        - bottom_image_url: https://example.com/t1-bottom.png
+          coordinates:
+            latitude: 40.4722
+            longitude: -3.5608
+          header_image_url: https://example.com/t1-header.png
+          instructions:
+          - en: Head to the main gate of Terminal 1
+            es: Dirígete a la puerta principal de la Terminal 1
+            step_image_url: https://example.com/step1.png
+          title:
+            en: Terminal 1
+            es: Terminal 1
+          uid: mp-loc4-1
+        title:
+          en: Madrid Barajas
+          es: Madrid Barajas
+        uid: hub-loc4
+      nullable: true
+      properties:
+        active:
+          description: Whether the hub is currently active.
+          type: boolean
+        location_id:
+          description: Location identifier used to look up this hub.
+          type: string
+        meeting_points:
+          description: Designated pick-up/drop-off points within the hub. Present one of these to the
+            user as their boarding location.
+          items:
+            properties:
+              bottom_image_url:
+                description: URL for the bottom image of the meeting point.
+                nullable: true
+                type: string
+              coordinates:
+                description: GPS coordinates of the meeting point.
+                properties:
+                  latitude:
+                    type: number
+                  longitude:
+                    type: number
+                type: object
+              header_image_url:
+                description: URL for the header image of the meeting point.
+                nullable: true
+                type: string
+              instructions:
+                description: Step-by-step instructions to reach the meeting point.
+                items:
+                  properties:
+                    en:
+                      type: string
+                    es:
+                      type: string
+                    step_image_url:
+                      nullable: true
+                      type: string
+                  type: object
+                type: array
+              title:
+                additionalProperties:
+                  type: string
+                description: Localized name of the meeting point, keyed by BCP 47 language tag.
+                type: object
+              uid:
+                description: Unique identifier of the meeting point.
+                type: string
+            type: object
+          type: array
+        title:
+          additionalProperties:
+            type: string
+          description: Localized name of the hub, keyed by BCP 47 language tag.
+          type: object
+        uid:
+          description: Unique identifier of the hub.
+          type: string
+      title: HubObject
+      type: object
+    HubResponse:
+      description: Hub information for a given set of coordinates. Returns null inside the data field
+        when no hub exists at those coordinates.
+      properties:
+        data:
+          $ref: '#/components/schemas/HubObject'
+      title: HubResponse
+      type: object
+    Price:
+      description: Price in the currency smallest unit.
+      example:
+        amount: 100
+        currency: EUR
+      nullable: false
+      properties:
+        amount:
+          description: Amount in cents. *For CLP this field is in currency units
+          nullable: false
+          type: integer
+        currency:
+          description: Currency code in ISO_4217 format
+          nullable: false
+          type: string
+      title: Price
+      type: object
+    Totals:
+      description: Price breakdown for the journey. Only populated after the journey reaches `terminated`
+        state.
+      example:
+        discount:
+          amount: 0
+          currency: EUR
+        price:
+          amount: 100
+          currency: EUR
+        price_total:
+          amount: 100
+          currency: EUR
+      nullable: true
+      properties:
+        discount:
+          $ref: '#/components/schemas/Price'
+        price:
+          $ref: '#/components/schemas/Price'
+        price_total:
+          $ref: '#/components/schemas/Price'
+      title: Totals
+      type: object
+    StopResponse:
+      description: 'Stop of a journey. A journey needs to have at least 2 stops: the first one is considered
+        the pickup point the last one the destination.'
+      example:
+        addr: Calle de la cruz
+        city: Madrid
+        contact:
+          mobile_cc: '34'
+          mobile_num: '123456789'
+          name: Jhon Doe
+          stop_action: pickup
+        country: ES
+        id: '123'
+        loc:
+        - 40.4169335
+        - -3.7061872
+        name: Work
+        num: '1428'
+        postal_code: '28002'
+      properties:
+        addr:
+          description: If an address was provided when creating the journey this field will have its value.
+          type: string
+        city:
+          description: City name where the address is located, e.g. Madrid.
+          type: string
+        contact:
+          $ref: '#/components/schemas/Contact'
+        contacts:
+          default: []
+          description: List of contacts for the stop, in case of multiple contacts.
+          items:
+            $ref: '#/components/schemas/Contact'
+          type: array
+        country:
+          description: Country name where the address is located, e.g. España.
+          type: string
+        hit_at:
+          description: DateTime when the driver arrived at the indicated point.
+          format: date-time
+          type: string
+        id:
+          description: Id of the stop.
+          type: string
+        instr:
+          description: Set of instructions for the Driver.
+          type: string
+        loc:
+          default: []
+          description: The actual coordinates of the address. Required floats per location latitude and
+            longitude.
+          items:
+            format: float
+            type: number
+          type: array
+        meeting_point:
+          $ref: '#/components/schemas/MeetingPoint'
+        name:
+          description: A short name for previously stored addresses. These can be viewed in places.
+          type: string
+        num:
+          description: Street number.
+          type: string
+        postal_code:
+          description: Postal code of the address.
+          type: string
+      required:
+      - loc
+      title: StopResponse
+      type: object
+    Journey:
+      description: Booking-level details of a journey including stops, pricing, timestamps, and lifecycle
+        status.
+      example:
+        created_at: '2022-08-04T19:28:18.375Z'
+        current_state: terminated
+        end_at: '2022-02-17T09:30:34.831Z'
+        end_state: drop off
+        finished: true
+        id: 96fc6f24-142b-11ed-bba7-56a6f40ef0bf
+        label_slug: apiV4
+        product_id: 75dd566797369d1f0927102e5356ce59
+        public_url: /j/5ceg7v77qm8x28c9
+        region_id: madrid
+        start_at: '2022-02-17T09:30:34.831Z'
+        start_type: asap
+        stops:
+        - addr: Calle de la cruz
+          city: Madrid
+          contact:
+            mobile_cc: '34'
+            mobile_num: '123456789'
+            name: Jhon Doe
+            stop_action: pickup
+          country: ES
+          id: '123'
+          loc:
+          - 40.4169335
+          - -3.7061872
+          name: Work
+          num: '1428'
+        totals:
+          discount:
+            amount: 0
+            currency: EUR
+          price:
+            amount: 100
+            currency: EUR
+          price_total:
+            amount: 100
+            currency: EUR
+        user_id: 0dfc7c0bbbd300e6f9212827106e8911
+      properties:
+        created_at:
+          description: ISO 8601 datetime when the journey was created.
+          format: date-time
+          type: string
+        current_state:
+          description: Current lifecycle state of the journey (e.g. hire, hired, arrived, pick up, terminated).
+          type: string
+        end_at:
+          description: ISO 8601 datetime when the journey ended. Null while still active.
+          nullable: true
+          type: string
+        end_state:
+          default: not found
+          description: The reason the journey ended. Null while the journey is still active.
+          enum:
+          - drop off
+          - driver cancel
+          - not found
+          - no show
+          - rider cancel
+          nullable: true
+          type: string
+        finished:
+          description: Whether the journey has reached an end state (drop off, cancel, no show, or not
+            found).
+          type: boolean
+        id:
+          description: UUID of the journey.
+          type: string
+        label_slug:
+          description: Slug of the label (cost center, project code) associated with this journey for
+            expense reporting.
+          type: string
+        product_id:
+          description: ID of the vehicle category/product used for this journey, as returned by the estimates
+            endpoint.
+          type: string
+        public_url:
+          description: Shareable URL that allows anyone to track the journey in real time without authentication.
+          nullable: true
+          type: string
+        region_id:
+          description: Identifier of the city/region where the journey takes place.
+          type: string
+        start_at:
+          description: ISO 8601 datetime when the journey started (driver began moving toward pickup).
+            Null for journeys still in `hire` state.
+          nullable: true
+          type: string
+        start_type:
+          description: Whether the journey was requested immediately or scheduled for a future time.
+          enum:
+          - asap
+          - reserved
+          nullable: false
+          type: string
+        stops:
+          items:
+            $ref: '#/components/schemas/StopResponse'
+          type: array
+        totals:
+          $ref: '#/components/schemas/Totals'
+        user_id:
+          description: ID of the user who requested the journey.
+          type: string
+      required:
+      - id
+      title: Journey
+      type: object
+    PriceDetail:
+      example:
+        discount: 0
+        tax_rate: 0
+        tax_type: iva
+        total: 0
+      properties:
+        discount:
+          default: 0
+          description: Total discount in cents with taxes.
+          type: integer
+        tax_rate:
+          default: 0
+          description: Tax Rate.
+          type: integer
+        tax_type:
+          description: Tax Type. Usually is 'iva_av'.
+          type: string
+        total:
+          default: 0
+          description: Total amount in cents with taxes.
+          type: integer
+      title: PriceDetail
+      type: object
+    TypeObjectSale:
+      description: Entity description in a Sale.
+      example:
+        charge_code: P004
+        country: ES
+        description: 2022-02-17. Sol, Madrid. P004
+        dropoff:
+          addr: Calle de oviedo
+          city: Madrid
+          contact:
+            mobile_cc: '34'
+            mobile_num: '123456789'
+            name: Jhon Doe
+          country: ES
+          loc:
+          - 40.449074
+          - -3.700908
+          name: Home
+          num: '1428'
+        end_at: '2022-02-17T09:31:27.028Z'
+        id: 41f11290-8fd4-11ec-879a-acde48001122
+        pickup:
+          addr: Calle de la cruz
+          city: Madrid
+          contact:
+            mobile_cc: '34'
+            mobile_num: '123456789'
+            name: Jhon Doe
+          country: ES
+          loc:
+          - 40.4169335
+          - -3.7061872
+          name: Work
+          num: '1428'
+        region: madrid
+        start_at: '2022-02-17T09:30:34.831Z'
+      properties:
+        charge_code:
+          description: Charge code of the Journey of the Sale.
+          type: string
+        country:
+          description: Country of the Journey of the Sale.
+          type: string
+        description:
+          description: The Description includes the detail of the Journey associated to the Sale.
+          type: string
+        dropoff:
+          $ref: '#/components/schemas/StopResponse'
+        end_at:
+          description: DateTime when the Journey ended.
+          format: date-time
+          type: string
+        id:
+          description: ID of the Journey of the Sale.
+          type: string
+        pickup:
+          $ref: '#/components/schemas/StopResponse'
+        region:
+          description: Region where the Journey happened.
+          type: string
+        start_at:
+          description: DateTime when the Journey started.
+          format: date-time
+          type: string
+      title: TypeObjectSale
+      type: object
+    TypeObjectRectification:
+      properties:
+        description:
+          description: Description usually indicating the reason of the Rectification.
+          type: string
+        rectified_sale_id:
+          description: ID of the Sale which was rectified.
+          type: string
+      title: TypeObjectRectification
+      type: object
+    Concept:
+      description: Prices of the Sale detailed.
+      example:
+        type: journey
+        type_object:
+          charge_code: P004
+          country: ES
+          description: 2022-02-17. Sol, Madrid. P004
+          dropoff:
+            addr: Calle de oviedo
+            city: Madrid
+            contact:
+              mobile_cc: '34'
+              mobile_num: '123456789'
+              name: Jhon Doe
+            country: ES
+            loc:
+            - 40.449074
+            - -3.700908
+            name: Home
+            num: '1428'
+          end_at: '2022-02-17T09:31:27.028Z'
+          id: 41f11290-8fd4-11ec-879a-acde48001122
+          pickup:
+            addr: Calle de la cruz
+            city: Madrid
+            contact:
+              mobile_cc: '34'
+              mobile_num: '123456789'
+              name: Jhon Doe
+            country: ES
+            loc:
+            - 40.4169335
+            - -3.7061872
+            name: Work
+            num: '1428'
+          region: madrid
+          start_at: '2022-02-17T09:30:34.831Z'
+      properties:
+        type:
+          description: Type of the element being sold.
+          type: string
+        type_object:
+          $ref: '#/components/schemas/TypeObject'
+      title: Concept
+      type: object
+    Sale:
+      example:
+        code: ESP22AX002004
+        concept:
+          type: journey
+          type_object:
+            charge_code: P004
+            country: ES
+            description: 2022-02-17. Sol, Madrid. P004
+            dropoff:
+              addr: Calle de oviedo
+              city: Madrid
+              contact:
+                mobile_cc: '34'
+                mobile_num: '123456789'
+                name: Jhon Doe
+              country: ES
+              loc:
+              - 40.449074
+              - -3.700908
+              name: Home
+              num: '1428'
+            end_at: '2022-02-17T09:31:27.028Z'
+            id: 41f11290-8fd4-11ec-879a-acde48001122
+            pickup:
+              addr: Calle de la cruz
+              city: Madrid
+              contact:
+                mobile_cc: '34'
+                mobile_num: '123456789'
+                name: Jhon Doe
+              country: ES
+              loc:
+              - 40.4169335
+              - -3.7061872
+              name: Work
+              num: '1428'
+            region: madrid
+            start_at: '2022-02-17T09:30:34.831Z'
+        currency: EUR
+        invoice_date: '2022-02-21'
+        price_details:
+          discount: 0
+          tax_rate: 0
+          tax_type: iva
+          total: 0
+      properties:
+        code:
+          description: Code of the Sale.
+          type: string
+        concept:
+          $ref: '#/components/schemas/Concept'
+        currency:
+          description: Currency of the Sale.
+          type: string
+        invoice_date:
+          description: Date of the Invoice of the Sale.
+          format: date
+          type: string
+        price_details:
+          $ref: '#/components/schemas/PriceDetail'
+      title: Sale
+      type: object
+    TypeObject:
+      anyOf:
+      - $ref: '#/components/schemas/TypeObjectSale'
+      - $ref: '#/components/schemas/TypeObjectRectification'
+      title: TypeObject
+      type: object
+    Vehicle:
+      description: Journey's vehicle information.
+      example:
+        color: red
+        name: Seat ibiza
+        plate: QXJ4758
+      properties:
+        color:
+          description: Vehicle color.
+          type: string
+        name:
+          description: Vehicle model.
+          type: string
+        plate:
+          description: Vehicle plate number.
+          type: string
+      title: Vehicle
+      type: object
+    Waypoint:
+      description: Information about the different points through which the driver passed during the journey.
+      example:
+        rows:
+        - loc:
+          - 40.4169335
+          - -3.7061872
+          state_name: hired
+        total: 48
+      properties:
+        rows:
+          description: List of each point and state through which the driver passed during the journey.
+          items:
+            $ref: '#/components/schemas/Row'
+          type: array
+        total:
+          default: 0
+          description: Total number of rows
+          nullable: true
+          type: integer
+      title: Waypoint
+      type: object
+    JourneyState:
+      description: 'Real-time operational state of an active journey: the assigned driver, their vehicle,
+        and the route waypoints recorded so far.'
+      example:
+        driver:
+          avatar_url: https://secure.gravatar.com/avatar/675ee8c314586d36a7b33c6c773565e9?r=pg&s=80&=blank
+          id: e8417e8cd14c11ec869eb2e3f32e3b38
+          name: John
+          phone_number: '34611111111'
+        driver_stop_before_pickup:
+          loc:
+          - 40.4201
+          - -3.7056
+        is_driver_on_another_journey: true
+        journey_id: f0397896-19aa-11ed-b6fe-7aaea8067492
+        preassigned_driver:
+          avatar_url: https://secure.gravatar.com/avatar/1a79a4d60de6718e8e5b326e338ae533?r=pg&s=80&=blank
+          id: a1b2c3d4e5f611ec869eb2e3f32e3b38
+          name: Diana
+        vehicle:
+          color: red
+          name: Seat ibiza
+          plate: QXJ4758
+        waypoints:
+          rows:
+          - loc:
+            - 40.4169335
+            - -3.7061872
+            state_name: hired
+          total: 48
+      properties:
+        driver:
+          $ref: '#/components/schemas/Driver'
+        driver_stop_before_pickup:
+          $ref: '#/components/schemas/DriverStopBeforePickup'
+        is_driver_on_another_journey:
+          description: Whether the assigned driver is currently completing another trip before heading
+            to the pickup.
+          nullable: false
+          type: boolean
+        journey_id:
+          description: UUID of the journey.
+          nullable: false
+          type: string
+        preassigned_driver:
+          $ref: '#/components/schemas/PreassignedDriver'
+        vehicle:
+          $ref: '#/components/schemas/Vehicle'
+        waypoints:
+          $ref: '#/components/schemas/Waypoint'
+      title: JourneyState
+      type: object
+    Driver:
+      description: Driver's information.
+      example:
+        avatar_url: https://secure.gravatar.com/avatar/675ee8c314586d36a7b33c6c773565e9?r=pg&s=80&=blank
+        id: e8417e8cd14c11ec869eb2e3f32e3b38
+        name: John
+        phone_number: '34611111111'
+      properties:
+        avatar_url:
+          description: Driver's picture.
+          type: string
+        id:
+          description: Id of the driver
+          nullable: false
+          type: string
+        name:
+          description: Driver's name.
+          type: string
+        phone_number:
+          description: Driver's phone number.
+          type: string
+      title: Driver
+      type: object
+    Row:
+      description: Point and state through which the driver passed during the journey.
+      example:
+        loc:
+        - 40.4169335
+        - -3.7061872
+        state_name: hired
+      properties:
+        loc:
+          default: []
+          description: The actual coordinates of the address. Required floats per location latitude and
+            longitude.
+          items:
+            format: float
+            type: number
+          type: array
+        state_name:
+          description: Status of the journey at the time the driver passed through that point.
+          nullable: false
+          type: string
+      title: Row
+      type: object
+    PreassignedDriver:
+      description: 'Driver preassigned to the journey (for example on a reservation) before the journey
+        is actually assigned. It does not include the phone number, and it may change or disappear before
+        the journey starts. `driver` always takes precedence: once a driver is assigned, that `driver`
+        is authoritative and this field is only informative about who had been preassigned.'
+      example:
+        avatar_url: https://secure.gravatar.com/avatar/1a79a4d60de6718e8e5b326e338ae533?r=pg&s=80&=blank
+        id: a1b2c3d4e5f611ec869eb2e3f32e3b38
+        name: Diana
+      nullable: true
+      properties:
+        avatar_url:
+          description: Preassigned driver's picture.
+          type: string
+        id:
+          description: Id of the preassigned driver
+          nullable: false
+          type: string
+        name:
+          description: Preassigned driver's first name.
+          type: string
+      title: PreassignedDriver
+      type: object
+    DriverStopBeforePickup:
+      description: Best-effort location where the driver is heading before coming to the pickup. May be
+        null even when is_driver_on_another_journey is true.
+      example:
+        loc:
+        - 40.4201
+        - -3.7056
+      nullable: true
+      properties:
+        loc:
+          description: Latitude and longitude of the driver's current destination.
+          items:
+            format: float
+            type: number
+          nullable: false
+          type: array
+      title: DriverStopBeforePickup
+      type: object
+    PaginatedLabelResponse:
+      description: Response schema for a list of labels
+      example:
+        data:
+        - active: true
+          client_id: 5ad782201d2e111dba689aa86d149702
+          description: Cabify label example
+          id: 9a0e2da7-f93a-4b24-bce4-7a8b10d3997a
+          name: ' Name of the Label'
+          slug: name-of-the-label
+        page: 1
+        pages: 1
+        per: 20
+        total: 3
+      properties:
+        data:
+          description: The list of labels
+          items:
+            $ref: '#/components/schemas/Label'
+          type: array
+        page:
+          description: Current page.
+          type: integer
+        pages:
+          description: Number of pages fetched.
+          type: integer
+        per:
+          description: Amount of labels per page.
+          type: integer
+        total:
+          description: total of results.
+          type: integer
+      title: PaginatedLabelResponse
+      type: object
+    Expense:
+      example:
+        data:
+        - code: ESP22AX002004
+          concept:
+            type: journey
+            type_object:
+              charge_code: P004
+              country: ES
+              description: 2022-02-17. Sol, Madrid. P004
+              end_at: '2022-02-17T09:31:27.028Z'
+              id: 41f11290-8fd4-11ec-879a-acde48001122
+              region: madrid
+              start_at: '2022-02-17T09:30:34.831Z'
+          currency: EUR
+          invoice_date: '2022-02-21'
+          price_details:
+            discount: 0
+            tax_rate: 0
+            tax_type: iva
+            total: 0
+        page: 1
+        pages: 1
+        per: 25
+        total: 3
+      properties:
+        data:
+          description: List of sales
+          items:
+            $ref: '#/components/schemas/Sale'
+          type: array
+        page:
+          description: Number of page to fetch.
+          type: integer
+        pages:
+          description: Total amount of pages.
+          type: integer
+        per:
+          description: Amount of sales by page.
+          type: integer
+        total:
+          description: Amount total of users obtained in all the pages.
+          type: integer
+      title: Expense
+      type: object
+    User:
+      example:
+        email: john.doe@example.com
+        id: 9a0e2da7f93a4b24bce47a8b10d3997a
+        mobile_cc: '34'
+        mobile_num: '612345678'
+        name: John
+        surname: Doe
+      properties:
+        can_manage:
+          description: Whether User is an admin or regular User
+          type: boolean
+        can_order_for_others:
+          description: If true, user will be able to order journeys for others
+          type: boolean
+        default_charge_code:
+          description: User's Default Charge Code
+          type: string
+        disabled:
+          description: Whether the User is enabled or disabled
+          type: boolean
+        email:
+          description: Email of User. Must be unique
+          format: email
+          type: string
+        email_cc:
+          description: List of email addresses (for journey related emails only)
+          items:
+            type: string
+          type: array
+        employee_code:
+          description: User's Employee Code, useful to map with company's code
+          type: string
+        id:
+          description: id of the User, UUIDv4 format without hyphens
+          pattern: ^[a-f0-9]{32}$
+          type: string
+        locale:
+          description: 'User''s Locale. Syntax consists of language two-letter tag which then will be
+            suffixed with Client''s country, e.g.: es-ES'
+          type: string
+        mobile_cc:
+          description: 'Mobile Country Code. Can be checked here: https://countrycode.org/'
+          type: string
+        mobile_num:
+          description: Mobile Number of User
+          type: string
+        name:
+          description: Name of the User
+          type: string
+        permission_group_id:
+          description: User's TravelPolicy
+          nullable: true
+          type: string
+        surname:
+          description: Surname of the User
+          type: string
+      required:
+      - id
+      - email
+      - name
+      - surname
+      - mobile_cc
+      - mobile_num
+      title: User
+      type: object
+    PageResponse:
+      example:
+        data: []
+        page: 2
+        pages: 0
+        per: 1
+        total: 0
+      properties:
+        data:
+          description: List of Users
+          items:
+            $ref: '#/components/schemas/User'
+          type: array
+        page:
+          description: Number of page returned
+          type: number
+        pages:
+          description: Number of total available pages
+          type: number
+        per:
+          description: Number of elements per page
+          type: number
+        total:
+          description: Number of total available elements
+          type: number
+      required:
+      - data
+      - per
+      - page
+      - total
+      - pages
+      title: PageResponse
+      type: object
+    LabelUpdateRequest:
+      additionalProperties: false
+      description: Payload for updating a label
+      example:
+        active: true
+        description: Some description of the label
+      properties:
+        active:
+          description: If false the Label is disabled
+          type: boolean
+        description:
+          description: Description of the Label
+          type: string
+      title: LabelUpdateRequest
+      type: object
+    UpdateUsersRequest:
+      description: List of Users update data
+      items:
+        $ref: '#/components/schemas/UpdateUser'
+      minItems: 1
+      title: UpdateUsersRequest
+      type: array
+    UpdateUser:
+      example:
+        email: john.doe@example.com
+        id: 9a0e2da7f93a4b24bce47a8b10d3997a
+        mobile_cc: '34'
+        mobile_num: '612345678'
+        name: John
+        surname: Doe
+      properties:
+        can_manage:
+          description: Whether User is an admin or regular User
+          type: boolean
+        can_order_for_others:
+          description: If true, user will be able to order journeys for others
+          type: boolean
+        default_charge_code:
+          description: User's Default Charge Code
+          type: string
+        disabled:
+          description: Whether the User is enabled or disabled
+          type: boolean
+        email:
+          description: Email of User. Must be unique
+          format: email
+          type: string
+        email_cc:
+          description: List of email addresses (for journey related emails only)
+          items:
+            type: string
+          type: array
+        employee_code:
+          description: User's Employee Code, useful to map with company's code
+          type: string
+        id:
+          description: id of the User, UUIDv4 format without hyphens
+          pattern: ^[a-f0-9]{32}$
+          type: string
+        locale:
+          description: 'User''s Locale. Syntax consists of language two-letter tag which then will be
+            suffixed with Client''s country, e.g.: es-ES'
+          type: string
+        mobile_cc:
+          description: 'Mobile Country Code. Can be checked here: https://countrycode.org/'
+          type: string
+        mobile_num:
+          description: Mobile Number of User
+          type: string
+        name:
+          description: Name of the User
+          type: string
+        permission_group_id:
+          description: User's TravelPolicy
+          nullable: true
+          type: string
+        surname:
+          description: Surname of the User
+          type: string
+      required:
+      - id
+      title: UpdateUser
+      type: object
+  securitySchemes:
+    access_token:
+      scheme: bearer
+      type: http

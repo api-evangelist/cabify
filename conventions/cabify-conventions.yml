@@ -1,0 +1,45 @@
+generated: '2026-07-18'
+method: searched
+source: https://developers.cabify.com/docs/getting-started
+derived_from:
+- openapi/cabify-ride-hailing-openapi.yml
+- openapi/cabify-logistics-openapi.yml
+authentication:
+  style: OAuth2 client-credentials → Bearer access token
+  header: 'Authorization: Bearer <access_token>'
+  detail: authentication/cabify-authentication.yml
+versioning:
+  scheme: uri-path
+  ride_hailing_current: v4
+  ride_hailing_legacy: v3 (GraphQL, /api/v3/graphql, retained for existing integrations)
+  logistics_current: v1
+  shipment_estimate: v3 (/v3/parcels/estimate)
+  detail: lifecycle/cabify-lifecycle.yml
+idempotency:
+  supported: false
+  note: >-
+    No Idempotency-Key header is documented or present in either OpenAPI. For webhooks, Cabify
+    explicitly warns that duplicate events are possible and the CLIENT must deduplicate (e.g. using
+    journey_id + state as the key) — i.e. at-least-once delivery, no server-side idempotency
+    contract. Journey creation is not idempotent; callers must estimate first and manage retries.
+pagination:
+  style: page-based
+  response_schemas: [PageResponse, PaginatedLabelResponse, PaginatedParcels]
+  note: List endpoints (labels, sales, users, parcels) return paginated collections.
+error_envelope:
+  format: custom (not RFC 9457)
+  ride_hailing_schemas: [BadRequest, UnauthorizedRequest, NotFound, Conflict, InternalServerError]
+  logistics_schema: RequestError
+  retry_guidance: Retry only on 5xx; 4xx requires changing the request.
+  detail: errors/cabify-problem-types.yml
+webhooks:
+  model: Cabify POSTs asynchronous results and state updates to a client-registered endpoint.
+  ride_hailing: Configured server-side by contacting API support; journey state/location/public-info updates.
+  logistics: Self-service subscription via POST /v1/webhooks; secured with a custom Authorization header or OAuth client-credentials.
+  delivery: at-least-once (duplicates possible; client must dedupe)
+  detail: asyncapi/cabify-webhooks.yml
+rate_limiting:
+  signaled: partial
+  note: A 429 (Too Many Requests) response is defined on POST /v1/parcels/{parcel_id}/tip; no documented rate-limit headers or global limits.
+money:
+  format: ISO 4217 minor units (e.g. €6.30 → 630 in EUR)

@@ -1,0 +1,34 @@
+generated: '2026-07-18'
+method: searched
+source: https://developers.cabify.com/docs/ride-hailing-changelog
+scope: Cabify Ride-Hailing API
+scheme: dated, additive (continuous enhancement of v4; no breaking changes)
+current_version: '4.0'
+entries:
+- date: '2026-07-07'
+  version: '4.0'
+  type: addition
+  breaking: false
+  title: Preferred Driver ID validation
+  highlights: >-
+    POST /api/v4/journey now validates preferred_driver_id format (hyphen-less UUID
+    ^[a-f0-9]{32}$); malformed values are rejected with 400. No change for clients not entitled to
+    the feature.
+- date: '2026-06-30'
+  version: '4.0'
+  type: addition
+  breaking: false
+  title: Preassigned Driver
+  highlights: >-
+    Added a preassigned_driver object (id, name first-name-only, avatar_url) to the journey state,
+    exposed in GET /api/v4/journey/{journey_id}/state and the GraphQL state object. Surfaces a
+    driver preassigned to a reservation before formal assignment; no phone number.
+- date: '2026-05-06'
+  version: '4.0'
+  type: addition
+  breaking: false
+  title: Hub meeting-point support
+  highlights: >-
+    Added hub discovery and meeting-point selection for large venues. POST /api/v4/estimates now
+    returns a hub object (origin stop, best-effort); GET /api/v4/hub looks up hub data by
+    coordinates; POST /api/v4/journey stops accept an optional meeting_point.

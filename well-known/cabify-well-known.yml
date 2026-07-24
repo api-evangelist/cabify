@@ -1,0 +1,28 @@
+generated: '2026-07-18'
+method: searched
+host: https://cabify.com
+documents:
+- path: /.well-known/security.txt
+  status: 200
+  file: cabify-security.txt
+- path: /.well-known/bounty.txt
+  status: 200
+  note: Bug bounty program policy (linked from security.txt Policy field)
+- path: /.well-known/security.pgp
+  status: 200
+  note: PGP encryption key (linked from security.txt Encryption field)
+- path: /.well-known/openid-configuration
+  status: 404
+- path: /.well-known/oauth-authorization-server
+  status: 404
+- path: /.well-known/api-catalog
+  status: 404
+- path: /.well-known/ai-plugin.json
+  status: 404
+other_hosts:
+- host: https://developers.cabify.com
+  path: /.well-known/security.txt
+  status: 404
+- host: https://cabify-api.readme.io
+  path: /.well-known/security.txt
+  status: 404

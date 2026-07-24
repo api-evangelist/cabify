@@ -1,0 +1,11 @@
+overlay: 1.0.0
+info:
+  title: API Evangelist enhancements for Cabify Logistics API
+  version: 1.0.0
+extends: openapi/cabify-logistics-openapi.yml
+actions:
+- target: $.info
+  update:
+    x-apievangelist-enriched: '2026-07-18'
+    x-apievangelist-source: https://developers.cabify.com
+    x-apievangelist-auth: oauth2-client-credentials

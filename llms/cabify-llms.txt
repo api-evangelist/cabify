@@ -1,0 +1,104 @@
+# Cabify Developer Hub Documentation
+
+> Cabify API provides an interface to interact with our services as well as to automate operations that will allow you to scale up your operations.
+
+## Guides
+- [Welcome](https://cabify-api.readme.io/docs/getting-started.md)
+- [Quickstart](https://cabify-api.readme.io/docs/quickstart.md)
+- [1. Create or login](https://cabify-api.readme.io/docs/create-or-login.md)
+- [2. Get your API key](https://cabify-api.readme.io/docs/get-your-api-key.md)
+- [3. Get your Access Token](https://cabify-api.readme.io/docs/get-your-access-token.md)
+- [Sandbox Environment](https://cabify-api.readme.io/docs/sandbox-environment.md)
+- [Introduction to Cabify Ride Hailing API](https://cabify-api.readme.io/docs/ride-hailing.md)
+- [Users Management](https://cabify-api.readme.io/docs/users.md)
+- [Pricing & Estimates](https://cabify-api.readme.io/docs/estimates.md)
+- [Polyline Algorithm](https://cabify-api.readme.io/docs/polyline-algorithm.md)
+- [Journeys Booking](https://cabify-api.readme.io/docs/journeys.md)
+- [Journey States](https://cabify-api.readme.io/docs/journey-states.md)
+- [Journey Labels](https://cabify-api.readme.io/docs/labels.md)
+- [Journey Sales](https://cabify-api.readme.io/docs/sales.md)
+- [Rectified sale](https://cabify-api.readme.io/docs/rectified-sale.md)
+- [Webhooks](https://cabify-api.readme.io/docs/webhooks.md)
+- [Webhook Headers](https://cabify-api.readme.io/docs/webhook-headers.md)
+- [Asynchronous Jobs](https://cabify-api.readme.io/docs/asynchronous-jobs.md)
+- [Journey Real-time Updates](https://cabify-api.readme.io/docs/journey-updates-webhook.md)
+- [Journey State Updates](https://cabify-api.readme.io/docs/journey-events.md)
+- [Journey Location Updates](https://cabify-api.readme.io/docs/location-updates.md)
+- [Journey Public Info Updates](https://cabify-api.readme.io/docs/public-info-updates.md)
+- [Journey Creation Use Cases](https://cabify-api.readme.io/docs/use-cases.md)
+- [Ride-Hailing API Changelog](https://cabify-api.readme.io/docs/ride-hailing-changelog.md)
+- [Getting started with Logistics API](https://cabify-api.readme.io/docs/getting-started-1.md)
+- [Introduction to Cabify Logistics API](https://cabify-api.readme.io/docs/introduction.md)
+- [Sandbox](https://cabify-api.readme.io/docs/sandbox.md)
+- [How interact with us](https://cabify-api.readme.io/docs/how-to-interact-with-us.md)
+- [Cabify Logistics DMS](https://cabify-api.readme.io/docs/dms.md)
+- [Parcel tracker](https://cabify-api.readme.io/docs/parcel-tracker.md)
+- [How to get your Logistics API key](https://cabify-api.readme.io/docs/logistics-steps.md)
+- [Get your Logistics API key](https://cabify-api.readme.io/docs/get-logistics-api-key.md)
+- [Main entities](https://cabify-api.readme.io/docs/main-entities.md)
+- [Parcel](https://cabify-api.readme.io/docs/parcel.md)
+- [Shipping type](https://cabify-api.readme.io/docs/shipping-type.md)
+- [Parcels life cycle](https://cabify-api.readme.io/docs/parcels-life-cycle.md)
+- [Parcel life cycle for express](https://cabify-api.readme.io/docs/parcel-life-cycle-for-express.md)
+- [Parcel life cycle for cross-dock](https://cabify-api.readme.io/docs/parcel-life-cycle-for-cross-dock.md)
+- [Proofs](https://cabify-api.readme.io/docs/proofs.md)
+- [Ecommerce integrations](https://cabify-api.readme.io/docs/ecommerce-integrations.md)
+- [Shopify](https://cabify-api.readme.io/docs/shopify.md)
+- [Tiendanube](https://cabify-api.readme.io/docs/tiendanube.md)
+- [VTEX](https://cabify-api.readme.io/docs/vtex.md)
+- [Error handling](https://cabify-api.readme.io/docs/error-handling.md)
+
+## API Reference
+- [Get labels paginated](https://cabify-api.readme.io/reference/getlabels.md): Fetch labels paginated
+- [Update label](https://cabify-api.readme.io/reference/updatelabel.md): Modify an existing label
+- [Create a Label](https://cabify-api.readme.io/reference/createlabel.md): Creates a new label.
+- [Get label by Id](https://cabify-api.readme.io/reference/getlabelbyid.md): Fetch the label with the given Id
+- [Create estimation](https://cabify-api.readme.io/reference/getestimation.md): Obtain prices, product IDs, and all the information for products that are available at the origin point.  > ❗️ Important > > You **must** call this endpoint before creating a Journey. The response provides the `product.id` > that should be passed to the journey creation endpoint. > > For **reserved** journeys, pass the same `start_at` used here to the journey creation request > to guarantee consistent product availability and pricing. > > We recommend estimating no more than **5 minutes** before creating the journey.  ## Response  The response contains an array of available products, each with: - `product.id` — pass as `product_id` when creating a journey - Estimated price and currency - ETA (estimated time of arrival) - Vehicle category information  ## Hub Information  When the origin is within a large venue (airport, train station, etc.), each estimation object may include a `hub` field containing: - Hub metadata (uid, title, location_id) - A list of **meeting points** — designated pick-up locations with coordinates, images, and localized instructions  The `hub` field is resolved on a best-effort basis in parallel with pricing. It may be `null` if hub resolution does not complete in time or no hub exists at the origin.  > 📘 Using Hub Data > > When a hub is present, present the meeting points to the user for selection and include the chosen one in the journey creation request via the `meeting_point` field in the origin stop. > Alternatively, use `GET /api/v4/hub` to look up hub data independently.
+- [Create a journey](https://cabify-api.readme.io/reference/createjourney.md): Creates a new journey request for a ride.  > ❗️ Prerequisites > > Before creating a journey, you **must** call the `/estimates` endpoint and use the returned > `product.id` as `product_id` in this request. This guarantees that the product is available > at the pickup location and provides accurate pricing shown to drivers. > > The estimate should be created within **5 minutes** of the journey request.  ## Journey States  After creation, the journey progresses through these states: 1. `hire` - Searching for available drivers 2. `hired` - Driver assigned and en route 3. `arrived` - Driver at pickup location 4. `pick up` - Passenger in vehicle 5. `drop off` - Journey completed 6. `terminated` - Receipt generated (after ~2 hours) For a detailed explanation of journey states and their transitions, see [Journey States](https://developers.cabify.com/docs/journey-states).  > 📘 Booking a Journey (Reservation) > > Creating a reservation is similar to creating an ASAP journey, except for the `start_at` field, > which should contain a future date-time value in the format "YYYY-MM-DD HH:MM:SS", expressed > in the local time of the pickup location. > > **Use the same `start_at` value you provided to the `/estimates` endpoint** to ensure consistent > product availability and pricing between the estimate and the journey creation. > > **Important constraints:** > - Reservations must be created at least **30 minutes** before the start time > - Reservations can be scheduled up to **60 days** in advance  > ⚠️ Sandbox Testing > > In the sandbox environment, pickup locations must be within central Madrid (approximately 40.4361°, -3.7014°). > See [Sandbox Environment](https://developers.cabify.com/docs/sandbox-environment) for details.
+- [Keep searching drivers for a journey](https://cabify-api.readme.io/reference/keepsearching.md): If there are no drivers available after having created a journey (meaning you receive a  'not found' state via webhooks or via the GET journey/state endpoints), with this  endpoint, you can continue searching for drivers for the same exact journey without the   need of a new estimation.  The journey will enter again in the 'hire' state for another 5 minutes (this time cannot be changed).
+- [Get Journey State](https://cabify-api.readme.io/reference/getjourneystate.md): Returns the real-time operational state of an active journey: assigned driver, vehicle, and the route waypoints collected so far.  Use this endpoint for live tracking while a journey is in progress. It provides the data needed to show the driver's position on a map and display vehicle/driver details to the rider.  **Typical use cases:** - Show the assigned driver's name, phone number, and avatar. - Display the vehicle plate, model, and color so the rider can identify it. - Plot the driver's route on a map using the waypoints array.  **Availability:** - Returns data once a driver is assigned (`hired` state onward). - Returns empty waypoints for journeys in `terminated` state (route data is archived). - Returns `404` if the journey does not exist or does not belong to the authenticated client.  > ⚠️ Stop polling once you receive an end state > > End states are terminal, the journey will never transition to another state. Once you receive an > end state (via this endpoint or a webhook), stop polling. Continued polling returns `200` with > `state: terminated` indefinitely but carries no new information. > > For reliable state delivery without polling, configure > [Journey State Updates webhooks](https://developers.cabify.com/docs/journey-updates-webhook).  > 📘 Looking for booking details or pricing? > > To retrieve stops, cost breakdown, or lifecycle status, use the > [Get Journey Details](#operation/getJourney) endpoint instead. > > To receive state changes in real time without polling, configure > [Webhooks](https://developers.cabify.com/docs/journey-updates-webhook).
+- [Cancel Journey](https://cabify-api.readme.io/reference/canceljourney.md): Cancels an active journey. Journeys can only be cancelled free of charge before a driver has been assigned. After assignment, cancellation fees may apply if the courtesy period has elapsed (this varies by operating zone).  Returns `409 Conflict` if the journey has already been completed, terminated, or is in a state that does not allow cancellation.
+- [Get Journey details](https://cabify-api.readme.io/reference/getjourney.md): Returns the booking-level details of a journey: stops, pricing, timestamps, and lifecycle status.  Use this endpoint to check whether a journey is finished, retrieve its cost breakdown, or read the stops that were requested. The response is stable once the journey is created and only changes when the journey ends (populating `end_state`, `end_at`, and `totals`).  **Typical use cases:** - Display a journey's origin/destination and scheduled time. - Check if a journey has finished and why (`end_state`). - Retrieve the price summary after a journey is terminated.  > 📘 Looking for real-time tracking data? > > To get the driver's current location, vehicle details, or route waypoints while a journey is > in progress, use the [Get Journey State](#operation/getJourneyState) endpoint instead.
+- [Get journey's sales](https://cabify-api.readme.io/reference/getjourneysales.md): Fetch the sales of the journey
+- [Fetch client's sales paginated](https://cabify-api.readme.io/reference/getsales.md): Get sales paginated
+- [Get user's sales paginated](https://cabify-api.readme.io/reference/getusersales.md): Fetch user's sales paginated
+- [Get Hub by coordinates](https://cabify-api.readme.io/reference/gethub.md): Look up hub meeting-point data for a given set of coordinates.  A **hub** is a large venue (e.g. airport, train station) with designated pick-up/drop-off meeting points. Use this endpoint to determine if a location is within a hub and retrieve the available meeting points.  ## Response  - If a hub exists at the given coordinates, returns the hub with its meeting points (uid, title, coordinates, images, and localized instructions). - If no hub exists or the lookup fails, returns `{ "data": null }`.  ## Usage  This endpoint is useful when you want to look up hub data independently from the estimation flow. For example: 1. User enters a pickup address 2. Call this endpoint with the address coordinates 3. If a hub is returned, present the meeting points to the user 4. Include the selected meeting point **and** the hub's `location_id` in the corresponding stop of the `POST /api/v4/journey` request  > 📘 Hub data in Estimates > > Hub data is also returned as part of the `POST /api/v4/estimates` response (best-effort, origin stop only). > Use this standalone endpoint when you need hub data without creating an estimate, or when the estimate did not resolve hub data in time.
+- [Get Users in bulk](https://cabify-api.readme.io/reference/getusers-1.md): Gets multiple Users
+- [Update Users in bulk](https://cabify-api.readme.io/reference/updateusers.md): Update Users in bulk
+- [Create Users in bulk](https://cabify-api.readme.io/reference/createusers.md): Create Users in bulk
+- [Get User by email](https://cabify-api.readme.io/reference/getuserbyemail.md): Gets a User by email
+- [Get User by ID](https://cabify-api.readme.io/reference/getuserbyid.md): Get User by id
+- [Create new parcels.](https://cabify-api.readme.io/reference/addparcels.md): Create one or more parcels to be shipped. Note that creating a parcel does not trigger a delivery — you must call `/v1/parcels/ship` afterwards to schedule the pickup.  Each parcel requires a pickup and a drop-off location. You can provide a location using one of the following fields in the `pickup_info` or `dropoff_info` schemas: `loc` (coordinates), `addr` (address string), or `hub_external_id` (reference to a registered hub).
+- [List parcels filtered by state.](https://cabify-api.readme.io/reference/getparcels.md): Returns a paginated list of parcels that match the specified states.
+- [Get a parcel by ID.](https://cabify-api.readme.io/reference/getparcel.md): Returns the full details of a parcel identified by its UUID.
+- [Update a parcel by ID.](https://cabify-api.readme.io/reference/updateparcel.md): Update editable fields of an existing parcel. The set of fields that can be modified depends on the parcel's current state:  **All fields** can be updated when the parcel is in one of these states: `ready`, `pickupfailed`, `requestercancel`, or `returnedtoorigin`.  **Instructions only** (`pickup_info.instr`, `dropoff_info.instr`) can be updated in all other active states.
+- [Delete parcels by ID.](https://cabify-api.readme.io/reference/deleteparcels.md): Permanently deletes the specified parcels. Only parcels that have not yet been shipped can be deleted. This is an **all-or-nothing** operation — if any parcel cannot be deleted, none of the parcels in the request will be deleted.
+- [Notify an event for the given parcel.](https://cabify-api.readme.io/reference/notifyparcel.md): Sends an event notification for the specified parcel. Currently, only the `ready_to_pickup` event is supported.  This event is typically used in food delivery workflows to signal that an order is prepared and ready to be collected by a driver.
+- [Add a tip for a parcel delivery.](https://cabify-api.readme.io/reference/tipparcel.md): > **Note:** This feature is not available to all clients. Please contact us before using it.  Adds a tip for the driver in the event of a successful delivery. The tip can be set at any point before the parcel is delivered. The tip amount must be formatted according to ISO 4217 (e.g. €6.30 → `630` in EUR).
+- [Get the tip for a parcel.](https://cabify-api.readme.io/reference/gettipparcel.md): > **Note:** This feature is not available to all clients. Please contact us before using it.  Returns the tip configured for the specified parcel, if one exists.
+- [Get proof of delivery configuration for a parcel.](https://cabify-api.readme.io/reference/proofconfigurationparcel.md): Returns the proof of delivery methods currently configured for the specified parcel.
+- [Set proof of delivery configuration for a parcel.](https://cabify-api.readme.io/reference/createproofconfigurationparcel.md): Creates or replaces the proof of delivery methods configured for the specified parcel.
+- [Get the shipping label for a parcel.](https://cabify-api.readme.io/reference/labelparcel.md): Returns the shipping label for the specified parcel as a PDF. This label is scanned by the driver during pickup and delivery operations.
+- [Cancel the delivery of the specified parcels.](https://cabify-api.readme.io/reference/cancelparcels.md): Cancels an in-progress delivery for the given parcels, when cancellation is still permitted. Delivery cannot be cancelled once the parcel has been picked up. Cancellation is allowed in the following states: `qualifiedforpickup`, `onroutetopickup`, and `pickingup`. Please note that cancellation may incur costs.
+- [Check whether a pickup location is within an operating area.](https://cabify-api.readme.io/reference/deliverpickup.md): Verifies that the given pickup location is covered by the delivery service. You can provide either a text address (`address`) or geographic coordinates (`pickup_point`).
+- [Get the current status of a parcel.](https://cabify-api.readme.io/reference/statusparcel.md): Returns the current state and tracking information for the specified parcel.
+- [Get the state history of a parcel.](https://cabify-api.readme.io/reference/timelineparcel.md): Returns the ordered list of state-change events for the specified parcel. Only parcels updated within the last 30 days can be queried.
+- [Getting started with Logistics API](https://cabify-api.readme.io/reference/getting-started-1.md)
+- [Get the warehouse label for a parcel (deprecated).](https://cabify-api.readme.io/reference/warehouselabelparcel.md): **This endpoint is deprecated.** Please use [GET /v1/parcels/{parcel_id}/label](https://developers.cabify.com/reference/labelparcel) instead.
+- [Ship the specified parcels.](https://cabify-api.readme.io/reference/shipparcels.md): Marks the given parcels as ready to ship using the specified shipping type.  The available shipping types for your account and location can be retrieved from the [GET /v1/shipping_types/available](https://developers.cabify.com/reference/shippingtypesavailable) endpoint.
+- [Estimate the cost and timing of a shipment.](https://cabify-api.readme.io/reference/estimateshipparcels.md): Calculates the estimated price, pickup time, and delivery time for the given parcels using the specified shipping type.
+- [Sandbox](https://cabify-api.readme.io/reference/sandbox.md)
+- [List available shipping types for a location.](https://cabify-api.readme.io/reference/shippingtypesavailable.md): Returns the shipping types available to your account for a given pickup location. The available options are determined by your account configuration and the geographic region of the provided coordinates.
+- [Create a new client hub.](https://cabify-api.readme.io/reference/post_v1-hubs.md): Creates a new hub associated with your account. Hubs represent physical locations (such as stores or warehouses) from which parcels can be picked up or delivered to.
+- [List all client hubs.](https://cabify-api.readme.io/reference/get_v1-hubs.md): Returns all hubs associated with your account.
+- [Get a client hub by its external ID.](https://cabify-api.readme.io/reference/get_v1-hubs-none-hub-external-id.md): Returns the details of a specific hub identified by your external ID.
+- [Update a client hub by its external ID.](https://cabify-api.readme.io/reference/put_v1-hubs-none-hub-external-id.md): Updates the details of a specific hub identified by your external ID.
+- [Error handling](https://cabify-api.readme.io/reference/error-handling.md)
+- [Subscribe to parcel update notifications.](https://cabify-api.readme.io/reference/subscribewebhook.md): Register a webhook to receive real-time notifications when parcels are updated.  **Securing your webhook endpoint:** 1. Include a custom authorization header in the subscription request. Our API will forward    it with every notification:    ```    Authorization: Bearer <your-auth-token>    ``` 2. For enhanced security using OAuth (client credentials), contact us to set up authentication    with a `clientId` and `clientSecret`.
+- [List your active webhook subscriptions.](https://cabify-api.readme.io/reference/getwebhook.md): Returns all active webhook subscriptions registered for your account.
+- [Unsubscribe from a webhook.](https://cabify-api.readme.io/reference/deletewebhook.md): Removes the webhook subscription for the specified event type.
+- [List users belonging to your account.](https://cabify-api.readme.io/reference/getusers.md): Returns all Cabify users associated with your account.
+
+## Pages
+- [Cabify API Support](https://cabify-api.readme.io/cabify-api-support.md)
+- [Subscribe to updates](https://cabify-api.readme.io/subscribe-to-updates.md)

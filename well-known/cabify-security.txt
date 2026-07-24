@@ -1,0 +1,20 @@
+-----BEGIN PGP SIGNED MESSAGE-----
+Hash: SHA512
+
+Contact: mailto:security+bugbounty@cabify.com
+Preferred-Languages: en
+Canonical: https://cabify.com/.well-known/security.txt
+Encryption: https://cabify.com/.well-known/security.pgp
+Hiring: https://cabify.careers/en/
+Expires: 2026-08-15T18:05:41z
+
+# Our bounty policy
+Policy: https://cabify.com/.well-known/bounty.txt
+
+-----BEGIN PGP SIGNATURE-----
+
+iHUEARYKAB0WIQTxMjSQi2hCRXuTNSrn8AefewJAuwUCalfL9QAKCRDn8AefewJA
+uzeaAP99M2XhV1WivWfohBCs4hoFeSZfomxubKubwNkYjEJB6wD+MJc8cq/YB0iE
+StxkDtXqJuDMEe5w2rEcuCbxdqQZRgk=
+=QONI
+-----END PGP SIGNATURE-----

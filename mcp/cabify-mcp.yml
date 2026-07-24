@@ -1,0 +1,138 @@
+generated: '2026-07-18'
+method: derived
+status: candidate
+source: openapi/cabify-ride-hailing-openapi.yml, openapi/cabify-logistics-openapi.yml
+note: No official Cabify MCP server found on the developer portal, npm @modelcontextprotocol, or public
+  MCP registries as of 2026-07-18. This is a CANDIDATE tool list derived one-tool-per-operation from the
+  OpenAPI, for building an MCP server over the Cabify APIs.
+server:
+  name: cabify
+  transport: http
+  url: null
+tools:
+- name: cancelJourney
+  description: Cancel Journey
+  source_operation: openapi/cabify-ride-hailing-openapi.yml#cancelJourney
+- name: getJourneyState
+  description: Get Journey State
+  source_operation: openapi/cabify-ride-hailing-openapi.yml#getJourneyState
+- name: createJourney
+  description: Create a journey
+  source_operation: openapi/cabify-ride-hailing-openapi.yml#createJourney
+- name: createLabel
+  description: Create a Label
+  source_operation: openapi/cabify-ride-hailing-openapi.yml#createLabel
+- name: getLabels
+  description: Get labels paginated
+  source_operation: openapi/cabify-ride-hailing-openapi.yml#getLabels
+- name: updateLabel
+  description: Update label
+  source_operation: openapi/cabify-ride-hailing-openapi.yml#updateLabel
+- name: createUsers
+  description: Create Users in bulk
+  source_operation: openapi/cabify-ride-hailing-openapi.yml#createUsers
+- name: getUsers
+  description: Get Users in bulk
+  source_operation: openapi/cabify-ride-hailing-openapi.yml#getUsers
+- name: updateUsers
+  description: Update Users in bulk
+  source_operation: openapi/cabify-ride-hailing-openapi.yml#updateUsers
+- name: getEstimation
+  description: Create estimation
+  source_operation: openapi/cabify-ride-hailing-openapi.yml#getEstimation
+- name: getHub
+  description: Get Hub by coordinates
+  source_operation: openapi/cabify-ride-hailing-openapi.yml#getHub
+- name: getJourney
+  description: Get Journey details
+  source_operation: openapi/cabify-ride-hailing-openapi.yml#getJourney
+- name: getJourneySales
+  description: Get journey's sales
+  source_operation: openapi/cabify-ride-hailing-openapi.yml#getJourneySales
+- name: getLabelById
+  description: Get label by Id
+  source_operation: openapi/cabify-ride-hailing-openapi.yml#getLabelById
+- name: getSales
+  description: Fetch client's sales paginated
+  source_operation: openapi/cabify-ride-hailing-openapi.yml#getSales
+- name: getUserByEmail
+  description: Get User by email
+  source_operation: openapi/cabify-ride-hailing-openapi.yml#getUserByEmail
+- name: getUserById
+  description: Get User by ID
+  source_operation: openapi/cabify-ride-hailing-openapi.yml#getUserById
+- name: getUserSales
+  description: Get user's sales paginated
+  source_operation: openapi/cabify-ride-hailing-openapi.yml#getUserSales
+- name: keepSearching
+  description: Keep searching drivers for a journey
+  source_operation: openapi/cabify-ride-hailing-openapi.yml#keepSearching
+- name: addParcels
+  description: Create new parcels.
+  source_operation: openapi/cabify-logistics-openapi.yml#addParcels
+- name: getParcels
+  description: List parcels filtered by state.
+  source_operation: openapi/cabify-logistics-openapi.yml#getParcels
+- name: cancelParcels
+  description: Cancel the delivery of the specified parcels.
+  source_operation: openapi/cabify-logistics-openapi.yml#cancelParcels
+- name: createProofConfigurationParcel
+  description: Set proof of delivery configuration for a parcel.
+  source_operation: openapi/cabify-logistics-openapi.yml#createProofConfigurationParcel
+- name: proofConfigurationParcel
+  description: Get proof of delivery configuration for a parcel.
+  source_operation: openapi/cabify-logistics-openapi.yml#proofConfigurationParcel
+- name: deleteParcels
+  description: Delete parcels by ID.
+  source_operation: openapi/cabify-logistics-openapi.yml#deleteParcels
+- name: deleteWebhook
+  description: Unsubscribe from a webhook.
+  source_operation: openapi/cabify-logistics-openapi.yml#deleteWebhook
+- name: deliverPickup
+  description: Check whether a pickup location is within an operating area.
+  source_operation: openapi/cabify-logistics-openapi.yml#deliverPickup
+- name: EstimateShipParcels
+  description: Estimate the cost and timing of a shipment.
+  source_operation: openapi/cabify-logistics-openapi.yml#EstimateShipParcels
+- name: getParcel
+  description: Get a parcel by ID.
+  source_operation: openapi/cabify-logistics-openapi.yml#getParcel
+- name: updateParcel
+  description: Update a parcel by ID.
+  source_operation: openapi/cabify-logistics-openapi.yml#updateParcel
+- name: getTipParcel
+  description: Get the tip for a parcel.
+  source_operation: openapi/cabify-logistics-openapi.yml#getTipParcel
+- name: tipParcel
+  description: Add a tip for a parcel delivery.
+  source_operation: openapi/cabify-logistics-openapi.yml#tipParcel
+- name: getUsers
+  description: List users belonging to your account.
+  source_operation: openapi/cabify-logistics-openapi.yml#getUsers
+- name: getWebhook
+  description: List your active webhook subscriptions.
+  source_operation: openapi/cabify-logistics-openapi.yml#getWebhook
+- name: subscribeWebhook
+  description: Subscribe to parcel update notifications.
+  source_operation: openapi/cabify-logistics-openapi.yml#subscribeWebhook
+- name: labelParcel
+  description: Get the shipping label for a parcel.
+  source_operation: openapi/cabify-logistics-openapi.yml#labelParcel
+- name: notifyParcel
+  description: Notify an event for the given parcel.
+  source_operation: openapi/cabify-logistics-openapi.yml#notifyParcel
+- name: shipParcels
+  description: Ship the specified parcels.
+  source_operation: openapi/cabify-logistics-openapi.yml#shipParcels
+- name: shippingTypesAvailable
+  description: List available shipping types for a location.
+  source_operation: openapi/cabify-logistics-openapi.yml#shippingTypesAvailable
+- name: statusParcel
+  description: Get the current status of a parcel.
+  source_operation: openapi/cabify-logistics-openapi.yml#statusParcel
+- name: timelineParcel
+  description: Get the state history of a parcel.
+  source_operation: openapi/cabify-logistics-openapi.yml#timelineParcel
+- name: warehouseLabelParcel
+  description: Get the warehouse label for a parcel (deprecated).
+  source_operation: openapi/cabify-logistics-openapi.yml#warehouseLabelParcel

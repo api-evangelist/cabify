@@ -1,0 +1,78 @@
+generated: '2026-07-18'
+method: derived
+source: openapi/cabify-ride-hailing-openapi.yml, openapi/cabify-logistics-openapi.yml
+note: >-
+  Entity-relationship graph derived from the two OpenAPI specs (schema $refs and id-reference
+  fields). Cabify uses UUID identifiers; no documented id prefixes.
+entities:
+  ride_hailing:
+    - name: Journey
+      key: journey_id
+      description: A ride request that progresses hire → hired → arrived → pick up → drop off → terminated.
+      relationships:
+        - belongs_to: User
+          via: rider
+        - has_one: JourneyState
+          via: state
+        - has_many: Sale
+          via: sales
+        - has_one: Label
+          via: label
+        - has_many: StopRequest
+          via: stops
+    - name: User
+      key: id
+      description: A rider (company member or external passenger) managed under the business account.
+      relationships:
+        - has_many: Journey
+          via: rider
+        - has_many: Sale
+          via: user_sales
+    - name: Estimate
+      key: product.id
+      description: A price/product estimate that must precede journey creation.
+      relationships:
+        - has_one: Hub
+          via: hub
+    - name: Hub
+      key: uid
+      description: A large venue (airport, station) exposing meeting points.
+      relationships:
+        - has_many: MeetingPoint
+          via: meeting_points
+    - name: Label
+      key: id
+      description: A cost-center / expense label attached to journeys.
+    - name: Sale
+      key: id
+      description: A billing record produced by a journey.
+      relationships:
+        - belongs_to: Journey
+          via: journey_id
+  logistics:
+    - name: Parcel
+      key: parcel_id
+      description: A delivery item with pickup and drop-off info; lifecycle tracked via states.
+      relationships:
+        - has_one: ProofConfiguration
+          via: proof_configuration
+        - has_one: Tip
+          via: tip
+        - has_one: ShippingType
+          via: shipping_type
+        - has_many: TimelineEvent
+          via: timeline
+        - belongs_to: Hub
+          via: hub_external_id
+    - name: Hub
+      key: hub_external_id
+      description: A client-registered physical location (store/warehouse) for pickup/delivery.
+    - name: ShippingType
+      key: id
+      description: An available shipping modality for an account and location.
+    - name: WebhookSubscription
+      key: hook
+      description: A registered endpoint receiving real-time parcel-update notifications.
+    - name: User
+      key: id
+      description: A Cabify user associated with the logistics account.

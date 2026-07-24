@@ -1,0 +1,28 @@
+generated: '2026-07-18'
+method: searched
+source: https://developers.cabify.com/docs/ride-hailing-changelog
+versioning:
+  scheme: uri-path
+  ride_hailing:
+    current: v4
+    approach: Continuous, additive, backward-compatible enhancement of v4 (no breaking changes).
+    legacy: v3 GraphQL at /api/v3/graphql retained for existing integrations.
+  logistics:
+    current: v1
+    shipment_estimate: v3 (/v3/parcels/estimate)
+deprecation:
+  policy: >-
+    Ride-Hailing follows a "no breaking changes" policy: all new features are additive to v4 and
+    backward compatible; legacy v3 is kept available rather than sunset. No RFC 8594
+    Sunset/Deprecation header support is documented.
+  deprecated_operations:
+  - openapi/cabify-logistics-openapi.yml#warehouseLabelParcel
+  note: >-
+    GET /v1/parcels/{parcel_id}/warehouse/label is marked deprecated in the docs; use
+    GET /v1/parcels/{parcel_id}/label instead.
+status_page: https://cabify.statuspage.io
+changelog:
+  ride_hailing: https://developers.cabify.com/docs/ride-hailing-changelog
+  artifact: changelog/cabify-changelog.yml
+sla:
+  published: false
