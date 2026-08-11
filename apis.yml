@@ -287,6 +287,8 @@ apis:
   - type: APIReference
     url: https://developers.cabify.com/reference/addparcels
 common:
+- type: Overlay
+  url: overlays/cabify-logistics-overlay.yaml
 - type: Website
   url: https://cabify.com
 - type: DeveloperPortal
