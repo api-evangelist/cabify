@@ -1,0 +1,3359 @@
+{
+  "item": [
+    {
+      "id": "b071e242-ce7f-4145-a09e-debf8fd330a3",
+      "name": "parcels",
+      "description": {
+        "content": "A parcel is the package you need to ship. Each parcel is identified by a unique ID and contains a pickup point (where the driver collects the package) and a drop-off point (the destination). Parcels must be created before they can be shipped.\n",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "3ea85bb7-11c9-4979-8188-f1b9abf8bd82",
+          "name": "Create new parcels.",
+          "request": {
+            "name": "Create new parcels.",
+            "description": {
+              "content": "Create one or more parcels to be shipped. Note that creating a parcel does not trigger a delivery — you must call `/v1/parcels/ship` afterwards to schedule the pickup.\n\nEach parcel requires a pickup and a drop-off location. You can provide a location using one of the following fields in the `pickup_info` or `dropoff_info` schemas: `loc` (coordinates), `addr` (address string), or `hub_external_id` (reference to a registered hub).\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "parcels"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"parcels\": [\n    {\n      \"pickup_info\": {\n        \"contact\": {\n          \"name\": \"<string>\",\n          \"phone\": \"<string>\"\n        },\n        \"addr\": \"<string>\",\n        \"instr\": \"<string>\",\n        \"loc\": {\n          \"lat\": \"<float>\",\n          \"lon\": \"<float>\"\n        },\n        \"code\": \"<string>\",\n        \"hub_external_id\": \"<string>\"\n      },\n      \"dropoff_info\": {\n        \"contact\": {\n          \"name\": \"<string>\",\n          \"phone\": \"<string>\"\n        },\n        \"addr\": \"<string>\",\n        \"instr\": \"<string>\",\n        \"loc\": {\n          \"lat\": \"<float>\",\n          \"lon\": \"<float>\"\n        },\n        \"hub_external_id\": \"<string>\"\n      },\n      \"external_id\": \"<string>\",\n      \"dimensions\": {\n        \"height\": \"<integer>\",\n        \"length\": \"<integer>\",\n        \"width\": \"<integer>\",\n        \"unit\": \"<string>\"\n      },\n      \"weight\": {\n        \"value\": \"<integer>\",\n        \"unit\": \"<string>\"\n      },\n      \"price\": {\n        \"declared_value\": \"<integer>\",\n        \"collected_value\": \"<integer>\",\n        \"currency\": \"<string>\"\n      },\n      \"delivery_from\": \"<dateTime>\",\n      \"delivery_to\": \"<dateTime>\"\n    },\n    {\n      \"pickup_info\": {\n        \"contact\": {\n          \"name\": \"<string>\",\n          \"phone\": \"<string>\"\n        },\n        \"addr\": \"<string>\",\n        \"instr\": \"<string>\",\n        \"loc\": {\n          \"lat\": \"<float>\",\n          \"lon\": \"<float>\"\n        },\n        \"code\": \"<string>\",\n        \"hub_external_id\": \"<string>\"\n      },\n      \"dropoff_info\": {\n        \"contact\": {\n          \"name\": \"<string>\",\n          \"phone\": \"<string>\"\n        },\n        \"addr\": \"<string>\",\n        \"instr\": \"<string>\",\n        \"loc\": {\n          \"lat\": \"<float>\",\n          \"lon\": \"<float>\"\n        },\n        \"hub_external_id\": \"<string>\"\n      },\n      \"external_id\": \"<string>\",\n      \"dimensions\": {\n        \"height\": \"<integer>\",\n        \"length\": \"<integer>\",\n        \"width\": \"<integer>\",\n        \"unit\": \"<string>\"\n      },\n      \"weight\": {\n        \"value\": \"<integer>\",\n        \"unit\": \"<string>\"\n      },\n      \"price\": {\n        \"declared_value\": \"<integer>\",\n        \"collected_value\": \"<integer>\",\n        \"currency\": \"<string>\"\n      },\n      \"delivery_from\": \"<dateTime>\",\n      \"delivery_to\": \"<dateTime>\"\n    }\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "8c959aae-c983-4331-a66f-71d048f75885",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "parcels"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"parcels\": [\n    {\n      \"pickup_info\": {\n        \"contact\": {\n          \"name\": \"John\",\n          \"phone\": \"+34666000000\"\n        },\n        \"addr\": \"Calle de Pradillo, 42, Madrid\",\n        \"instr\": \"Knock the door three times\",\n        \"loc\": {\n          \"lat\": 40.4489254,\n          \"lon\": -3.6730293\n        },\n        \"code\": \"ABC123\",\n        \"hub_external_id\": \"magic_store_santa_fe\"\n      },\n      \"dropoff_info\": {\n        \"contact\": {\n          \"name\": \"John\",\n          \"phone\": \"+34666000000\"\n        },\n        \"addr\": \"Calle de Pradillo, 42, Madrid\",\n        \"instr\": \"Knock the door three times\",\n        \"loc\": {\n          \"lat\": 40.4489254,\n          \"lon\": -3.6730293\n        },\n        \"hub_external_id\": \"magic_store_santa_fe\"\n      },\n      \"external_id\": \"parcel_001\",\n      \"dimensions\": {\n        \"height\": 10,\n        \"length\": 10,\n        \"width\": 10,\n        \"unit\": \"<string>\"\n      },\n      \"weight\": {\n        \"value\": 1500,\n        \"unit\": \"<string>\"\n      },\n      \"price\": {\n        \"declared_value\": 630,\n        \"collected_value\": 630,\n        \"currency\": \"EUR\"\n      },\n      \"delivery_from\": \"2021-12-02T10:12:07.753Z\",\n      \"delivery_to\": \"2021-12-02T10:12:07.753Z\"\n    },\n    {\n      \"pickup_info\": {\n        \"contact\": {\n          \"name\": \"John\",\n          \"phone\": \"+34666000000\"\n        },\n        \"addr\": \"Calle de Pradillo, 42, Madrid\",\n        \"instr\": \"Knock the door three times\",\n        \"loc\": {\n          \"lat\": 40.4489254,\n          \"lon\": -3.6730293\n        },\n        \"code\": \"ABC123\",\n        \"hub_external_id\": \"magic_store_santa_fe\"\n      },\n      \"dropoff_info\": {\n        \"contact\": {\n          \"name\": \"John\",\n          \"phone\": \"+34666000000\"\n        },\n        \"addr\": \"Calle de Pradillo, 42, Madrid\",\n        \"instr\": \"Knock the door three times\",\n        \"loc\": {\n          \"lat\": 40.4489254,\n          \"lon\": -3.6730293\n        },\n        \"hub_external_id\": \"magic_store_santa_fe\"\n      },\n      \"external_id\": \"parcel_001\",\n      \"dimensions\": {\n        \"height\": 10,\n        \"length\": 10,\n        \"width\": 10,\n        \"unit\": \"<string>\"\n      },\n      \"weight\": {\n        \"value\": 1500,\n        \"unit\": \"<string>\"\n      },\n      \"price\": {\n        \"declared_value\": 630,\n        \"collected_value\": 630,\n        \"currency\": \"EUR\"\n      },\n      \"delivery_from\": \"2021-12-02T10:12:07.753Z\",\n      \"delivery_to\": \"2021-12-02T10:12:07.753Z\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"parcels\": [\n    {\n      \"id\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n      \"external_id\": \"parcel_001\",\n      \"pickup_info\": {\n        \"contact\": {\n          \"name\": \"John\",\n          \"phone\": \"+34666000000\"\n        },\n        \"addr\": \"Calle de Pradillo, 42, Madrid\",\n        \"instr\": \"Knock the door three times\",\n        \"loc\": {\n          \"lat\": 40.4489254,\n          \"lon\": -3.6730293\n        },\n        \"code\": \"ABC123\",\n        \"hub_external_id\": \"magic_store_santa_fe\"\n      },\n      \"dropoff_info\": {\n        \"contact\": {\n          \"name\": \"John\",\n          \"phone\": \"+34666000000\"\n        },\n        \"addr\": \"Calle de Pradillo, 42, Madrid\",\n        \"instr\": \"Knock the door three times\",\n        \"loc\": {\n          \"lat\": 40.4489254,\n          \"lon\": -3.6730293\n        },\n        \"hub_external_id\": \"magic_store_santa_fe\"\n      },\n      \"dimensions\": {\n        \"height\": 10,\n        \"length\": 10,\n        \"width\": 10,\n        \"unit\": \"<string>\"\n      },\n      \"weight\": {\n        \"value\": 1500,\n        \"unit\": \"<string>\"\n      },\n      \"price\": {\n        \"declared_value\": 630,\n        \"collected_value\": 630,\n        \"currency\": \"EUR\"\n      },\n      \"created_at\": \"2021-12-02T10:12:07.753Z\",\n      \"updated_at\": \"2021-12-02T10:12:07.753Z\"\n    },\n    {\n      \"id\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n      \"external_id\": \"parcel_001\",\n      \"pickup_info\": {\n        \"contact\": {\n          \"name\": \"John\",\n          \"phone\": \"+34666000000\"\n        },\n        \"addr\": \"Calle de Pradillo, 42, Madrid\",\n        \"instr\": \"Knock the door three times\",\n        \"loc\": {\n          \"lat\": 40.4489254,\n          \"lon\": -3.6730293\n        },\n        \"code\": \"ABC123\",\n        \"hub_external_id\": \"magic_store_santa_fe\"\n      },\n      \"dropoff_info\": {\n        \"contact\": {\n          \"name\": \"John\",\n          \"phone\": \"+34666000000\"\n        },\n        \"addr\": \"Calle de Pradillo, 42, Madrid\",\n        \"instr\": \"Knock the door three times\",\n        \"loc\": {\n          \"lat\": 40.4489254,\n          \"lon\": -3.6730293\n        },\n        \"hub_external_id\": \"magic_store_santa_fe\"\n      },\n      \"dimensions\": {\n        \"height\": 10,\n        \"length\": 10,\n        \"width\": 10,\n        \"unit\": \"<string>\"\n      },\n      \"weight\": {\n        \"value\": 1500,\n        \"unit\": \"<string>\"\n      },\n      \"price\": {\n        \"declared_value\": 630,\n        \"collected_value\": 630,\n        \"currency\": \"EUR\"\n      },\n      \"created_at\": \"2021-12-02T10:12:07.753Z\",\n      \"updated_at\": \"2021-12-02T10:12:07.753Z\"\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c3981a3a-0f69-4149-bafd-0fa494d9736c",
+              "name": "Bad request. One or more fields failed validation.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "parcels"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"parcels\": [\n    {\n      \"pickup_info\": {\n        \"contact\": {\n          \"name\": \"John\",\n          \"phone\": \"+34666000000\"\n        },\n        \"addr\": \"Calle de Pradillo, 42, Madrid\",\n        \"instr\": \"Knock the door three times\",\n        \"loc\": {\n          \"lat\": 40.4489254,\n          \"lon\": -3.6730293\n        },\n        \"code\": \"ABC123\",\n        \"hub_external_id\": \"magic_store_santa_fe\"\n      },\n      \"dropoff_info\": {\n        \"contact\": {\n          \"name\": \"John\",\n          \"phone\": \"+34666000000\"\n        },\n        \"addr\": \"Calle de Pradillo, 42, Madrid\",\n        \"instr\": \"Knock the door three times\",\n        \"loc\": {\n          \"lat\": 40.4489254,\n          \"lon\": -3.6730293\n        },\n        \"hub_external_id\": \"magic_store_santa_fe\"\n      },\n      \"external_id\": \"parcel_001\",\n      \"dimensions\": {\n        \"height\": 10,\n        \"length\": 10,\n        \"width\": 10,\n        \"unit\": \"<string>\"\n      },\n      \"weight\": {\n        \"value\": 1500,\n        \"unit\": \"<string>\"\n      },\n      \"price\": {\n        \"declared_value\": 630,\n        \"collected_value\": 630,\n        \"currency\": \"EUR\"\n      },\n      \"delivery_from\": \"2021-12-02T10:12:07.753Z\",\n      \"delivery_to\": \"2021-12-02T10:12:07.753Z\"\n    },\n    {\n      \"pickup_info\": {\n        \"contact\": {\n          \"name\": \"John\",\n          \"phone\": \"+34666000000\"\n        },\n        \"addr\": \"Calle de Pradillo, 42, Madrid\",\n        \"instr\": \"Knock the door three times\",\n        \"loc\": {\n          \"lat\": 40.4489254,\n          \"lon\": -3.6730293\n        },\n        \"code\": \"ABC123\",\n        \"hub_external_id\": \"magic_store_santa_fe\"\n      },\n      \"dropoff_info\": {\n        \"contact\": {\n          \"name\": \"John\",\n          \"phone\": \"+34666000000\"\n        },\n        \"addr\": \"Calle de Pradillo, 42, Madrid\",\n        \"instr\": \"Knock the door three times\",\n        \"loc\": {\n          \"lat\": 40.4489254,\n          \"lon\": -3.6730293\n        },\n        \"hub_external_id\": \"magic_store_santa_fe\"\n      },\n      \"external_id\": \"parcel_001\",\n      \"dimensions\": {\n        \"height\": 10,\n        \"length\": 10,\n        \"width\": 10,\n        \"unit\": \"<string>\"\n      },\n      \"weight\": {\n        \"value\": 1500,\n        \"unit\": \"<string>\"\n      },\n      \"price\": {\n        \"declared_value\": 630,\n        \"collected_value\": 630,\n        \"currency\": \"EUR\"\n      },\n      \"delivery_from\": \"2021-12-02T10:12:07.753Z\",\n      \"delivery_to\": \"2021-12-02T10:12:07.753Z\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    \"string\",\n    \"string\"\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "abf36f2d-0ae2-4662-8d28-5e2365b82de7",
+              "name": "Unauthorized. Missing or invalid authentication token.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "parcels"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"parcels\": [\n    {\n      \"pickup_info\": {\n        \"contact\": {\n          \"name\": \"John\",\n          \"phone\": \"+34666000000\"\n        },\n        \"addr\": \"Calle de Pradillo, 42, Madrid\",\n        \"instr\": \"Knock the door three times\",\n        \"loc\": {\n          \"lat\": 40.4489254,\n          \"lon\": -3.6730293\n        },\n        \"code\": \"ABC123\",\n        \"hub_external_id\": \"magic_store_santa_fe\"\n      },\n      \"dropoff_info\": {\n        \"contact\": {\n          \"name\": \"John\",\n          \"phone\": \"+34666000000\"\n        },\n        \"addr\": \"Calle de Pradillo, 42, Madrid\",\n        \"instr\": \"Knock the door three times\",\n        \"loc\": {\n          \"lat\": 40.4489254,\n          \"lon\": -3.6730293\n        },\n        \"hub_external_id\": \"magic_store_santa_fe\"\n      },\n      \"external_id\": \"parcel_001\",\n      \"dimensions\": {\n        \"height\": 10,\n        \"length\": 10,\n        \"width\": 10,\n        \"unit\": \"<string>\"\n      },\n      \"weight\": {\n        \"value\": 1500,\n        \"unit\": \"<string>\"\n      },\n      \"price\": {\n        \"declared_value\": 630,\n        \"collected_value\": 630,\n        \"currency\": \"EUR\"\n      },\n      \"delivery_from\": \"2021-12-02T10:12:07.753Z\",\n      \"delivery_to\": \"2021-12-02T10:12:07.753Z\"\n    },\n    {\n      \"pickup_info\": {\n        \"contact\": {\n          \"name\": \"John\",\n          \"phone\": \"+34666000000\"\n        },\n        \"addr\": \"Calle de Pradillo, 42, Madrid\",\n        \"instr\": \"Knock the door three times\",\n        \"loc\": {\n          \"lat\": 40.4489254,\n          \"lon\": -3.6730293\n        },\n        \"code\": \"ABC123\",\n        \"hub_external_id\": \"magic_store_santa_fe\"\n      },\n      \"dropoff_info\": {\n        \"contact\": {\n          \"name\": \"John\",\n          \"phone\": \"+34666000000\"\n        },\n        \"addr\": \"Calle de Pradillo, 42, Madrid\",\n        \"instr\": \"Knock the door three times\",\n        \"loc\": {\n          \"lat\": 40.4489254,\n          \"lon\": -3.6730293\n        },\n        \"hub_external_id\": \"magic_store_santa_fe\"\n      },\n      \"external_id\": \"parcel_001\",\n      \"dimensions\": {\n        \"height\": 10,\n        \"length\": 10,\n        \"width\": 10,\n        \"unit\": \"<string>\"\n      },\n      \"weight\": {\n        \"value\": 1500,\n        \"unit\": \"<string>\"\n      },\n      \"price\": {\n        \"declared_value\": 630,\n        \"collected_value\": 630,\n        \"currency\": \"EUR\"\n      },\n      \"delivery_from\": \"2021-12-02T10:12:07.753Z\",\n      \"delivery_to\": \"2021-12-02T10:12:07.753Z\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "d5ef8be8-5763-49b2-b8e6-6b0e8c87f6d0",
+              "name": "Conflict. A parcel with the provided `external_id` already exists.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "parcels"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"parcels\": [\n    {\n      \"pickup_info\": {\n        \"contact\": {\n          \"name\": \"John\",\n          \"phone\": \"+34666000000\"\n        },\n        \"addr\": \"Calle de Pradillo, 42, Madrid\",\n        \"instr\": \"Knock the door three times\",\n        \"loc\": {\n          \"lat\": 40.4489254,\n          \"lon\": -3.6730293\n        },\n        \"code\": \"ABC123\",\n        \"hub_external_id\": \"magic_store_santa_fe\"\n      },\n      \"dropoff_info\": {\n        \"contact\": {\n          \"name\": \"John\",\n          \"phone\": \"+34666000000\"\n        },\n        \"addr\": \"Calle de Pradillo, 42, Madrid\",\n        \"instr\": \"Knock the door three times\",\n        \"loc\": {\n          \"lat\": 40.4489254,\n          \"lon\": -3.6730293\n        },\n        \"hub_external_id\": \"magic_store_santa_fe\"\n      },\n      \"external_id\": \"parcel_001\",\n      \"dimensions\": {\n        \"height\": 10,\n        \"length\": 10,\n        \"width\": 10,\n        \"unit\": \"<string>\"\n      },\n      \"weight\": {\n        \"value\": 1500,\n        \"unit\": \"<string>\"\n      },\n      \"price\": {\n        \"declared_value\": 630,\n        \"collected_value\": 630,\n        \"currency\": \"EUR\"\n      },\n      \"delivery_from\": \"2021-12-02T10:12:07.753Z\",\n      \"delivery_to\": \"2021-12-02T10:12:07.753Z\"\n    },\n    {\n      \"pickup_info\": {\n        \"contact\": {\n          \"name\": \"John\",\n          \"phone\": \"+34666000000\"\n        },\n        \"addr\": \"Calle de Pradillo, 42, Madrid\",\n        \"instr\": \"Knock the door three times\",\n        \"loc\": {\n          \"lat\": 40.4489254,\n          \"lon\": -3.6730293\n        },\n        \"code\": \"ABC123\",\n        \"hub_external_id\": \"magic_store_santa_fe\"\n      },\n      \"dropoff_info\": {\n        \"contact\": {\n          \"name\": \"John\",\n          \"phone\": \"+34666000000\"\n        },\n        \"addr\": \"Calle de Pradillo, 42, Madrid\",\n        \"instr\": \"Knock the door three times\",\n        \"loc\": {\n          \"lat\": 40.4489254,\n          \"lon\": -3.6730293\n        },\n        \"hub_external_id\": \"magic_store_santa_fe\"\n      },\n      \"external_id\": \"parcel_001\",\n      \"dimensions\": {\n        \"height\": 10,\n        \"length\": 10,\n        \"width\": 10,\n        \"unit\": \"<string>\"\n      },\n      \"weight\": {\n        \"value\": 1500,\n        \"unit\": \"<string>\"\n      },\n      \"price\": {\n        \"declared_value\": 630,\n        \"collected_value\": 630,\n        \"currency\": \"EUR\"\n      },\n      \"delivery_from\": \"2021-12-02T10:12:07.753Z\",\n      \"delivery_to\": \"2021-12-02T10:12:07.753Z\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "c866d1c8-6496-42df-8f94-0bbd3f88aace",
+              "name": "Unprocessable entity. The request is well-formed but contains semantic errors.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "parcels"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"parcels\": [\n    {\n      \"pickup_info\": {\n        \"contact\": {\n          \"name\": \"John\",\n          \"phone\": \"+34666000000\"\n        },\n        \"addr\": \"Calle de Pradillo, 42, Madrid\",\n        \"instr\": \"Knock the door three times\",\n        \"loc\": {\n          \"lat\": 40.4489254,\n          \"lon\": -3.6730293\n        },\n        \"code\": \"ABC123\",\n        \"hub_external_id\": \"magic_store_santa_fe\"\n      },\n      \"dropoff_info\": {\n        \"contact\": {\n          \"name\": \"John\",\n          \"phone\": \"+34666000000\"\n        },\n        \"addr\": \"Calle de Pradillo, 42, Madrid\",\n        \"instr\": \"Knock the door three times\",\n        \"loc\": {\n          \"lat\": 40.4489254,\n          \"lon\": -3.6730293\n        },\n        \"hub_external_id\": \"magic_store_santa_fe\"\n      },\n      \"external_id\": \"parcel_001\",\n      \"dimensions\": {\n        \"height\": 10,\n        \"length\": 10,\n        \"width\": 10,\n        \"unit\": \"<string>\"\n      },\n      \"weight\": {\n        \"value\": 1500,\n        \"unit\": \"<string>\"\n      },\n      \"price\": {\n        \"declared_value\": 630,\n        \"collected_value\": 630,\n        \"currency\": \"EUR\"\n      },\n      \"delivery_from\": \"2021-12-02T10:12:07.753Z\",\n      \"delivery_to\": \"2021-12-02T10:12:07.753Z\"\n    },\n    {\n      \"pickup_info\": {\n        \"contact\": {\n          \"name\": \"John\",\n          \"phone\": \"+34666000000\"\n        },\n        \"addr\": \"Calle de Pradillo, 42, Madrid\",\n        \"instr\": \"Knock the door three times\",\n        \"loc\": {\n          \"lat\": 40.4489254,\n          \"lon\": -3.6730293\n        },\n        \"code\": \"ABC123\",\n        \"hub_external_id\": \"magic_store_santa_fe\"\n      },\n      \"dropoff_info\": {\n        \"contact\": {\n          \"name\": \"John\",\n          \"phone\": \"+34666000000\"\n        },\n        \"addr\": \"Calle de Pradillo, 42, Madrid\",\n        \"instr\": \"Knock the door three times\",\n        \"loc\": {\n          \"lat\": 40.4489254,\n          \"lon\": -3.6730293\n        },\n        \"hub_external_id\": \"magic_store_santa_fe\"\n      },\n      \"external_id\": \"parcel_001\",\n      \"dimensions\": {\n        \"height\": 10,\n        \"length\": 10,\n        \"width\": 10,\n        \"unit\": \"<string>\"\n      },\n      \"weight\": {\n        \"value\": 1500,\n        \"unit\": \"<string>\"\n      },\n      \"price\": {\n        \"declared_value\": 630,\n        \"collected_value\": 630,\n        \"currency\": \"EUR\"\n      },\n      \"delivery_from\": \"2021-12-02T10:12:07.753Z\",\n      \"delivery_to\": \"2021-12-02T10:12:07.753Z\"\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    \"string\",\n    \"string\"\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "60b0c119-b6c8-4ab8-b126-adebad6f1fc4",
+          "name": "List parcels filtered by state.",
+          "request": {
+            "name": "List parcels filtered by state.",
+            "description": {
+              "content": "Returns a paginated list of parcels that match the specified states.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "parcels"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "states",
+                  "value": "<string>",
+                  "description": "(Required) Filter results by one or more parcel states. See [parcel states](https://developers.cabify.com/reference/logistics-introduction#parcel) for a description of each value.\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "states",
+                  "value": "<string>",
+                  "description": "(Required) Filter results by one or more parcel states. See [parcel states](https://developers.cabify.com/reference/logistics-introduction#parcel) for a description of each value.\n"
+                },
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "<number>",
+                  "description": "(Required) Page number to retrieve (0-based)."
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "e8747f1b-8165-433c-9e46-3ca25ae1076a",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "parcels"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "states",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "states",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "page",
+                      "value": "<number>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"parcels\": [\n    {\n      \"id\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n      \"external_id\": \"parcel_001\",\n      \"pickup_info\": {\n        \"contact\": {\n          \"name\": \"John\",\n          \"phone\": \"+34666000000\"\n        },\n        \"addr\": \"Calle de Pradillo, 42, Madrid\",\n        \"instr\": \"Knock the door three times\",\n        \"loc\": {\n          \"lat\": 40.4489254,\n          \"lon\": -3.6730293\n        },\n        \"code\": \"ABC123\",\n        \"hub_external_id\": \"magic_store_santa_fe\"\n      },\n      \"dropoff_info\": {\n        \"contact\": {\n          \"name\": \"John\",\n          \"phone\": \"+34666000000\"\n        },\n        \"addr\": \"Calle de Pradillo, 42, Madrid\",\n        \"instr\": \"Knock the door three times\",\n        \"loc\": {\n          \"lat\": 40.4489254,\n          \"lon\": -3.6730293\n        },\n        \"hub_external_id\": \"magic_store_santa_fe\"\n      },\n      \"dimensions\": {\n        \"height\": 10,\n        \"length\": 10,\n        \"width\": 10,\n        \"unit\": \"<string>\"\n      },\n      \"weight\": {\n        \"value\": 1500,\n        \"unit\": \"<string>\"\n      },\n      \"price\": {\n        \"declared_value\": 630,\n        \"collected_value\": 630,\n        \"currency\": \"EUR\"\n      },\n      \"created_at\": \"2021-12-02T10:12:07.753Z\",\n      \"updated_at\": \"2021-12-02T10:12:07.753Z\"\n    },\n    {\n      \"id\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n      \"external_id\": \"parcel_001\",\n      \"pickup_info\": {\n        \"contact\": {\n          \"name\": \"John\",\n          \"phone\": \"+34666000000\"\n        },\n        \"addr\": \"Calle de Pradillo, 42, Madrid\",\n        \"instr\": \"Knock the door three times\",\n        \"loc\": {\n          \"lat\": 40.4489254,\n          \"lon\": -3.6730293\n        },\n        \"code\": \"ABC123\",\n        \"hub_external_id\": \"magic_store_santa_fe\"\n      },\n      \"dropoff_info\": {\n        \"contact\": {\n          \"name\": \"John\",\n          \"phone\": \"+34666000000\"\n        },\n        \"addr\": \"Calle de Pradillo, 42, Madrid\",\n        \"instr\": \"Knock the door three times\",\n        \"loc\": {\n          \"lat\": 40.4489254,\n          \"lon\": -3.6730293\n        },\n        \"hub_external_id\": \"magic_store_santa_fe\"\n      },\n      \"dimensions\": {\n        \"height\": 10,\n        \"length\": 10,\n        \"width\": 10,\n        \"unit\": \"<string>\"\n      },\n      \"weight\": {\n        \"value\": 1500,\n        \"unit\": \"<string>\"\n      },\n      \"price\": {\n        \"declared_value\": 630,\n        \"collected_value\": 630,\n        \"currency\": \"EUR\"\n      },\n      \"created_at\": \"2021-12-02T10:12:07.753Z\",\n      \"updated_at\": \"2021-12-02T10:12:07.753Z\"\n    }\n  ],\n  \"page\": 2,\n  \"page_size\": 20,\n  \"more_pages\": true\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "dfa29289-dbb1-437f-92f3-5766847b3029",
+              "name": "Bad request. One or more query parameters failed validation.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "parcels"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "states",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "states",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "page",
+                      "value": "<number>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    \"string\",\n    \"string\"\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "296a42fa-4155-482e-8109-3b82a4e1998e",
+              "name": "Unauthorized. Missing or invalid authentication token.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "parcels"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "states",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "states",
+                      "value": "<string>"
+                    },
+                    {
+                      "key": "page",
+                      "value": "<number>"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b1b6e29f-d2ee-4fe6-a28a-9a6fd39a9250",
+          "name": "Set proof of delivery configuration for a parcel.",
+          "request": {
+            "name": "Set proof of delivery configuration for a parcel.",
+            "description": {
+              "content": "Creates or replaces the proof of delivery methods configured for the specified parcel.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "parcels",
+                ":parcel_id",
+                "proof_configuration"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "parcel_id",
+                  "description": "(Required) UUID of the parcel to configure proof of delivery for."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"delivered_proofs\": {\n    \"code_proof\": {\n      \"active\": \"<boolean>\",\n      \"hashed_code\": \"<string>\"\n    },\n    \"ic_proof\": {\n      \"active\": \"<boolean>\"\n    },\n    \"photo_proof\": {\n      \"active\": \"<boolean>\"\n    },\n    \"comment_proof\": {\n      \"active\": \"<boolean>\"\n    }\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "f9d1ce29-d689-4847-ad02-11daca38e6ea",
+              "name": "Configuration saved successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "parcels",
+                    ":parcel_id",
+                    "proof_configuration"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "parcel_id",
+                      "description": "(Required) UUID of the parcel to configure proof of delivery for."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"delivered_proofs\": {\n    \"code_proof\": {\n      \"active\": true,\n      \"hashed_code\": \"6eef362598bc0d76139d3c4df61347a7faad5fa0a535347e46420214c68558a7\"\n    },\n    \"ic_proof\": {\n      \"active\": true\n    },\n    \"photo_proof\": {\n      \"active\": true\n    },\n    \"comment_proof\": {\n      \"active\": true\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"parcel_id\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n  \"delivered_proofs\": {\n    \"code_proof\": {\n      \"active\": true,\n      \"code\": \"1234\",\n      \"hashed_code\": \"6eef362598bc0d76139d3c4df61347a7faad5fa0a535347e46420214c68558a7\"\n    },\n    \"ic_proof\": {\n      \"active\": true\n    },\n    \"photo_proof\": {\n      \"active\": true\n    },\n    \"comment_proof\": {\n      \"active\": true\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "dfaff2ec-acba-4e44-879a-53a04016a237",
+              "name": "Unauthorized. Missing or invalid authentication token.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "parcels",
+                    ":parcel_id",
+                    "proof_configuration"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "parcel_id",
+                      "description": "(Required) UUID of the parcel to configure proof of delivery for."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"delivered_proofs\": {\n    \"code_proof\": {\n      \"active\": true,\n      \"hashed_code\": \"6eef362598bc0d76139d3c4df61347a7faad5fa0a535347e46420214c68558a7\"\n    },\n    \"ic_proof\": {\n      \"active\": true\n    },\n    \"photo_proof\": {\n      \"active\": true\n    },\n    \"comment_proof\": {\n      \"active\": true\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "1cee92ea-f70e-4513-9b5b-762233866e7e",
+              "name": "No parcel found with the given ID.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "parcels",
+                    ":parcel_id",
+                    "proof_configuration"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "parcel_id",
+                      "description": "(Required) UUID of the parcel to configure proof of delivery for."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"delivered_proofs\": {\n    \"code_proof\": {\n      \"active\": true,\n      \"hashed_code\": \"6eef362598bc0d76139d3c4df61347a7faad5fa0a535347e46420214c68558a7\"\n    },\n    \"ic_proof\": {\n      \"active\": true\n    },\n    \"photo_proof\": {\n      \"active\": true\n    },\n    \"comment_proof\": {\n      \"active\": true\n    }\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "b2cd8e18-6d56-497c-a0a6-a63a6f01c7d2",
+          "name": "Get proof of delivery configuration for a parcel.",
+          "request": {
+            "name": "Get proof of delivery configuration for a parcel.",
+            "description": {
+              "content": "Returns the proof of delivery methods currently configured for the specified parcel.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "parcels",
+                ":parcel_id",
+                "proof_configuration"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "parcel_id",
+                  "description": "(Required) UUID of the parcel whose proof of delivery configuration you want to retrieve."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "34b7b2b7-322f-4ad6-8f16-59a8ed47ed3e",
+              "name": "Proof of delivery configuration retrieved successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "parcels",
+                    ":parcel_id",
+                    "proof_configuration"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "parcel_id",
+                      "description": "(Required) UUID of the parcel whose proof of delivery configuration you want to retrieve."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"parcel_id\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n  \"delivered_proofs\": {\n    \"code_proof\": {\n      \"active\": true,\n      \"code\": \"1234\",\n      \"hashed_code\": \"6eef362598bc0d76139d3c4df61347a7faad5fa0a535347e46420214c68558a7\"\n    },\n    \"ic_proof\": {\n      \"active\": true\n    },\n    \"photo_proof\": {\n      \"active\": true\n    },\n    \"comment_proof\": {\n      \"active\": true\n    }\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f6dc21ea-68bd-4863-a3df-6ffc1e270f2d",
+              "name": "Unauthorized. Missing or invalid authentication token.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "parcels",
+                    ":parcel_id",
+                    "proof_configuration"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "parcel_id",
+                      "description": "(Required) UUID of the parcel whose proof of delivery configuration you want to retrieve."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "276e2965-cb3e-4218-a149-1648023ccca1",
+              "name": "No parcel found with the given ID.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "parcels",
+                    ":parcel_id",
+                    "proof_configuration"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "parcel_id",
+                      "description": "(Required) UUID of the parcel whose proof of delivery configuration you want to retrieve."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "a4464d71-9330-4a3e-b6cd-44b4c2bcb9a3",
+          "name": "Delete parcels by ID.",
+          "request": {
+            "name": "Delete parcels by ID.",
+            "description": {
+              "content": "Permanently deletes the specified parcels. Only parcels that have not yet been shipped can be deleted. This is an **all-or-nothing** operation — if any parcel cannot be deleted, none of the parcels in the request will be deleted.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "parcels",
+                "delete"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"parcel_ids\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ]\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "b34ddfee-c8e4-4af9-8dd3-1ccfd9793811",
+              "name": "All specified parcels were successfully deleted.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "parcels",
+                    "delete"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"parcel_ids\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Accepted",
+              "code": 202,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "25f02338-f4c7-431d-a733-727254c95702",
+              "name": "Unauthorized. Missing or invalid authentication token.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "parcels",
+                    "delete"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"parcel_ids\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "81136045-5d94-4501-83e6-5ddd7bf02e3c",
+              "name": "One or more parcels were not found.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "parcels",
+                    "delete"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"parcel_ids\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "8d07c167-b959-4ca7-a0f7-a566ccf36121",
+          "name": "Get a parcel by ID.",
+          "request": {
+            "name": "Get a parcel by ID.",
+            "description": {
+              "content": "Returns the full details of a parcel identified by its UUID.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "parcels",
+                ":parcel_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "parcel_id",
+                  "description": "(Required) UUID of the parcel to retrieve."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "431b9927-fc4c-4fdb-9545-379cd7214f71",
+              "name": "Parcel found and returned successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "parcels",
+                    ":parcel_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "parcel_id",
+                      "description": "(Required) UUID of the parcel to retrieve."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n  \"external_id\": \"parcel_001\",\n  \"pickup_info\": {\n    \"contact\": {\n      \"name\": \"John\",\n      \"phone\": \"+34666000000\"\n    },\n    \"addr\": \"Calle de Pradillo, 42, Madrid\",\n    \"instr\": \"Knock the door three times\",\n    \"loc\": {\n      \"lat\": 40.4489254,\n      \"lon\": -3.6730293\n    },\n    \"code\": \"ABC123\",\n    \"hub_external_id\": \"magic_store_santa_fe\"\n  },\n  \"dropoff_info\": {\n    \"contact\": {\n      \"name\": \"John\",\n      \"phone\": \"+34666000000\"\n    },\n    \"addr\": \"Calle de Pradillo, 42, Madrid\",\n    \"instr\": \"Knock the door three times\",\n    \"loc\": {\n      \"lat\": 40.4489254,\n      \"lon\": -3.6730293\n    },\n    \"hub_external_id\": \"magic_store_santa_fe\"\n  },\n  \"dimensions\": {\n    \"height\": 10,\n    \"length\": 10,\n    \"width\": 10,\n    \"unit\": \"<string>\"\n  },\n  \"weight\": {\n    \"value\": 1500,\n    \"unit\": \"<string>\"\n  },\n  \"price\": {\n    \"declared_value\": 630,\n    \"collected_value\": 630,\n    \"currency\": \"EUR\"\n  },\n  \"created_at\": \"2021-12-02T10:12:07.753Z\",\n  \"updated_at\": \"2021-12-02T10:12:07.753Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e75b88d2-0f5c-4940-b23b-4947268231ed",
+              "name": "Unauthorized. Missing or invalid authentication token.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "parcels",
+                    ":parcel_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "parcel_id",
+                      "description": "(Required) UUID of the parcel to retrieve."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "9f978ea6-7913-4b07-a2e5-12d5d03f42aa",
+              "name": "No parcel found with the given ID.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "parcels",
+                    ":parcel_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "parcel_id",
+                      "description": "(Required) UUID of the parcel to retrieve."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "2d68f53f-fb93-4a86-9457-9262be362957",
+          "name": "Update a parcel by ID.",
+          "request": {
+            "name": "Update a parcel by ID.",
+            "description": {
+              "content": "Update editable fields of an existing parcel. The set of fields that can be modified depends on the parcel's current state:\n\n**All fields** can be updated when the parcel is in one of these states: `ready`, `pickupfailed`, `requestercancel`, or `returnedtoorigin`.\n\n**Instructions only** (`pickup_info.instr`, `dropoff_info.instr`) can be updated in all other active states.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "parcels",
+                ":parcel_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "parcel_id",
+                  "description": "(Required) UUID of the parcel to update."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "PUT",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"external_id\": \"<string>\",\n  \"pickup_info\": {\n    \"contact\": {\n      \"name\": \"<string>\",\n      \"phone\": \"<string>\"\n    },\n    \"addr\": \"<string>\",\n    \"instr\": \"<string>\",\n    \"loc\": {\n      \"lat\": \"<float>\",\n      \"lon\": \"<float>\"\n    },\n    \"code\": \"<string>\",\n    \"hub_external_id\": \"<string>\"\n  },\n  \"dropoff_info\": {\n    \"contact\": {\n      \"name\": \"<string>\",\n      \"phone\": \"<string>\"\n    },\n    \"addr\": \"<string>\",\n    \"instr\": \"<string>\",\n    \"loc\": {\n      \"lat\": \"<float>\",\n      \"lon\": \"<float>\"\n    },\n    \"hub_external_id\": \"<string>\"\n  },\n  \"dimensions\": {\n    \"height\": \"<integer>\",\n    \"length\": \"<integer>\",\n    \"width\": \"<integer>\",\n    \"unit\": \"<string>\"\n  },\n  \"weight\": {\n    \"value\": \"<integer>\",\n    \"unit\": \"<string>\"\n  },\n  \"delivery_from\": \"<dateTime>\",\n  \"delivery_to\": \"<dateTime>\",\n  \"price\": {\n    \"declared_value\": \"<integer>\",\n    \"collected_value\": \"<integer>\",\n    \"currency\": \"<string>\"\n  }\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "57cc13c1-537e-4583-8570-eb9a9eab02f7",
+              "name": "Parcel updated successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "parcels",
+                    ":parcel_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "parcel_id",
+                      "description": "(Required) UUID of the parcel to update."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"external_id\": \"parcel_001\",\n  \"pickup_info\": {\n    \"contact\": {\n      \"name\": \"John\",\n      \"phone\": \"+34666000000\"\n    },\n    \"addr\": \"Calle de Pradillo, 42, Madrid\",\n    \"instr\": \"Knock the door three times\",\n    \"loc\": {\n      \"lat\": 40.4489254,\n      \"lon\": -3.6730293\n    },\n    \"code\": \"ABC123\",\n    \"hub_external_id\": \"magic_store_santa_fe\"\n  },\n  \"dropoff_info\": {\n    \"contact\": {\n      \"name\": \"John\",\n      \"phone\": \"+34666000000\"\n    },\n    \"addr\": \"Calle de Pradillo, 42, Madrid\",\n    \"instr\": \"Knock the door three times\",\n    \"loc\": {\n      \"lat\": 40.4489254,\n      \"lon\": -3.6730293\n    },\n    \"hub_external_id\": \"magic_store_santa_fe\"\n  },\n  \"dimensions\": {\n    \"height\": 10,\n    \"length\": 10,\n    \"width\": 10,\n    \"unit\": \"<string>\"\n  },\n  \"weight\": {\n    \"value\": 1500,\n    \"unit\": \"<string>\"\n  },\n  \"delivery_from\": \"2021-12-02T10:12:07.753Z\",\n  \"delivery_to\": \"2021-12-02T10:12:07.753Z\",\n  \"price\": {\n    \"declared_value\": 630,\n    \"collected_value\": 630,\n    \"currency\": \"EUR\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n  \"external_id\": \"parcel_001\",\n  \"pickup_info\": {\n    \"contact\": {\n      \"name\": \"John\",\n      \"phone\": \"+34666000000\"\n    },\n    \"addr\": \"Calle de Pradillo, 42, Madrid\",\n    \"instr\": \"Knock the door three times\",\n    \"loc\": {\n      \"lat\": 40.4489254,\n      \"lon\": -3.6730293\n    },\n    \"code\": \"ABC123\",\n    \"hub_external_id\": \"magic_store_santa_fe\"\n  },\n  \"dropoff_info\": {\n    \"contact\": {\n      \"name\": \"John\",\n      \"phone\": \"+34666000000\"\n    },\n    \"addr\": \"Calle de Pradillo, 42, Madrid\",\n    \"instr\": \"Knock the door three times\",\n    \"loc\": {\n      \"lat\": 40.4489254,\n      \"lon\": -3.6730293\n    },\n    \"hub_external_id\": \"magic_store_santa_fe\"\n  },\n  \"dimensions\": {\n    \"height\": 10,\n    \"length\": 10,\n    \"width\": 10,\n    \"unit\": \"<string>\"\n  },\n  \"weight\": {\n    \"value\": 1500,\n    \"unit\": \"<string>\"\n  },\n  \"price\": {\n    \"declared_value\": 630,\n    \"collected_value\": 630,\n    \"currency\": \"EUR\"\n  },\n  \"created_at\": \"2021-12-02T10:12:07.753Z\",\n  \"updated_at\": \"2021-12-02T10:12:07.753Z\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "fa473c46-e9da-4b1b-85ec-1e61cd31f78c",
+              "name": "Bad request. One or more fields failed validation.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "parcels",
+                    ":parcel_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "parcel_id",
+                      "description": "(Required) UUID of the parcel to update."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"external_id\": \"parcel_001\",\n  \"pickup_info\": {\n    \"contact\": {\n      \"name\": \"John\",\n      \"phone\": \"+34666000000\"\n    },\n    \"addr\": \"Calle de Pradillo, 42, Madrid\",\n    \"instr\": \"Knock the door three times\",\n    \"loc\": {\n      \"lat\": 40.4489254,\n      \"lon\": -3.6730293\n    },\n    \"code\": \"ABC123\",\n    \"hub_external_id\": \"magic_store_santa_fe\"\n  },\n  \"dropoff_info\": {\n    \"contact\": {\n      \"name\": \"John\",\n      \"phone\": \"+34666000000\"\n    },\n    \"addr\": \"Calle de Pradillo, 42, Madrid\",\n    \"instr\": \"Knock the door three times\",\n    \"loc\": {\n      \"lat\": 40.4489254,\n      \"lon\": -3.6730293\n    },\n    \"hub_external_id\": \"magic_store_santa_fe\"\n  },\n  \"dimensions\": {\n    \"height\": 10,\n    \"length\": 10,\n    \"width\": 10,\n    \"unit\": \"<string>\"\n  },\n  \"weight\": {\n    \"value\": 1500,\n    \"unit\": \"<string>\"\n  },\n  \"delivery_from\": \"2021-12-02T10:12:07.753Z\",\n  \"delivery_to\": \"2021-12-02T10:12:07.753Z\",\n  \"price\": {\n    \"declared_value\": 630,\n    \"collected_value\": 630,\n    \"currency\": \"EUR\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    \"string\",\n    \"string\"\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "80ed4d5e-2f68-4fe0-a0e9-95d3af9070b8",
+              "name": "Unauthorized. Missing or invalid authentication token.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "parcels",
+                    ":parcel_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "parcel_id",
+                      "description": "(Required) UUID of the parcel to update."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"external_id\": \"parcel_001\",\n  \"pickup_info\": {\n    \"contact\": {\n      \"name\": \"John\",\n      \"phone\": \"+34666000000\"\n    },\n    \"addr\": \"Calle de Pradillo, 42, Madrid\",\n    \"instr\": \"Knock the door three times\",\n    \"loc\": {\n      \"lat\": 40.4489254,\n      \"lon\": -3.6730293\n    },\n    \"code\": \"ABC123\",\n    \"hub_external_id\": \"magic_store_santa_fe\"\n  },\n  \"dropoff_info\": {\n    \"contact\": {\n      \"name\": \"John\",\n      \"phone\": \"+34666000000\"\n    },\n    \"addr\": \"Calle de Pradillo, 42, Madrid\",\n    \"instr\": \"Knock the door three times\",\n    \"loc\": {\n      \"lat\": 40.4489254,\n      \"lon\": -3.6730293\n    },\n    \"hub_external_id\": \"magic_store_santa_fe\"\n  },\n  \"dimensions\": {\n    \"height\": 10,\n    \"length\": 10,\n    \"width\": 10,\n    \"unit\": \"<string>\"\n  },\n  \"weight\": {\n    \"value\": 1500,\n    \"unit\": \"<string>\"\n  },\n  \"delivery_from\": \"2021-12-02T10:12:07.753Z\",\n  \"delivery_to\": \"2021-12-02T10:12:07.753Z\",\n  \"price\": {\n    \"declared_value\": 630,\n    \"collected_value\": 630,\n    \"currency\": \"EUR\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "b6bc6404-ce54-46b7-b66e-25f6eb80008d",
+              "name": "This parcel does not belong to your account.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "parcels",
+                    ":parcel_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "parcel_id",
+                      "description": "(Required) UUID of the parcel to update."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"external_id\": \"parcel_001\",\n  \"pickup_info\": {\n    \"contact\": {\n      \"name\": \"John\",\n      \"phone\": \"+34666000000\"\n    },\n    \"addr\": \"Calle de Pradillo, 42, Madrid\",\n    \"instr\": \"Knock the door three times\",\n    \"loc\": {\n      \"lat\": 40.4489254,\n      \"lon\": -3.6730293\n    },\n    \"code\": \"ABC123\",\n    \"hub_external_id\": \"magic_store_santa_fe\"\n  },\n  \"dropoff_info\": {\n    \"contact\": {\n      \"name\": \"John\",\n      \"phone\": \"+34666000000\"\n    },\n    \"addr\": \"Calle de Pradillo, 42, Madrid\",\n    \"instr\": \"Knock the door three times\",\n    \"loc\": {\n      \"lat\": 40.4489254,\n      \"lon\": -3.6730293\n    },\n    \"hub_external_id\": \"magic_store_santa_fe\"\n  },\n  \"dimensions\": {\n    \"height\": 10,\n    \"length\": 10,\n    \"width\": 10,\n    \"unit\": \"<string>\"\n  },\n  \"weight\": {\n    \"value\": 1500,\n    \"unit\": \"<string>\"\n  },\n  \"delivery_from\": \"2021-12-02T10:12:07.753Z\",\n  \"delivery_to\": \"2021-12-02T10:12:07.753Z\",\n  \"price\": {\n    \"declared_value\": 630,\n    \"collected_value\": 630,\n    \"currency\": \"EUR\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    \"string\",\n    \"string\"\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3b59b570-fd6b-4ea1-8465-b96ab3ddf6c2",
+              "name": "The parcel cannot be updated in its current state.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "parcels",
+                    ":parcel_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "parcel_id",
+                      "description": "(Required) UUID of the parcel to update."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"external_id\": \"parcel_001\",\n  \"pickup_info\": {\n    \"contact\": {\n      \"name\": \"John\",\n      \"phone\": \"+34666000000\"\n    },\n    \"addr\": \"Calle de Pradillo, 42, Madrid\",\n    \"instr\": \"Knock the door three times\",\n    \"loc\": {\n      \"lat\": 40.4489254,\n      \"lon\": -3.6730293\n    },\n    \"code\": \"ABC123\",\n    \"hub_external_id\": \"magic_store_santa_fe\"\n  },\n  \"dropoff_info\": {\n    \"contact\": {\n      \"name\": \"John\",\n      \"phone\": \"+34666000000\"\n    },\n    \"addr\": \"Calle de Pradillo, 42, Madrid\",\n    \"instr\": \"Knock the door three times\",\n    \"loc\": {\n      \"lat\": 40.4489254,\n      \"lon\": -3.6730293\n    },\n    \"hub_external_id\": \"magic_store_santa_fe\"\n  },\n  \"dimensions\": {\n    \"height\": 10,\n    \"length\": 10,\n    \"width\": 10,\n    \"unit\": \"<string>\"\n  },\n  \"weight\": {\n    \"value\": 1500,\n    \"unit\": \"<string>\"\n  },\n  \"delivery_from\": \"2021-12-02T10:12:07.753Z\",\n  \"delivery_to\": \"2021-12-02T10:12:07.753Z\",\n  \"price\": {\n    \"declared_value\": 630,\n    \"collected_value\": 630,\n    \"currency\": \"EUR\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    \"string\",\n    \"string\"\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2440969f-33c2-43ea-a17f-5c37a3be0c0d",
+              "name": "Unprocessable entity. The request is well-formed but contains semantic errors.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "parcels",
+                    ":parcel_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "parcel_id",
+                      "description": "(Required) UUID of the parcel to update."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "PUT",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"external_id\": \"parcel_001\",\n  \"pickup_info\": {\n    \"contact\": {\n      \"name\": \"John\",\n      \"phone\": \"+34666000000\"\n    },\n    \"addr\": \"Calle de Pradillo, 42, Madrid\",\n    \"instr\": \"Knock the door three times\",\n    \"loc\": {\n      \"lat\": 40.4489254,\n      \"lon\": -3.6730293\n    },\n    \"code\": \"ABC123\",\n    \"hub_external_id\": \"magic_store_santa_fe\"\n  },\n  \"dropoff_info\": {\n    \"contact\": {\n      \"name\": \"John\",\n      \"phone\": \"+34666000000\"\n    },\n    \"addr\": \"Calle de Pradillo, 42, Madrid\",\n    \"instr\": \"Knock the door three times\",\n    \"loc\": {\n      \"lat\": 40.4489254,\n      \"lon\": -3.6730293\n    },\n    \"hub_external_id\": \"magic_store_santa_fe\"\n  },\n  \"dimensions\": {\n    \"height\": 10,\n    \"length\": 10,\n    \"width\": 10,\n    \"unit\": \"<string>\"\n  },\n  \"weight\": {\n    \"value\": 1500,\n    \"unit\": \"<string>\"\n  },\n  \"delivery_from\": \"2021-12-02T10:12:07.753Z\",\n  \"delivery_to\": \"2021-12-02T10:12:07.753Z\",\n  \"price\": {\n    \"declared_value\": 630,\n    \"collected_value\": 630,\n    \"currency\": \"EUR\"\n  }\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    \"string\",\n    \"string\"\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "a406badb-c7ce-4dad-a406-d5805c50ed1b",
+          "name": "Get the tip for a parcel.",
+          "request": {
+            "name": "Get the tip for a parcel.",
+            "description": {
+              "content": "> **Note:** This feature is not available to all clients. Please contact us before using it.\n\nReturns the tip configured for the specified parcel, if one exists.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "parcels",
+                ":parcel_id",
+                "tip"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "parcel_id",
+                  "description": "(Required) UUID of the parcel whose tip you want to retrieve."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "bb9e7bab-9b8a-4d81-9e39-0ca55a677cbe",
+              "name": "Tip retrieved successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "parcels",
+                    ":parcel_id",
+                    "tip"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "parcel_id",
+                      "description": "(Required) UUID of the parcel whose tip you want to retrieve."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"parcel_id\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n  \"amount\": 100,\n  \"currency\": \"ARS\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "82e4971c-74e7-4b16-8166-71e3f897371c",
+              "name": "No tip exists for the specified parcel.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "parcels",
+                    ":parcel_id",
+                    "tip"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "parcel_id",
+                      "description": "(Required) UUID of the parcel whose tip you want to retrieve."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "d35b0298-a2de-4297-9091-ef54079e5fe2",
+              "name": "Unauthorized. Missing or invalid authentication token.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "parcels",
+                    ":parcel_id",
+                    "tip"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "parcel_id",
+                      "description": "(Required) UUID of the parcel whose tip you want to retrieve."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "7adad838-50d9-464d-85d6-094207b1a871",
+              "name": "This parcel does not belong to your account, or your account is not allowed to use the tipping feature.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "parcels",
+                    ":parcel_id",
+                    "tip"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "parcel_id",
+                      "description": "(Required) UUID of the parcel whose tip you want to retrieve."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    \"string\",\n    \"string\"\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "be4d39ad-c68b-4ef9-a944-dfe10ffc961c",
+              "name": "No parcel found with the given ID.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "parcels",
+                    ":parcel_id",
+                    "tip"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "parcel_id",
+                      "description": "(Required) UUID of the parcel whose tip you want to retrieve."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    \"string\",\n    \"string\"\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "86d65e20-95c6-4d09-89c5-b48c6274b081",
+          "name": "Add a tip for a parcel delivery.",
+          "request": {
+            "name": "Add a tip for a parcel delivery.",
+            "description": {
+              "content": "> **Note:** This feature is not available to all clients. Please contact us before using it.\n\nAdds a tip for the driver in the event of a successful delivery. The tip can be set at any\npoint before the parcel is delivered. The tip amount must be formatted according to ISO 4217\n(e.g. €6.30 → `630` in EUR).\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "parcels",
+                ":parcel_id",
+                "tip"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "parcel_id",
+                  "description": "(Required) UUID of the parcel to tip."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"amount\": \"<integer>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "887d55c9-cc32-44f9-8811-1dccd1dd2cea",
+              "name": "Tip created successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "parcels",
+                    ":parcel_id",
+                    "tip"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "parcel_id",
+                      "description": "(Required) UUID of the parcel to tip."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"amount\": 100\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"parcel_id\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n  \"amount\": 100,\n  \"currency\": \"ARS\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "c3f7f918-3716-41b6-a2ba-f79fac4dd146",
+              "name": "Unauthorized. Missing or invalid authentication token.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "parcels",
+                    ":parcel_id",
+                    "tip"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "parcel_id",
+                      "description": "(Required) UUID of the parcel to tip."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"amount\": 100\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "03dfca8c-9b1d-4e27-aaea-4ecdbf15a0d8",
+              "name": "This parcel does not belong to your account, or your account is not allowed to use the tipping feature.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "parcels",
+                    ":parcel_id",
+                    "tip"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "parcel_id",
+                      "description": "(Required) UUID of the parcel to tip."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"amount\": 100\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    \"string\",\n    \"string\"\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "d5b125bf-0e1d-4b37-be2c-e985d65cdcee",
+              "name": "No parcel found with the given ID.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "parcels",
+                    ":parcel_id",
+                    "tip"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "parcel_id",
+                      "description": "(Required) UUID of the parcel to tip."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"amount\": 100\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    \"string\",\n    \"string\"\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "6d9d9ebd-57d1-4938-b955-00ab0c411221",
+              "name": "A tip already exists for this parcel.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "parcels",
+                    ":parcel_id",
+                    "tip"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "parcel_id",
+                      "description": "(Required) UUID of the parcel to tip."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"amount\": 100\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    \"string\",\n    \"string\"\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b63cb1b9-590c-4a84-8985-fa104bcb22c7",
+              "name": "The parcel's current state does not allow adding a tip.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "parcels",
+                    ":parcel_id",
+                    "tip"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "parcel_id",
+                      "description": "(Required) UUID of the parcel to tip."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"amount\": 100\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Too Many Requests",
+              "code": 429,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    \"string\",\n    \"string\"\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "ea672445-dd00-44cc-8fa2-b7a18ac18f79",
+          "name": "Get the shipping label for a parcel.",
+          "request": {
+            "name": "Get the shipping label for a parcel.",
+            "description": {
+              "content": "Returns the shipping label for the specified parcel as a PDF. This label is scanned by the driver during pickup and delivery operations.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "parcels",
+                ":parcel_id",
+                "label"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "parcel_id",
+                  "description": "(Required) UUID of the parcel."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/pdf"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "3957693a-df99-4405-9642-f77759517de9",
+              "name": "Returns the parcel label as a PDF file.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "parcels",
+                    ":parcel_id",
+                    "label"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "parcel_id",
+                      "description": "(Required) UUID of the parcel."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/pdf"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/pdf"
+                }
+              ],
+              "body": "string",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "379ff0f2-b58e-484c-a1ab-6a2f9faa385c",
+              "name": "Unauthorized. Missing or invalid authentication token.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "parcels",
+                    ":parcel_id",
+                    "label"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "parcel_id",
+                      "description": "(Required) UUID of the parcel."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "ca059040-364a-4bcc-9b5b-531edd5d312c",
+              "name": "This parcel does not belong to your account.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "parcels",
+                    ":parcel_id",
+                    "label"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "parcel_id",
+                      "description": "(Required) UUID of the parcel."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "9a658c6a-779b-4b1a-9bd6-b17de2cac37f",
+              "name": "No parcel found with the given ID.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "parcels",
+                    ":parcel_id",
+                    "label"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "parcel_id",
+                      "description": "(Required) UUID of the parcel."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "50dfb341-5884-4b82-8b31-15856215d052",
+          "name": "Notify an event for the given parcel.",
+          "request": {
+            "name": "Notify an event for the given parcel.",
+            "description": {
+              "content": "Sends an event notification for the specified parcel. Currently, only the `ready_to_pickup`\nevent is supported.\n\nThis event is typically used in food delivery workflows to signal that an order is prepared\nand ready to be collected by a driver.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "parcels",
+                ":parcel_id",
+                "notify"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "parcel_id",
+                  "description": "(Required) UUID of the parcel to notify an event for."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"event\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "2d49a3ad-0083-49dd-a88c-a6451ea782d4",
+              "name": "Event accepted and queued for processing.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "parcels",
+                    ":parcel_id",
+                    "notify"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "parcel_id",
+                      "description": "(Required) UUID of the parcel to notify an event for."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"event\": \"ready_to_pickup\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Accepted",
+              "code": 202,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "8b87e26e-af57-4e82-95c0-8a603692b2e2",
+              "name": "Bad request. One or more fields failed validation.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "parcels",
+                    ":parcel_id",
+                    "notify"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "parcel_id",
+                      "description": "(Required) UUID of the parcel to notify an event for."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"event\": \"ready_to_pickup\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    \"string\",\n    \"string\"\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ec09f168-1233-42fa-935a-1a095fff071e",
+              "name": "This parcel does not belong to your account.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "parcels",
+                    ":parcel_id",
+                    "notify"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "parcel_id",
+                      "description": "(Required) UUID of the parcel to notify an event for."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"event\": \"ready_to_pickup\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    \"string\",\n    \"string\"\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "7884dd93-b52e-424e-9714-ebd1f2b53e7f",
+              "name": "No parcel found with the given ID.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "parcels",
+                    ":parcel_id",
+                    "notify"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "parcel_id",
+                      "description": "(Required) UUID of the parcel to notify an event for."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"event\": \"ready_to_pickup\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    \"string\",\n    \"string\"\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b5efdca4-282b-43f8-a140-2a32f560d0d5",
+              "name": "The parcel has not yet been assigned to a modality, or the assigned modality does not support this event.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "parcels",
+                    ":parcel_id",
+                    "notify"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "parcel_id",
+                      "description": "(Required) UUID of the parcel to notify an event for."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"event\": \"ready_to_pickup\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    \"string\",\n    \"string\"\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ecd7ec59-1e23-4de4-99b6-416cefdf4ffe",
+              "name": "Unprocessable entity. The request is well-formed but contains semantic errors.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "parcels",
+                    ":parcel_id",
+                    "notify"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "parcel_id",
+                      "description": "(Required) UUID of the parcel to notify an event for."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"event\": \"ready_to_pickup\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unprocessable Entity (WebDAV) (RFC 4918)",
+              "code": 422,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    \"string\",\n    \"string\"\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "70e5db84-cdb3-4710-9295-2f4b165e1a67",
+              "name": "An unexpected server error occurred.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "parcels",
+                    ":parcel_id",
+                    "notify"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "parcel_id",
+                      "description": "(Required) UUID of the parcel to notify an event for."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"event\": \"ready_to_pickup\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://logistics.api.cabify.com",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "781193fc-9796-4be4-8fe7-3fb89a03dbcd",
+    "name": "Cabify Logistics delivery parcels API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Welcome to the Cabify Logistics API. This API allows you to create and manage parcel deliveries, track their status in real time, configure proof of delivery options, and receive live updates via webhooks. All requests must be authenticated using a Bearer token.\n\n\nContact Support:\n Email: p.delivery@cabify.com",
+      "type": "text/plain"
+    }
+  }
+}

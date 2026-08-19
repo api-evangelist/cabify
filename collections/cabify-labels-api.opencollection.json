@@ -1,0 +1,106 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Cabify Logistics delivery Labels API",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Labels",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get labels paginated",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://logistics.api.cabify.com/api/v4/labels",
+            "params": [
+              {
+                "name": "per",
+                "value": "20",
+                "type": "query",
+                "description": "Amount of labels for page"
+              },
+              {
+                "name": "page",
+                "value": "1",
+                "type": "query",
+                "description": "Number of page to fetch"
+              },
+              {
+                "name": "active",
+                "value": "true",
+                "type": "query",
+                "description": "Filter by active Labels. If not set then all Labels are returned"
+              }
+            ]
+          },
+          "docs": "Fetch labels paginated"
+        },
+        {
+          "info": {
+            "name": "Create a Label",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://logistics.api.cabify.com/api/v4/labels",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new label."
+        },
+        {
+          "info": {
+            "name": "Update label",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://logistics.api.cabify.com/api/v4/labels",
+            "params": [
+              {
+                "name": "id",
+                "value": "93aba78c-8876-4a75-ae4d-3d4e31ab8334",
+                "type": "query",
+                "description": "Id of the label"
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Modify an existing label"
+        },
+        {
+          "info": {
+            "name": "Get label by Id",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://logistics.api.cabify.com/api/v4/labels/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "93aba78c-8876-4a75-ae4d-3d4e31ab8334",
+                "type": "path",
+                "description": "Id of the label"
+              }
+            ]
+          },
+          "docs": "Fetch the label with the given Id"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

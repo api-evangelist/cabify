@@ -1,0 +1,33 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Cabify Logistics delivery Estimates API",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Estimates",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Create estimation",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://logistics.api.cabify.com/api/v4/estimates",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Obtain prices, product IDs, and all the information for products that are available at the origin point.\n\n> ❗️ Important\n>\n> You **must** call this endpoint before creating a Journey. The response provides the `product.id`\n> that should be passed to the journey creation endpoint.\n>\n> For **reserved** journeys, pass the same `start_at` used here to the journey creation request\n> to guarantee consistent product availability and pricing.\n>\n> We recommend estimating no more than **5 minutes** before"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

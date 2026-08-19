@@ -1,0 +1,66 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Cabify Logistics delivery API",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "delivery",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Cancel the delivery of the specified parcels.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://logistics.api.cabify.com/v1/parcels/deliver/cancel",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Cancels an in-progress delivery for the given parcels, when cancellation is still permitted. Delivery cannot be cancelled once the parcel has been picked up. Cancellation is allowed in the following states: `qualifiedforpickup`, `onroutetopickup`, and `pickingup`. Please note that cancellation may incur costs.\n"
+        },
+        {
+          "info": {
+            "name": "Check whether a pickup location is within an operating area.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://logistics.api.cabify.com/v1/parcels/deliver/pickup",
+            "params": [
+              {
+                "name": "address",
+                "value": "Calle%20Pradillo%2042%2C%20Madrid (Calle Pradillo 42, Madrid)",
+                "type": "query",
+                "description": "Full address to check (e.g. `Calle Pradillo 42, Madrid`). You must provide either `address` or `pickup_point` (or both).\n"
+              },
+              {
+                "name": "pickup_point",
+                "value": "40.456367,-3.690587",
+                "type": "query",
+                "description": "Geographic coordinates of the pickup location, formatted as `latitude,longitude`. You must provide either `address` or `pickup_point` (or both).\n"
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Verifies that the given pickup location is covered by the delivery service. You can provide either a text address (`address`) or geographic coordinates (`pickup_point`).\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,64 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Cabify Logistics delivery status API",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "status",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get the current status of a parcel.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://logistics.api.cabify.com/v1/parcels/:parcel_id/status",
+            "params": [
+              {
+                "name": "parcel_id",
+                "value": "",
+                "type": "path",
+                "description": "UUID of the parcel to track."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns the current state and tracking information for the specified parcel."
+        },
+        {
+          "info": {
+            "name": "Get the state history of a parcel.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://logistics.api.cabify.com/v1/parcels/:parcel_id/timeline",
+            "params": [
+              {
+                "name": "parcel_id",
+                "value": "",
+                "type": "path",
+                "description": "UUID of the parcel whose history you want to retrieve."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns the ordered list of state-change events for the specified parcel. Only parcels updated within the last 30 days can be queried.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

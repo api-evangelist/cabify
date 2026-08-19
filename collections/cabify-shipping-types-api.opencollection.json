@@ -1,0 +1,41 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Cabify Logistics delivery shipping_types API",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "shipping_types",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List available shipping types for a location.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://logistics.api.cabify.com/v1/shipping_types/available",
+            "params": [
+              {
+                "name": "location",
+                "value": "40.456367,-3.690587",
+                "type": "query",
+                "description": "Geographic coordinates of the pickup point, formatted as `latitude,longitude`."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns the shipping types available to your account for a given pickup location. The available options are determined by your account configuration and the geographic region of the provided coordinates.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

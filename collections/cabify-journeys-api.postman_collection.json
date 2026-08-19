@@ -1,0 +1,1409 @@
+{
+  "item": [
+    {
+      "id": "74fe4bda-6a7f-4e47-acfb-c170d340666a",
+      "name": "Journeys",
+      "description": {
+        "content": "This section covers the mobility solution for all companies looking to transport their employees in a simple, safe and comfortable way. We offer different types of vehicles with private drivers and provide everything you need to enjoy your journey, such as a good driver and a top-of-the-range car.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "158ea01d-b283-4bec-a3c3-ee2da57f8d54",
+          "name": "Cancel Journey",
+          "request": {
+            "name": "Cancel Journey",
+            "description": {
+              "content": "Cancels an active journey. Journeys can only be cancelled free of charge before a driver has been assigned. After assignment, cancellation fees may apply if the courtesy period has elapsed (this varies by operating zone).\n\nReturns `409 Conflict` if the journey has already been completed, terminated, or is in a state that does not allow cancellation.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v4",
+                "journey",
+                ":id",
+                "state"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) Id of the journey"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "f11aad57-b492-4c60-90ee-b27e6ca7c826",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v4",
+                    "journey",
+                    ":id",
+                    "state"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Id of the journey"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2bb4fd15-1359-4a5d-a6b7-2b039688bd8a",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v4",
+                    "journey",
+                    ":id",
+                    "state"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Id of the journey"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"Bad Request error message\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9f5113fe-c223-45e9-ae83-0248ca455804",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v4",
+                    "journey",
+                    ":id",
+                    "state"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Id of the journey"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"Unauthorized\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "fd00ec7e-badb-4315-9190-5c4afcd8f988",
+              "name": "Journey cannot be cancelled (already terminated or in a non-cancellable state)",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v4",
+                    "journey",
+                    ":id",
+                    "state"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Id of the journey"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"journey has already been terminated\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "9b6449fb-97ec-40a5-8697-a805a8c53176",
+              "name": "Internal server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v4",
+                    "journey",
+                    ":id",
+                    "state"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) Id of the journey"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/text"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/text"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "c9c1b4b2-9b6b-4b10-95b5-a9b158a2c73e",
+          "name": "Get Journey State",
+          "request": {
+            "name": "Get Journey State",
+            "description": {
+              "content": "Returns the real-time operational state of an active journey: assigned driver, vehicle, and\nthe route waypoints collected so far.\n\nUse this endpoint for live tracking while a journey is in progress. It provides the data\nneeded to show the driver's position on a map and display vehicle/driver details to the rider.\n\n**Typical use cases:**\n- Show the assigned driver's name, phone number, and avatar.\n- Display the vehicle plate, model, and color so the rider can identify it.\n- Plot the driver's route on a map using the waypoints array.\n\n**Availability:**\n- Returns data once a driver is assigned (`hired` state onward).\n- Returns empty waypoints for journeys in `terminated` state (route data is archived).\n- Returns `404` if the journey does not exist or does not belong to the authenticated client.\n\n> ⚠️ Stop polling once you receive an end state\n>\n> End states are terminal, the journey will never transition to another state. Once you receive an\n> end state (via this endpoint or a webhook), stop polling. Continued polling returns `200` with\n> `state: terminated` indefinitely but carries no new information.\n>\n> For reliable state delivery without polling, configure\n> [Journey State Updates webhooks](https://developers.cabify.com/docs/journey-updates-webhook).\n\n> 📘 Looking for booking details or pricing?\n>\n> To retrieve stops, cost breakdown, or lifecycle status, use the\n> [Get Journey Details](#operation/getJourney) endpoint instead.\n>\n> To receive state changes in real time without polling, configure\n> [Webhooks](https://developers.cabify.com/docs/journey-updates-webhook).\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v4",
+                "journey",
+                ":id",
+                "state"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "requester_id",
+                  "value": "<string>",
+                  "description": "(Required) ID of the user who requested the journey"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "id",
+                  "description": "(Required) UUID of the journey"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "5a23baf8-b6a3-4b34-8e91-61046c45a721",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v4",
+                    "journey",
+                    ":id",
+                    "state"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "requester_id",
+                      "value": "6f80363aa84fa61a58dc5720"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) UUID of the journey"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"driver\": {\n    \"avatar_url\": \"https://secure.gravatar.com/avatar/675ee8c314586d36a7b33c6c773565e9?r=pg&s=80&=blank\",\n    \"name\": \"John\",\n    \"phone_number\": \"34611111111\"\n  },\n  \"driver_stop_before_pickup\": {\n    \"loc\": [\n      40.4201,\n      -3.7056\n    ]\n  },\n  \"is_driver_on_another_journey\": true,\n  \"journey_id\": \"f0397896-19aa-11ed-b6fe-7aaea8067492\",\n  \"preassigned_driver\": {\n    \"avatar_url\": \"https://secure.gravatar.com/avatar/1a79a4d60de6718e8e5b326e338ae533?r=pg&s=80&=blank\",\n    \"name\": \"Diana\"\n  },\n  \"vehicle\": {\n    \"color\": \"red\",\n    \"name\": \"Seat ibiza\",\n    \"plate\": \"QXJ4758\"\n  },\n  \"waypoints\": {\n    \"rows\": [\n      {\n        \"loc\": [\n          40.4169335,\n          -3.7061872\n        ],\n        \"state_name\": \"hired\"\n      }\n    ],\n    \"total\": 48\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "69ae211c-1568-4a33-a0b1-2184a327d0c1",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v4",
+                    "journey",
+                    ":id",
+                    "state"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "requester_id",
+                      "value": "6f80363aa84fa61a58dc5720"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) UUID of the journey"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"Bad Request error message\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "aeb176dc-8e4a-498d-8a25-b3daecc8cf8f",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v4",
+                    "journey",
+                    ":id",
+                    "state"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "requester_id",
+                      "value": "6f80363aa84fa61a58dc5720"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) UUID of the journey"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"Unauthorized\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "febd161b-987d-4a38-991d-dec5e146f5cd",
+              "name": "Not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v4",
+                    "journey",
+                    ":id",
+                    "state"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "requester_id",
+                      "value": "6f80363aa84fa61a58dc5720"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) UUID of the journey"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"user with provided ID does not exist\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "3d4b093c-47f4-4760-b5b4-99b494700590",
+              "name": "Internal server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v4",
+                    "journey",
+                    ":id",
+                    "state"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "requester_id",
+                      "value": "6f80363aa84fa61a58dc5720"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "id",
+                      "description": "(Required) UUID of the journey"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/text"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/text"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "0c56b529-1aba-41b0-ad20-a8fa760ed7ff",
+          "name": "Create a journey",
+          "request": {
+            "name": "Create a journey",
+            "description": {
+              "content": "Creates a new journey request for a ride.\n\n> ❗️ Prerequisites\n>\n> Before creating a journey, you **must** call the `/estimates` endpoint and use the returned\n> `product.id` as `product_id` in this request. This guarantees that the product is available\n> at the pickup location and provides accurate pricing shown to drivers.\n>\n> The estimate should be created within **5 minutes** of the journey request.\n\n## Journey States\n\nAfter creation, the journey progresses through these states:\n1. `hire` - Searching for available drivers\n2. `hired` - Driver assigned and en route\n3. `arrived` - Driver at pickup location\n4. `pick up` - Passenger in vehicle\n5. `drop off` - Journey completed\n6. `terminated` - Receipt generated (after ~2 hours)\nFor a detailed explanation of journey states and their transitions, see [Journey States](https://developers.cabify.com/docs/journey-states).\n\n> 📘 Booking a Journey (Reservation)\n>\n> Creating a reservation is similar to creating an ASAP journey, except for the `start_at` field,\n> which should contain a future date-time value in the format \"YYYY-MM-DD HH:MM:SS\", expressed\n> in the local time of the pickup location.\n>\n> **Use the same `start_at` value you provided to the `/estimates` endpoint** to ensure consistent\n> product availability and pricing between the estimate and the journey creation.\n>\n> **Important constraints:**\n> - Reservations must be created at least **30 minutes** before the start time\n> - Reservations can be scheduled up to **60 days** in advance\n\n> ⚠️ Sandbox Testing\n>\n> In the sandbox environment, pickup locations must be within central Madrid (approximately 40.4361°, -3.7014°).\n> See [Sandbox Environment](https://developers.cabify.com/docs/sandbox-environment) for details.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v4",
+                "journey"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"product_id\": \"<string>\",\n  \"requester_id\": \"<string>\",\n  \"rider\": {\n    \"email\": \"<email>\",\n    \"id\": \"<string>\",\n    \"locale\": \"<string>\",\n    \"mobile\": {\n      \"mobile_cc\": \"<string>\",\n      \"mobile_num\": \"<string>\"\n    },\n    \"name\": \"<string>\"\n  },\n  \"stops\": [\n    {\n      \"addr\": \"<string>\",\n      \"city\": \"<string>\",\n      \"contact\": {\n        \"mobile_cc\": \"<string>\",\n        \"mobile_num\": \"<string>\",\n        \"name\": \"<string>\",\n        \"stop_action\": \"<string>\"\n      },\n      \"contacts\": [\n        {\n          \"mobile_cc\": \"<string>\",\n          \"mobile_num\": \"<string>\",\n          \"name\": \"<string>\",\n          \"stop_action\": \"<string>\"\n        },\n        {\n          \"mobile_cc\": \"<string>\",\n          \"mobile_num\": \"<string>\",\n          \"name\": \"<string>\",\n          \"stop_action\": \"<string>\"\n        }\n      ],\n      \"country\": \"<string>\",\n      \"instr\": \"<string>\",\n      \"location_id\": \"<string>\",\n      \"meeting_point\": {\n        \"id\": \"<string>\",\n        \"loc\": [\n          \"<float>\",\n          \"<float>\"\n        ],\n        \"name\": \"<string>\"\n      },\n      \"name\": \"<string>\",\n      \"num\": \"<string>\",\n      \"postal_code\": \"<string>\"\n    },\n    {\n      \"addr\": \"<string>\",\n      \"city\": \"<string>\",\n      \"contact\": {\n        \"mobile_cc\": \"<string>\",\n        \"mobile_num\": \"<string>\",\n        \"name\": \"<string>\",\n        \"stop_action\": \"<string>\"\n      },\n      \"contacts\": [\n        {\n          \"mobile_cc\": \"<string>\",\n          \"mobile_num\": \"<string>\",\n          \"name\": \"<string>\",\n          \"stop_action\": \"<string>\"\n        },\n        {\n          \"mobile_cc\": \"<string>\",\n          \"mobile_num\": \"<string>\",\n          \"name\": \"<string>\",\n          \"stop_action\": \"<string>\"\n        }\n      ],\n      \"country\": \"<string>\",\n      \"instr\": \"<string>\",\n      \"location_id\": \"<string>\",\n      \"meeting_point\": {\n        \"id\": \"<string>\",\n        \"loc\": [\n          \"<float>\",\n          \"<float>\"\n        ],\n        \"name\": \"<string>\"\n      },\n      \"name\": \"<string>\",\n      \"num\": \"<string>\",\n      \"postal_code\": \"<string>\"\n    }\n  ],\n  \"label_slug\": \"<string>\",\n  \"message\": \"<string>\",\n  \"preferred_driver_id\": \"<string>\",\n  \"reason\": \"<string>\",\n  \"start_at\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "56878a1d-5465-44d4-b9ee-f6f29d8dd51b",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v4",
+                    "journey"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"product_id\": \"<string>\",\n  \"requester_id\": \"<string>\",\n  \"rider\": {\n    \"email\": \"riderEmail@example.com\",\n    \"locale\": \"ES\",\n    \"mobile\": {\n      \"mobile_cc\": \"34\",\n      \"mobile_num\": \"123456789\"\n    },\n    \"name\": \"John Doe\"\n  },\n  \"stops\": [\n    {\n      \"addr\": \"<string>\",\n      \"city\": \"<string>\",\n      \"contact\": {\n        \"mobile_cc\": \"34\",\n        \"mobile_num\": \"123456789\",\n        \"name\": \"Jhon Doe\",\n        \"stop_action\": \"pickup\"\n      },\n      \"contacts\": [\n        {\n          \"mobile_cc\": \"34\",\n          \"mobile_num\": \"123456789\",\n          \"name\": \"Jhon Doe\",\n          \"stop_action\": \"pickup\"\n        },\n        {\n          \"mobile_cc\": \"34\",\n          \"mobile_num\": \"123456789\",\n          \"name\": \"Jhon Doe\",\n          \"stop_action\": \"pickup\"\n        }\n      ],\n      \"country\": \"<string>\",\n      \"instr\": \"<string>\",\n      \"location_id\": \"<string>\",\n      \"meeting_point\": {\n        \"id\": \"<string>\",\n        \"loc\": [\n          \"<float>\",\n          \"<float>\"\n        ],\n        \"name\": \"<string>\"\n      },\n      \"name\": \"<string>\",\n      \"num\": \"<string>\",\n      \"postal_code\": \"<string>\"\n    },\n    {\n      \"addr\": \"<string>\",\n      \"city\": \"<string>\",\n      \"contact\": {\n        \"mobile_cc\": \"34\",\n        \"mobile_num\": \"123456789\",\n        \"name\": \"Jhon Doe\",\n        \"stop_action\": \"pickup\"\n      },\n      \"contacts\": [\n        {\n          \"mobile_cc\": \"34\",\n          \"mobile_num\": \"123456789\",\n          \"name\": \"Jhon Doe\",\n          \"stop_action\": \"pickup\"\n        },\n        {\n          \"mobile_cc\": \"34\",\n          \"mobile_num\": \"123456789\",\n          \"name\": \"Jhon Doe\",\n          \"stop_action\": \"pickup\"\n        }\n      ],\n      \"country\": \"<string>\",\n      \"instr\": \"<string>\",\n      \"location_id\": \"<string>\",\n      \"meeting_point\": {\n        \"id\": \"<string>\",\n        \"loc\": [\n          \"<float>\",\n          \"<float>\"\n        ],\n        \"name\": \"<string>\"\n      },\n      \"name\": \"<string>\",\n      \"num\": \"<string>\",\n      \"postal_code\": \"<string>\"\n    }\n  ],\n  \"label_slug\": \"<string>\",\n  \"message\": \"<string>\",\n  \"preferred_driver_id\": \"<string>\",\n  \"reason\": \"<string>\",\n  \"start_at\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2f26a5bd-14e2-4fcc-b853-2da31665a797",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v4",
+                    "journey"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"product_id\": \"<string>\",\n  \"requester_id\": \"<string>\",\n  \"rider\": {\n    \"email\": \"riderEmail@example.com\",\n    \"locale\": \"ES\",\n    \"mobile\": {\n      \"mobile_cc\": \"34\",\n      \"mobile_num\": \"123456789\"\n    },\n    \"name\": \"John Doe\"\n  },\n  \"stops\": [\n    {\n      \"addr\": \"<string>\",\n      \"city\": \"<string>\",\n      \"contact\": {\n        \"mobile_cc\": \"34\",\n        \"mobile_num\": \"123456789\",\n        \"name\": \"Jhon Doe\",\n        \"stop_action\": \"pickup\"\n      },\n      \"contacts\": [\n        {\n          \"mobile_cc\": \"34\",\n          \"mobile_num\": \"123456789\",\n          \"name\": \"Jhon Doe\",\n          \"stop_action\": \"pickup\"\n        },\n        {\n          \"mobile_cc\": \"34\",\n          \"mobile_num\": \"123456789\",\n          \"name\": \"Jhon Doe\",\n          \"stop_action\": \"pickup\"\n        }\n      ],\n      \"country\": \"<string>\",\n      \"instr\": \"<string>\",\n      \"location_id\": \"<string>\",\n      \"meeting_point\": {\n        \"id\": \"<string>\",\n        \"loc\": [\n          \"<float>\",\n          \"<float>\"\n        ],\n        \"name\": \"<string>\"\n      },\n      \"name\": \"<string>\",\n      \"num\": \"<string>\",\n      \"postal_code\": \"<string>\"\n    },\n    {\n      \"addr\": \"<string>\",\n      \"city\": \"<string>\",\n      \"contact\": {\n        \"mobile_cc\": \"34\",\n        \"mobile_num\": \"123456789\",\n        \"name\": \"Jhon Doe\",\n        \"stop_action\": \"pickup\"\n      },\n      \"contacts\": [\n        {\n          \"mobile_cc\": \"34\",\n          \"mobile_num\": \"123456789\",\n          \"name\": \"Jhon Doe\",\n          \"stop_action\": \"pickup\"\n        },\n        {\n          \"mobile_cc\": \"34\",\n          \"mobile_num\": \"123456789\",\n          \"name\": \"Jhon Doe\",\n          \"stop_action\": \"pickup\"\n        }\n      ],\n      \"country\": \"<string>\",\n      \"instr\": \"<string>\",\n      \"location_id\": \"<string>\",\n      \"meeting_point\": {\n        \"id\": \"<string>\",\n        \"loc\": [\n          \"<float>\",\n          \"<float>\"\n        ],\n        \"name\": \"<string>\"\n      },\n      \"name\": \"<string>\",\n      \"num\": \"<string>\",\n      \"postal_code\": \"<string>\"\n    }\n  ],\n  \"label_slug\": \"<string>\",\n  \"message\": \"<string>\",\n  \"preferred_driver_id\": \"<string>\",\n  \"reason\": \"<string>\",\n  \"start_at\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"Bad Request error message\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "49d257f7-220d-4e59-b5a6-f85f10f02fd2",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v4",
+                    "journey"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"product_id\": \"<string>\",\n  \"requester_id\": \"<string>\",\n  \"rider\": {\n    \"email\": \"riderEmail@example.com\",\n    \"locale\": \"ES\",\n    \"mobile\": {\n      \"mobile_cc\": \"34\",\n      \"mobile_num\": \"123456789\"\n    },\n    \"name\": \"John Doe\"\n  },\n  \"stops\": [\n    {\n      \"addr\": \"<string>\",\n      \"city\": \"<string>\",\n      \"contact\": {\n        \"mobile_cc\": \"34\",\n        \"mobile_num\": \"123456789\",\n        \"name\": \"Jhon Doe\",\n        \"stop_action\": \"pickup\"\n      },\n      \"contacts\": [\n        {\n          \"mobile_cc\": \"34\",\n          \"mobile_num\": \"123456789\",\n          \"name\": \"Jhon Doe\",\n          \"stop_action\": \"pickup\"\n        },\n        {\n          \"mobile_cc\": \"34\",\n          \"mobile_num\": \"123456789\",\n          \"name\": \"Jhon Doe\",\n          \"stop_action\": \"pickup\"\n        }\n      ],\n      \"country\": \"<string>\",\n      \"instr\": \"<string>\",\n      \"location_id\": \"<string>\",\n      \"meeting_point\": {\n        \"id\": \"<string>\",\n        \"loc\": [\n          \"<float>\",\n          \"<float>\"\n        ],\n        \"name\": \"<string>\"\n      },\n      \"name\": \"<string>\",\n      \"num\": \"<string>\",\n      \"postal_code\": \"<string>\"\n    },\n    {\n      \"addr\": \"<string>\",\n      \"city\": \"<string>\",\n      \"contact\": {\n        \"mobile_cc\": \"34\",\n        \"mobile_num\": \"123456789\",\n        \"name\": \"Jhon Doe\",\n        \"stop_action\": \"pickup\"\n      },\n      \"contacts\": [\n        {\n          \"mobile_cc\": \"34\",\n          \"mobile_num\": \"123456789\",\n          \"name\": \"Jhon Doe\",\n          \"stop_action\": \"pickup\"\n        },\n        {\n          \"mobile_cc\": \"34\",\n          \"mobile_num\": \"123456789\",\n          \"name\": \"Jhon Doe\",\n          \"stop_action\": \"pickup\"\n        }\n      ],\n      \"country\": \"<string>\",\n      \"instr\": \"<string>\",\n      \"location_id\": \"<string>\",\n      \"meeting_point\": {\n        \"id\": \"<string>\",\n        \"loc\": [\n          \"<float>\",\n          \"<float>\"\n        ],\n        \"name\": \"<string>\"\n      },\n      \"name\": \"<string>\",\n      \"num\": \"<string>\",\n      \"postal_code\": \"<string>\"\n    }\n  ],\n  \"label_slug\": \"<string>\",\n  \"message\": \"<string>\",\n  \"preferred_driver_id\": \"<string>\",\n  \"reason\": \"<string>\",\n  \"start_at\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"Unauthorized\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "fafa442f-0539-45f2-be94-e1785193d3df",
+              "name": "Not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v4",
+                    "journey"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"product_id\": \"<string>\",\n  \"requester_id\": \"<string>\",\n  \"rider\": {\n    \"email\": \"riderEmail@example.com\",\n    \"locale\": \"ES\",\n    \"mobile\": {\n      \"mobile_cc\": \"34\",\n      \"mobile_num\": \"123456789\"\n    },\n    \"name\": \"John Doe\"\n  },\n  \"stops\": [\n    {\n      \"addr\": \"<string>\",\n      \"city\": \"<string>\",\n      \"contact\": {\n        \"mobile_cc\": \"34\",\n        \"mobile_num\": \"123456789\",\n        \"name\": \"Jhon Doe\",\n        \"stop_action\": \"pickup\"\n      },\n      \"contacts\": [\n        {\n          \"mobile_cc\": \"34\",\n          \"mobile_num\": \"123456789\",\n          \"name\": \"Jhon Doe\",\n          \"stop_action\": \"pickup\"\n        },\n        {\n          \"mobile_cc\": \"34\",\n          \"mobile_num\": \"123456789\",\n          \"name\": \"Jhon Doe\",\n          \"stop_action\": \"pickup\"\n        }\n      ],\n      \"country\": \"<string>\",\n      \"instr\": \"<string>\",\n      \"location_id\": \"<string>\",\n      \"meeting_point\": {\n        \"id\": \"<string>\",\n        \"loc\": [\n          \"<float>\",\n          \"<float>\"\n        ],\n        \"name\": \"<string>\"\n      },\n      \"name\": \"<string>\",\n      \"num\": \"<string>\",\n      \"postal_code\": \"<string>\"\n    },\n    {\n      \"addr\": \"<string>\",\n      \"city\": \"<string>\",\n      \"contact\": {\n        \"mobile_cc\": \"34\",\n        \"mobile_num\": \"123456789\",\n        \"name\": \"Jhon Doe\",\n        \"stop_action\": \"pickup\"\n      },\n      \"contacts\": [\n        {\n          \"mobile_cc\": \"34\",\n          \"mobile_num\": \"123456789\",\n          \"name\": \"Jhon Doe\",\n          \"stop_action\": \"pickup\"\n        },\n        {\n          \"mobile_cc\": \"34\",\n          \"mobile_num\": \"123456789\",\n          \"name\": \"Jhon Doe\",\n          \"stop_action\": \"pickup\"\n        }\n      ],\n      \"country\": \"<string>\",\n      \"instr\": \"<string>\",\n      \"location_id\": \"<string>\",\n      \"meeting_point\": {\n        \"id\": \"<string>\",\n        \"loc\": [\n          \"<float>\",\n          \"<float>\"\n        ],\n        \"name\": \"<string>\"\n      },\n      \"name\": \"<string>\",\n      \"num\": \"<string>\",\n      \"postal_code\": \"<string>\"\n    }\n  ],\n  \"label_slug\": \"<string>\",\n  \"message\": \"<string>\",\n  \"preferred_driver_id\": \"<string>\",\n  \"reason\": \"<string>\",\n  \"start_at\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"user with provided ID does not exist\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "1ab23182-6b23-4768-83d3-96259b76e004",
+              "name": "Internal server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v4",
+                    "journey"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/text"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"product_id\": \"<string>\",\n  \"requester_id\": \"<string>\",\n  \"rider\": {\n    \"email\": \"riderEmail@example.com\",\n    \"locale\": \"ES\",\n    \"mobile\": {\n      \"mobile_cc\": \"34\",\n      \"mobile_num\": \"123456789\"\n    },\n    \"name\": \"John Doe\"\n  },\n  \"stops\": [\n    {\n      \"addr\": \"<string>\",\n      \"city\": \"<string>\",\n      \"contact\": {\n        \"mobile_cc\": \"34\",\n        \"mobile_num\": \"123456789\",\n        \"name\": \"Jhon Doe\",\n        \"stop_action\": \"pickup\"\n      },\n      \"contacts\": [\n        {\n          \"mobile_cc\": \"34\",\n          \"mobile_num\": \"123456789\",\n          \"name\": \"Jhon Doe\",\n          \"stop_action\": \"pickup\"\n        },\n        {\n          \"mobile_cc\": \"34\",\n          \"mobile_num\": \"123456789\",\n          \"name\": \"Jhon Doe\",\n          \"stop_action\": \"pickup\"\n        }\n      ],\n      \"country\": \"<string>\",\n      \"instr\": \"<string>\",\n      \"location_id\": \"<string>\",\n      \"meeting_point\": {\n        \"id\": \"<string>\",\n        \"loc\": [\n          \"<float>\",\n          \"<float>\"\n        ],\n        \"name\": \"<string>\"\n      },\n      \"name\": \"<string>\",\n      \"num\": \"<string>\",\n      \"postal_code\": \"<string>\"\n    },\n    {\n      \"addr\": \"<string>\",\n      \"city\": \"<string>\",\n      \"contact\": {\n        \"mobile_cc\": \"34\",\n        \"mobile_num\": \"123456789\",\n        \"name\": \"Jhon Doe\",\n        \"stop_action\": \"pickup\"\n      },\n      \"contacts\": [\n        {\n          \"mobile_cc\": \"34\",\n          \"mobile_num\": \"123456789\",\n          \"name\": \"Jhon Doe\",\n          \"stop_action\": \"pickup\"\n        },\n        {\n          \"mobile_cc\": \"34\",\n          \"mobile_num\": \"123456789\",\n          \"name\": \"Jhon Doe\",\n          \"stop_action\": \"pickup\"\n        }\n      ],\n      \"country\": \"<string>\",\n      \"instr\": \"<string>\",\n      \"location_id\": \"<string>\",\n      \"meeting_point\": {\n        \"id\": \"<string>\",\n        \"loc\": [\n          \"<float>\",\n          \"<float>\"\n        ],\n        \"name\": \"<string>\"\n      },\n      \"name\": \"<string>\",\n      \"num\": \"<string>\",\n      \"postal_code\": \"<string>\"\n    }\n  ],\n  \"label_slug\": \"<string>\",\n  \"message\": \"<string>\",\n  \"preferred_driver_id\": \"<string>\",\n  \"reason\": \"<string>\",\n  \"start_at\": \"<string>\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/text"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "5482717f-1bca-46bf-85b9-0c837698a185",
+          "name": "Get Journey details",
+          "request": {
+            "name": "Get Journey details",
+            "description": {
+              "content": "Returns the booking-level details of a journey: stops, pricing, timestamps, and lifecycle status.\n\nUse this endpoint to check whether a journey is finished, retrieve its cost breakdown, or read\nthe stops that were requested. The response is stable once the journey is created and only\nchanges when the journey ends (populating `end_state`, `end_at`, and `totals`).\n\n**Typical use cases:**\n- Display a journey's origin/destination and scheduled time.\n- Check if a journey has finished and why (`end_state`).\n- Retrieve the price summary after a journey is terminated.\n\n> 📘 Looking for real-time tracking data?\n>\n> To get the driver's current location, vehicle details, or route waypoints while a journey is\n> in progress, use the [Get Journey State](#operation/getJourneyState) endpoint instead.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v4",
+                "journey",
+                ":journey_id"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "journey_id",
+                  "description": "(Required) UUID of the journey"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "866df0b2-69c1-4f18-bb4b-7d553daffc57",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v4",
+                    "journey",
+                    ":journey_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "journey_id",
+                      "description": "(Required) UUID of the journey"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"string\",\n  \"created_at\": \"1992-09-21T08:28:09.618Z\",\n  \"current_state\": \"string\",\n  \"end_at\": \"string\",\n  \"end_state\": \"not found\",\n  \"finished\": false,\n  \"label_slug\": \"string\",\n  \"product_id\": \"string\",\n  \"public_url\": \"string\",\n  \"region_id\": \"string\",\n  \"start_at\": \"string\",\n  \"start_type\": \"asap\",\n  \"stops\": [\n    {\n      \"addr\": \"Calle de la cruz\",\n      \"city\": \"Madrid\",\n      \"contact\": {\n        \"mobile_cc\": \"34\",\n        \"mobile_num\": \"123456789\",\n        \"name\": \"Jhon Doe\",\n        \"stop_action\": \"pickup\"\n      },\n      \"country\": \"ES\",\n      \"loc\": [\n        40.4169335,\n        -3.7061872\n      ],\n      \"name\": \"Work\",\n      \"num\": \"1428\",\n      \"postal_code\": \"28002\"\n    },\n    {\n      \"addr\": \"Calle de la cruz\",\n      \"city\": \"Madrid\",\n      \"contact\": {\n        \"mobile_cc\": \"34\",\n        \"mobile_num\": \"123456789\",\n        \"name\": \"Jhon Doe\",\n        \"stop_action\": \"pickup\"\n      },\n      \"country\": \"ES\",\n      \"loc\": [\n        40.4169335,\n        -3.7061872\n      ],\n      \"name\": \"Work\",\n      \"num\": \"1428\",\n      \"postal_code\": \"28002\"\n    }\n  ],\n  \"totals\": {\n    \"discount\": {\n      \"amount\": 0,\n      \"currency\": \"EUR\"\n    },\n    \"price\": {\n      \"amount\": 100,\n      \"currency\": \"EUR\"\n    },\n    \"price_total\": {\n      \"amount\": 100,\n      \"currency\": \"EUR\"\n    }\n  },\n  \"user_id\": \"string\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b6a2f8c6-0651-4aa1-8fad-681dcd642a9f",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v4",
+                    "journey",
+                    ":journey_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "journey_id",
+                      "description": "(Required) UUID of the journey"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"Bad Request error message\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "cd429ae4-7b64-4e9f-8643-db398e41c47e",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v4",
+                    "journey",
+                    ":journey_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "journey_id",
+                      "description": "(Required) UUID of the journey"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"Unauthorized\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b11ff39b-05c2-40a2-a909-26318879daf2",
+              "name": "Internal server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v4",
+                    "journey",
+                    ":journey_id"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "journey_id",
+                      "description": "(Required) UUID of the journey"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/text"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/text"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "75f13a96-488d-44ad-91ba-529a0089443c",
+          "name": "Keep searching drivers for a journey",
+          "request": {
+            "name": "Keep searching drivers for a journey",
+            "description": {
+              "content": "If there are no drivers available after having created a journey (meaning you receive a\n 'not found' state via webhooks or via the GET journey/state endpoints), with this\n endpoint, you can continue searching for drivers for the same exact journey without the\n  need of a new estimation.\n\nThe journey will enter again in the 'hire' state for another 5 minutes (this time cannot be changed).\n\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v4",
+                "journey",
+                ":id",
+                "keep_searching"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "id",
+                  "description": "(Required) Id of the journey"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "f122ea46-73ee-4ea4-bff5-d9d26b95e9e3",
+              "name": "Empty Response",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v4",
+                    "journey",
+                    ":id",
+                    "keep_searching"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Id of the journey"
+                    }
+                  ]
+                },
+                "method": "POST",
+                "body": {}
+              },
+              "status": "No Content",
+              "code": 204,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "6026c9c9-9398-4e10-a7bf-6ba50e1a4339",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v4",
+                    "journey",
+                    ":id",
+                    "keep_searching"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Id of the journey"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"Bad Request error message\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f934ed82-5871-42a7-99ef-a9b6b65ef91e",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v4",
+                    "journey",
+                    ":id",
+                    "keep_searching"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Id of the journey"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"Unauthorized\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "2e4a1f9b-c6af-40f3-ba1f-ad87b1c71cd2",
+              "name": "Not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v4",
+                    "journey",
+                    ":id",
+                    "keep_searching"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Id of the journey"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"user with provided ID does not exist\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ad79b081-22be-44f1-91dd-b84fc8e9d400",
+              "name": "Internal server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v4",
+                    "journey",
+                    ":id",
+                    "keep_searching"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "id",
+                      "description": "(Required) Id of the journey"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/text"
+                  }
+                ],
+                "method": "POST",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/text"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://logistics.api.cabify.com",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "fc67373b-0159-49ac-a9fb-a206401d4a92",
+    "name": "Cabify Logistics delivery Journeys API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Welcome to the Cabify Logistics API. This API allows you to create and manage parcel deliveries, track their status in real time, configure proof of delivery options, and receive live updates via webhooks. All requests must be authenticated using a Bearer token.\n\n\nContact Support:\n Email: p.delivery@cabify.com",
+      "type": "text/plain"
+    }
+  }
+}

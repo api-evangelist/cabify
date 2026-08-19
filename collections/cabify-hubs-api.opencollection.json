@@ -1,0 +1,127 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Cabify Logistics delivery hubs API",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "hubs",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List all client hubs.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://logistics.api.cabify.com/v1/hubs",
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns all hubs associated with your account."
+        },
+        {
+          "info": {
+            "name": "Create a new client hub.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://logistics.api.cabify.com/v1/hubs",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Creates a new hub associated with your account. Hubs represent physical locations (such as stores or warehouses) from which parcels can be picked up or delivered to.\n"
+        },
+        {
+          "info": {
+            "name": "Get a client hub by its external ID.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://logistics.api.cabify.com/v1/hubs/none/:hub_external_id",
+            "params": [
+              {
+                "name": "hub_external_id",
+                "value": "",
+                "type": "path",
+                "description": "The external ID you assigned to the hub."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns the details of a specific hub identified by your external ID."
+        },
+        {
+          "info": {
+            "name": "Update a client hub by its external ID.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://logistics.api.cabify.com/v1/hubs/none/:hub_external_id",
+            "params": [
+              {
+                "name": "hub_external_id",
+                "value": "",
+                "type": "path",
+                "description": "The external ID you assigned to the hub."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Updates the details of a specific hub identified by your external ID."
+        },
+        {
+          "info": {
+            "name": "Get Hub by coordinates",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://logistics.api.cabify.com/api/v4/hub",
+            "params": [
+              {
+                "name": "latitude",
+                "value": "",
+                "type": "query",
+                "description": "Latitude of the location to look up."
+              },
+              {
+                "name": "longitude",
+                "value": "",
+                "type": "query",
+                "description": "Longitude of the location to look up."
+              }
+            ]
+          },
+          "docs": "Look up hub meeting-point data for a given set of coordinates.\n\nA **hub** is a large venue (e.g. airport, train station) with designated pick-up/drop-off meeting points. Use this endpoint to determine if a location is within a hub and retrieve the available meeting points.\n\n## Response\n\n- If a hub exists at the given coordinates, returns the hub with its meeting points (uid, title, coordinates, images, and localized instructions).\n- If no hub exists or the lookup fails, returns `{ \"data\": null }"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,776 @@
+{
+  "item": [
+    {
+      "id": "cee34cb4-1632-40b5-8ce9-c255c6ed6925",
+      "name": "shipment",
+      "description": {
+        "content": "",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "107b1712-2939-4229-844f-6d7154fd57a0",
+          "name": "Estimate the cost and timing of a shipment.",
+          "request": {
+            "name": "Estimate the cost and timing of a shipment.",
+            "description": {
+              "content": "Calculates the estimated price, pickup time, and delivery time for the given parcels using the specified shipping type.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v3",
+                "parcels",
+                "estimate"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"parcels\": [\n    {\n      \"pickup_location\": {\n        \"lat\": \"<float>\",\n        \"lon\": \"<float>\"\n      },\n      \"dropoff_location\": {\n        \"lat\": \"<float>\",\n        \"lon\": \"<float>\"\n      },\n      \"external_id\": \"<string>\",\n      \"dimensions\": {\n        \"height\": \"<integer>\",\n        \"length\": \"<integer>\",\n        \"width\": \"<integer>\",\n        \"unit\": \"<string>\"\n      },\n      \"weight\": {\n        \"value\": \"<integer>\",\n        \"unit\": \"<string>\"\n      }\n    },\n    {\n      \"pickup_location\": {\n        \"lat\": \"<float>\",\n        \"lon\": \"<float>\"\n      },\n      \"dropoff_location\": {\n        \"lat\": \"<float>\",\n        \"lon\": \"<float>\"\n      },\n      \"external_id\": \"<string>\",\n      \"dimensions\": {\n        \"height\": \"<integer>\",\n        \"length\": \"<integer>\",\n        \"width\": \"<integer>\",\n        \"unit\": \"<string>\"\n      },\n      \"weight\": {\n        \"value\": \"<integer>\",\n        \"unit\": \"<string>\"\n      }\n    }\n  ],\n  \"shipping_type_id\": \"<uuid>\",\n  \"pickup_time\": \"<dateTime>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "97913812-66a7-4d4e-a270-0ed4d5c6f780",
+              "name": "Estimation calculated successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v3",
+                    "parcels",
+                    "estimate"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"parcels\": [\n    {\n      \"pickup_location\": {\n        \"lat\": 40.4489254,\n        \"lon\": -3.6730293\n      },\n      \"dropoff_location\": {\n        \"lat\": 40.4489254,\n        \"lon\": -3.6730293\n      },\n      \"external_id\": \"parcel_001\",\n      \"dimensions\": {\n        \"height\": 10,\n        \"length\": 10,\n        \"width\": 10,\n        \"unit\": \"<string>\"\n      },\n      \"weight\": {\n        \"value\": 1500,\n        \"unit\": \"<string>\"\n      }\n    },\n    {\n      \"pickup_location\": {\n        \"lat\": 40.4489254,\n        \"lon\": -3.6730293\n      },\n      \"dropoff_location\": {\n        \"lat\": 40.4489254,\n        \"lon\": -3.6730293\n      },\n      \"external_id\": \"parcel_001\",\n      \"dimensions\": {\n        \"height\": 10,\n        \"length\": 10,\n        \"width\": 10,\n        \"unit\": \"<string>\"\n      },\n      \"weight\": {\n        \"value\": 1500,\n        \"unit\": \"<string>\"\n      }\n    }\n  ],\n  \"shipping_type_id\": \"<uuid>\",\n  \"pickup_time\": \"2021-12-02T10:12:07.753Z\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"deliveries\": [\n    {\n      \"estimation\": {\n        \"price\": {\n          \"amount\": 630,\n          \"currency\": \"EUR\"\n        },\n        \"asset_kind\": \"moped\",\n        \"eta_to_pickup\": \"2021-12-02T10:12:07.753Z\",\n        \"eta_to_delivery\": \"2021-12-02T10:12:47.753Z\"\n      },\n      \"parcels\": [\n        {\n          \"pickup_location\": {\n            \"lat\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"lon\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"dropoff_location\": {\n            \"lat\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"lon\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"external_id\": \"parcel_001\",\n          \"dimensions\": {\n            \"height\": 10,\n            \"length\": 10,\n            \"width\": 10,\n            \"unit\": \"<string>\"\n          },\n          \"weight\": {\n            \"value\": 1500,\n            \"unit\": \"<string>\"\n          }\n        },\n        {\n          \"pickup_location\": {\n            \"lat\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"lon\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"dropoff_location\": {\n            \"lat\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"lon\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"external_id\": \"parcel_001\",\n          \"dimensions\": {\n            \"height\": 10,\n            \"length\": 10,\n            \"width\": 10,\n            \"unit\": \"<string>\"\n          },\n          \"weight\": {\n            \"value\": 1500,\n            \"unit\": \"<string>\"\n          }\n        }\n      ]\n    },\n    {\n      \"estimation\": {\n        \"price\": {\n          \"amount\": 630,\n          \"currency\": \"EUR\"\n        },\n        \"asset_kind\": \"scooter\",\n        \"eta_to_pickup\": \"2021-12-02T10:12:07.753Z\",\n        \"eta_to_delivery\": \"2021-12-02T10:12:47.753Z\"\n      },\n      \"parcels\": [\n        {\n          \"pickup_location\": {\n            \"lat\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"lon\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"dropoff_location\": {\n            \"lat\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"lon\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"external_id\": \"parcel_001\",\n          \"dimensions\": {\n            \"height\": 10,\n            \"length\": 10,\n            \"width\": 10,\n            \"unit\": \"<string>\"\n          },\n          \"weight\": {\n            \"value\": 1500,\n            \"unit\": \"<string>\"\n          }\n        },\n        {\n          \"pickup_location\": {\n            \"lat\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"lon\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"dropoff_location\": {\n            \"lat\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            },\n            \"lon\": {\n              \"value\": \"<Error: Too many levels of nesting to fake this schema>\"\n            }\n          },\n          \"external_id\": \"parcel_001\",\n          \"dimensions\": {\n            \"height\": 10,\n            \"length\": 10,\n            \"width\": 10,\n            \"unit\": \"<string>\"\n          },\n          \"weight\": {\n            \"value\": 1500,\n            \"unit\": \"<string>\"\n          }\n        }\n      ]\n    }\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f5c3ba72-e0aa-46cf-98d6-49be5564d02d",
+              "name": "Bad request. One or more fields failed validation.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v3",
+                    "parcels",
+                    "estimate"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"parcels\": [\n    {\n      \"pickup_location\": {\n        \"lat\": 40.4489254,\n        \"lon\": -3.6730293\n      },\n      \"dropoff_location\": {\n        \"lat\": 40.4489254,\n        \"lon\": -3.6730293\n      },\n      \"external_id\": \"parcel_001\",\n      \"dimensions\": {\n        \"height\": 10,\n        \"length\": 10,\n        \"width\": 10,\n        \"unit\": \"<string>\"\n      },\n      \"weight\": {\n        \"value\": 1500,\n        \"unit\": \"<string>\"\n      }\n    },\n    {\n      \"pickup_location\": {\n        \"lat\": 40.4489254,\n        \"lon\": -3.6730293\n      },\n      \"dropoff_location\": {\n        \"lat\": 40.4489254,\n        \"lon\": -3.6730293\n      },\n      \"external_id\": \"parcel_001\",\n      \"dimensions\": {\n        \"height\": 10,\n        \"length\": 10,\n        \"width\": 10,\n        \"unit\": \"<string>\"\n      },\n      \"weight\": {\n        \"value\": 1500,\n        \"unit\": \"<string>\"\n      }\n    }\n  ],\n  \"shipping_type_id\": \"<uuid>\",\n  \"pickup_time\": \"2021-12-02T10:12:07.753Z\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    \"string\",\n    \"string\"\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "51d1e3fc-1569-4966-a790-3c30217b6ca0",
+              "name": "Unauthorized. Missing or invalid authentication token.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v3",
+                    "parcels",
+                    "estimate"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"parcels\": [\n    {\n      \"pickup_location\": {\n        \"lat\": 40.4489254,\n        \"lon\": -3.6730293\n      },\n      \"dropoff_location\": {\n        \"lat\": 40.4489254,\n        \"lon\": -3.6730293\n      },\n      \"external_id\": \"parcel_001\",\n      \"dimensions\": {\n        \"height\": 10,\n        \"length\": 10,\n        \"width\": 10,\n        \"unit\": \"<string>\"\n      },\n      \"weight\": {\n        \"value\": 1500,\n        \"unit\": \"<string>\"\n      }\n    },\n    {\n      \"pickup_location\": {\n        \"lat\": 40.4489254,\n        \"lon\": -3.6730293\n      },\n      \"dropoff_location\": {\n        \"lat\": 40.4489254,\n        \"lon\": -3.6730293\n      },\n      \"external_id\": \"parcel_001\",\n      \"dimensions\": {\n        \"height\": 10,\n        \"length\": 10,\n        \"width\": 10,\n        \"unit\": \"<string>\"\n      },\n      \"weight\": {\n        \"value\": 1500,\n        \"unit\": \"<string>\"\n      }\n    }\n  ],\n  \"shipping_type_id\": \"<uuid>\",\n  \"pickup_time\": \"2021-12-02T10:12:07.753Z\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "ded8ad9b-25f1-490c-96b1-a32804371891",
+              "name": "The estimation could not be calculated. Check that the provided locations are within an operating area.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v3",
+                    "parcels",
+                    "estimate"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"parcels\": [\n    {\n      \"pickup_location\": {\n        \"lat\": 40.4489254,\n        \"lon\": -3.6730293\n      },\n      \"dropoff_location\": {\n        \"lat\": 40.4489254,\n        \"lon\": -3.6730293\n      },\n      \"external_id\": \"parcel_001\",\n      \"dimensions\": {\n        \"height\": 10,\n        \"length\": 10,\n        \"width\": 10,\n        \"unit\": \"<string>\"\n      },\n      \"weight\": {\n        \"value\": 1500,\n        \"unit\": \"<string>\"\n      }\n    },\n    {\n      \"pickup_location\": {\n        \"lat\": 40.4489254,\n        \"lon\": -3.6730293\n      },\n      \"dropoff_location\": {\n        \"lat\": 40.4489254,\n        \"lon\": -3.6730293\n      },\n      \"external_id\": \"parcel_001\",\n      \"dimensions\": {\n        \"height\": 10,\n        \"length\": 10,\n        \"width\": 10,\n        \"unit\": \"<string>\"\n      },\n      \"weight\": {\n        \"value\": 1500,\n        \"unit\": \"<string>\"\n      }\n    }\n  ],\n  \"shipping_type_id\": \"<uuid>\",\n  \"pickup_time\": \"2021-12-02T10:12:07.753Z\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    \"string\",\n    \"string\"\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ac49a4ce-548a-4e23-9e97-859061654613",
+              "name": "The server state does not currently allow processing this estimation request.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v3",
+                    "parcels",
+                    "estimate"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"parcels\": [\n    {\n      \"pickup_location\": {\n        \"lat\": 40.4489254,\n        \"lon\": -3.6730293\n      },\n      \"dropoff_location\": {\n        \"lat\": 40.4489254,\n        \"lon\": -3.6730293\n      },\n      \"external_id\": \"parcel_001\",\n      \"dimensions\": {\n        \"height\": 10,\n        \"length\": 10,\n        \"width\": 10,\n        \"unit\": \"<string>\"\n      },\n      \"weight\": {\n        \"value\": 1500,\n        \"unit\": \"<string>\"\n      }\n    },\n    {\n      \"pickup_location\": {\n        \"lat\": 40.4489254,\n        \"lon\": -3.6730293\n      },\n      \"dropoff_location\": {\n        \"lat\": 40.4489254,\n        \"lon\": -3.6730293\n      },\n      \"external_id\": \"parcel_001\",\n      \"dimensions\": {\n        \"height\": 10,\n        \"length\": 10,\n        \"width\": 10,\n        \"unit\": \"<string>\"\n      },\n      \"weight\": {\n        \"value\": 1500,\n        \"unit\": \"<string>\"\n      }\n    }\n  ],\n  \"shipping_type_id\": \"<uuid>\",\n  \"pickup_time\": \"2021-12-02T10:12:07.753Z\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    \"string\",\n    \"string\"\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b3946b0e-25b5-4c77-9840-54f666863451",
+              "name": "The service is temporarily unavailable. Please try again later.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v3",
+                    "parcels",
+                    "estimate"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"parcels\": [\n    {\n      \"pickup_location\": {\n        \"lat\": 40.4489254,\n        \"lon\": -3.6730293\n      },\n      \"dropoff_location\": {\n        \"lat\": 40.4489254,\n        \"lon\": -3.6730293\n      },\n      \"external_id\": \"parcel_001\",\n      \"dimensions\": {\n        \"height\": 10,\n        \"length\": 10,\n        \"width\": 10,\n        \"unit\": \"<string>\"\n      },\n      \"weight\": {\n        \"value\": 1500,\n        \"unit\": \"<string>\"\n      }\n    },\n    {\n      \"pickup_location\": {\n        \"lat\": 40.4489254,\n        \"lon\": -3.6730293\n      },\n      \"dropoff_location\": {\n        \"lat\": 40.4489254,\n        \"lon\": -3.6730293\n      },\n      \"external_id\": \"parcel_001\",\n      \"dimensions\": {\n        \"height\": 10,\n        \"length\": 10,\n        \"width\": 10,\n        \"unit\": \"<string>\"\n      },\n      \"weight\": {\n        \"value\": 1500,\n        \"unit\": \"<string>\"\n      }\n    }\n  ],\n  \"shipping_type_id\": \"<uuid>\",\n  \"pickup_time\": \"2021-12-02T10:12:07.753Z\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Service Unavailable",
+              "code": 503,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    \"string\",\n    \"string\"\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "e367da53-ad22-41d8-8cf5-9d3936ddbdf6",
+          "name": "Ship the specified parcels.",
+          "request": {
+            "name": "Ship the specified parcels.",
+            "description": {
+              "content": "Marks the given parcels as ready to ship using the specified shipping type.\n\nThe available shipping types for your account and location can be retrieved from the\n[GET /v1/shipping_types/available](https://developers.cabify.com/reference/shippingtypesavailable) endpoint.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "parcels",
+                "ship"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            },
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"parcel_ids\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ],\n  \"shipping_type_id\": \"<string>\",\n  \"pickup_time\": \"<dateTime>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "ee7bb379-b204-4e18-8353-3ebdd6218397",
+              "name": "Shipment request accepted and is being processed.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "parcels",
+                    "ship"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"parcel_ids\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ],\n  \"shipping_type_id\": \"<string>\",\n  \"pickup_time\": \"2021-12-02T10:12:07.753Z\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Accepted",
+              "code": 202,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"parcels\": [\n    {\n      \"id\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n      \"tracking_url\": \"https://logistics.follow.cabify.com/abcdefghi/e\"\n    },\n    {\n      \"id\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n      \"tracking_url\": \"https://logistics.follow.cabify.com/abcdefghi/e\"\n    }\n  ],\n  \"shipping_type_id\": \"11cdd98a-534b-b752-386a-f650bb07600c\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e969d219-79b6-4b85-96ec-2dd5502cc476",
+              "name": "Bad request. One or more fields failed validation.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "parcels",
+                    "ship"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"parcel_ids\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ],\n  \"shipping_type_id\": \"<string>\",\n  \"pickup_time\": \"2021-12-02T10:12:07.753Z\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    \"string\",\n    \"string\"\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ebc5e7b3-7ec7-434a-95d6-0acf08b09c82",
+              "name": "Unauthorized. Missing or invalid authentication token.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "parcels",
+                    "ship"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"parcel_ids\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ],\n  \"shipping_type_id\": \"<string>\",\n  \"pickup_time\": \"2021-12-02T10:12:07.753Z\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "f9545671-e124-47c1-9268-6921a9d46085",
+              "name": "This parcel does not belong to your account, or the chosen shipping type is not available for your account.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "parcels",
+                    "ship"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"parcel_ids\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ],\n  \"shipping_type_id\": \"<string>\",\n  \"pickup_time\": \"2021-12-02T10:12:07.753Z\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    \"string\",\n    \"string\"\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "bacb6380-5765-43f5-a10d-2709d56e131a",
+              "name": "The parcel or shipping type could not be found. To find valid shipping type IDs, use [GET /v1/shipping_types/available](https://developers.cabify.com/reference/shippingtypesavailable).\n",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "parcels",
+                    "ship"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"parcel_ids\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ],\n  \"shipping_type_id\": \"<string>\",\n  \"pickup_time\": \"2021-12-02T10:12:07.753Z\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    \"string\",\n    \"string\"\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "de8f79c2-f6a1-4d3c-9c94-a4f557803723",
+              "name": "One or more parcels are in a state that does not allow them to be shipped.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "parcels",
+                    "ship"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"parcel_ids\": [\n    \"<uuid>\",\n    \"<uuid>\"\n  ],\n  \"shipping_type_id\": \"<string>\",\n  \"pickup_time\": \"2021-12-02T10:12:07.753Z\"\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Conflict",
+              "code": 409,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"errors\": [\n    \"string\",\n    \"string\"\n  ]\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://logistics.api.cabify.com",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "c6c9d6bd-523b-4c74-b813-44b65d8fd7b2",
+    "name": "Cabify Logistics delivery shipment API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Welcome to the Cabify Logistics API. This API allows you to create and manage parcel deliveries, track their status in real time, configure proof of delivery options, and receive live updates via webhooks. All requests must be authenticated using a Bearer token.\n\n\nContact Support:\n Email: p.delivery@cabify.com",
+      "type": "text/plain"
+    }
+  }
+}

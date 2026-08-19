@@ -1,0 +1,285 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Cabify Logistics delivery parcels API",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "parcels",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List parcels filtered by state.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://logistics.api.cabify.com/v1/parcels",
+            "params": [
+              {
+                "name": "states",
+                "value": "",
+                "type": "query",
+                "description": "Filter results by one or more parcel states. See [parcel states](https://developers.cabify.com/reference/logistics-introduction#parcel) for a description of each value.\n"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Page number to retrieve (0-based)."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns a paginated list of parcels that match the specified states."
+        },
+        {
+          "info": {
+            "name": "Create new parcels.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://logistics.api.cabify.com/v1/parcels",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Create one or more parcels to be shipped. Note that creating a parcel does not trigger a delivery — you must call `/v1/parcels/ship` afterwards to schedule the pickup.\n\nEach parcel requires a pickup and a drop-off location. You can provide a location using one of the following fields in the `pickup_info` or `dropoff_info` schemas: `loc` (coordinates), `addr` (address string), or `hub_external_id` (reference to a registered hub).\n"
+        },
+        {
+          "info": {
+            "name": "Get proof of delivery configuration for a parcel.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://logistics.api.cabify.com/v1/parcels/:parcel_id/proof_configuration",
+            "params": [
+              {
+                "name": "parcel_id",
+                "value": "",
+                "type": "path",
+                "description": "UUID of the parcel whose proof of delivery configuration you want to retrieve."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns the proof of delivery methods currently configured for the specified parcel."
+        },
+        {
+          "info": {
+            "name": "Set proof of delivery configuration for a parcel.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://logistics.api.cabify.com/v1/parcels/:parcel_id/proof_configuration",
+            "params": [
+              {
+                "name": "parcel_id",
+                "value": "",
+                "type": "path",
+                "description": "UUID of the parcel to configure proof of delivery for."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Creates or replaces the proof of delivery methods configured for the specified parcel."
+        },
+        {
+          "info": {
+            "name": "Delete parcels by ID.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://logistics.api.cabify.com/v1/parcels/delete",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Permanently deletes the specified parcels. Only parcels that have not yet been shipped can be deleted. This is an **all-or-nothing** operation — if any parcel cannot be deleted, none of the parcels in the request will be deleted.\n"
+        },
+        {
+          "info": {
+            "name": "Get a parcel by ID.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://logistics.api.cabify.com/v1/parcels/:parcel_id",
+            "params": [
+              {
+                "name": "parcel_id",
+                "value": "",
+                "type": "path",
+                "description": "UUID of the parcel to retrieve."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns the full details of a parcel identified by its UUID."
+        },
+        {
+          "info": {
+            "name": "Update a parcel by ID.",
+            "type": "http"
+          },
+          "http": {
+            "method": "PUT",
+            "url": "https://logistics.api.cabify.com/v1/parcels/:parcel_id",
+            "params": [
+              {
+                "name": "parcel_id",
+                "value": "",
+                "type": "path",
+                "description": "UUID of the parcel to update."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Update editable fields of an existing parcel. The set of fields that can be modified depends on the parcel's current state:\n\n**All fields** can be updated when the parcel is in one of these states: `ready`, `pickupfailed`, `requestercancel`, or `returnedtoorigin`.\n\n**Instructions only** (`pickup_info.instr`, `dropoff_info.instr`) can be updated in all other active states.\n"
+        },
+        {
+          "info": {
+            "name": "Get the tip for a parcel.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://logistics.api.cabify.com/v1/parcels/:parcel_id/tip",
+            "params": [
+              {
+                "name": "parcel_id",
+                "value": "",
+                "type": "path",
+                "description": "UUID of the parcel whose tip you want to retrieve."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "> **Note:** This feature is not available to all clients. Please contact us before using it.\n\nReturns the tip configured for the specified parcel, if one exists.\n"
+        },
+        {
+          "info": {
+            "name": "Add a tip for a parcel delivery.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://logistics.api.cabify.com/v1/parcels/:parcel_id/tip",
+            "params": [
+              {
+                "name": "parcel_id",
+                "value": "",
+                "type": "path",
+                "description": "UUID of the parcel to tip."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "> **Note:** This feature is not available to all clients. Please contact us before using it.\n\nAdds a tip for the driver in the event of a successful delivery. The tip can be set at any\npoint before the parcel is delivered. The tip amount must be formatted according to ISO 4217\n(e.g. €6.30 → `630` in EUR).\n"
+        },
+        {
+          "info": {
+            "name": "Get the shipping label for a parcel.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://logistics.api.cabify.com/v1/parcels/:parcel_id/label",
+            "params": [
+              {
+                "name": "parcel_id",
+                "value": "",
+                "type": "path",
+                "description": "UUID of the parcel."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns the shipping label for the specified parcel as a PDF. This label is scanned by the driver during pickup and delivery operations.\n"
+        },
+        {
+          "info": {
+            "name": "Notify an event for the given parcel.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://logistics.api.cabify.com/v1/parcels/:parcel_id/notify",
+            "params": [
+              {
+                "name": "parcel_id",
+                "value": "",
+                "type": "path",
+                "description": "UUID of the parcel to notify an event for."
+              }
+            ],
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Sends an event notification for the specified parcel. Currently, only the `ready_to_pickup`\nevent is supported.\n\nThis event is typically used in food delivery workflows to signal that an order is prepared\nand ready to be collected by a driver.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

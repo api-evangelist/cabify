@@ -1,0 +1,1032 @@
+{
+  "item": [
+    {
+      "id": "92f8e9ed-ea9b-428e-8919-393e276a8150",
+      "name": "Sales",
+      "description": {
+        "content": "Sales objects are created once a journey transitions into the terminated state and they are associated with the user who requested the journey (which not necessarily is the rider).\n            <br> <br>The transition to terminated happens automatically after 2 hours in production (10 minutes in sandbox environment).\n            <br> <br>You can request them per user (requester of the journey), the client (all of your sales), or journey (all Sales associated to a specific journey which in most cases is just one).",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "fcc2d621-eadc-48a8-a135-33ebc3c251f4",
+          "name": "Get journey's sales",
+          "request": {
+            "name": "Get journey's sales",
+            "description": {
+              "content": "Fetch the sales of the journey",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v4",
+                "journey",
+                ":journey_id",
+                "sales"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "journey_id",
+                  "description": "(Required) Id of the journey"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "ad74dcf4-af72-4c67-b4d2-ea5a77ff5b2f",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v4",
+                    "journey",
+                    ":journey_id",
+                    "sales"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "journey_id",
+                      "description": "(Required) Id of the journey"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"code\": \"ESP22AX002004\",\n    \"concept\": {\n      \"type\": \"journey\",\n      \"type_object\": {\n        \"charge_code\": \"P004\",\n        \"country\": \"ES\",\n        \"description\": \"2022-02-17. Sol, Madrid. P004\",\n        \"dropoff\": {\n          \"addr\": \"Calle de oviedo\",\n          \"city\": \"Madrid\",\n          \"contact\": {\n            \"mobile_cc\": \"34\",\n            \"mobile_num\": \"123456789\",\n            \"name\": \"Jhon Doe\"\n          },\n          \"country\": \"ES\",\n          \"loc\": [\n            40.449074,\n            -3.700908\n          ],\n          \"name\": \"Home\",\n          \"num\": \"1428\"\n        },\n        \"end_at\": \"2022-02-17T09:31:27.028Z\",\n        \"pickup\": {\n          \"addr\": \"Calle de la cruz\",\n          \"city\": \"Madrid\",\n          \"contact\": {\n            \"mobile_cc\": \"34\",\n            \"mobile_num\": \"123456789\",\n            \"name\": \"Jhon Doe\"\n          },\n          \"country\": \"ES\",\n          \"loc\": [\n            40.4169335,\n            -3.7061872\n          ],\n          \"name\": \"Work\",\n          \"num\": \"1428\"\n        },\n        \"region\": \"madrid\",\n        \"start_at\": \"2022-02-17T09:30:34.831Z\"\n      }\n    },\n    \"currency\": \"EUR\",\n    \"invoice_date\": \"2022-02-21\",\n    \"price_details\": {\n      \"discount\": 0,\n      \"tax_rate\": 0,\n      \"tax_type\": \"iva\",\n      \"total\": 0\n    }\n  },\n  {\n    \"code\": \"ESP22AX002004\",\n    \"concept\": {\n      \"type\": \"journey\",\n      \"type_object\": {\n        \"charge_code\": \"P004\",\n        \"country\": \"ES\",\n        \"description\": \"2022-02-17. Sol, Madrid. P004\",\n        \"dropoff\": {\n          \"addr\": \"Calle de oviedo\",\n          \"city\": \"Madrid\",\n          \"contact\": {\n            \"mobile_cc\": \"34\",\n            \"mobile_num\": \"123456789\",\n            \"name\": \"Jhon Doe\"\n          },\n          \"country\": \"ES\",\n          \"loc\": [\n            40.449074,\n            -3.700908\n          ],\n          \"name\": \"Home\",\n          \"num\": \"1428\"\n        },\n        \"end_at\": \"2022-02-17T09:31:27.028Z\",\n        \"pickup\": {\n          \"addr\": \"Calle de la cruz\",\n          \"city\": \"Madrid\",\n          \"contact\": {\n            \"mobile_cc\": \"34\",\n            \"mobile_num\": \"123456789\",\n            \"name\": \"Jhon Doe\"\n          },\n          \"country\": \"ES\",\n          \"loc\": [\n            40.4169335,\n            -3.7061872\n          ],\n          \"name\": \"Work\",\n          \"num\": \"1428\"\n        },\n        \"region\": \"madrid\",\n        \"start_at\": \"2022-02-17T09:30:34.831Z\"\n      }\n    },\n    \"currency\": \"EUR\",\n    \"invoice_date\": \"2022-02-21\",\n    \"price_details\": {\n      \"discount\": 0,\n      \"tax_rate\": 0,\n      \"tax_type\": \"iva\",\n      \"total\": 0\n    }\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "cbcb3d3e-7731-4b62-a315-0a2452769422",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v4",
+                    "journey",
+                    ":journey_id",
+                    "sales"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "journey_id",
+                      "description": "(Required) Id of the journey"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"Bad Request error message\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "218c2cab-19cd-4631-a798-8c98577601b8",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v4",
+                    "journey",
+                    ":journey_id",
+                    "sales"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "journey_id",
+                      "description": "(Required) Id of the journey"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"Unauthorized\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "f8cc0eae-28f2-4162-99a4-ddc50c16e657",
+              "name": "Not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v4",
+                    "journey",
+                    ":journey_id",
+                    "sales"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "journey_id",
+                      "description": "(Required) Id of the journey"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"user with provided ID does not exist\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "08e5f0eb-faa2-4f3d-9546-174b9e1c75d1",
+              "name": "Internal server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v4",
+                    "journey",
+                    ":journey_id",
+                    "sales"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "journey_id",
+                      "description": "(Required) Id of the journey"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/text"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/text"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "76ebebf9-73fb-4667-b46c-b1ebcf5161c1",
+          "name": "Fetch client's sales paginated",
+          "request": {
+            "name": "Fetch client's sales paginated",
+            "description": {
+              "content": "Get sales paginated",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v4",
+                "sales"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "from",
+                  "value": "<date>",
+                  "description": "(Required) Start date"
+                },
+                {
+                  "disabled": false,
+                  "key": "to",
+                  "value": "<date>",
+                  "description": "(Required) End date"
+                },
+                {
+                  "disabled": false,
+                  "key": "currency",
+                  "value": "EUR",
+                  "description": "(Required) Currency of the sale"
+                },
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "1",
+                  "description": "(Required) Number of page to fetch"
+                },
+                {
+                  "disabled": false,
+                  "key": "per",
+                  "value": "20",
+                  "description": "(Required) Amount of sales per page"
+                }
+              ],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "e1ce2635-158e-4b2d-a2dd-aecd96b8e786",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v4",
+                    "sales"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "from",
+                      "value": "2021-12-01"
+                    },
+                    {
+                      "key": "to",
+                      "value": "2021-12-01"
+                    },
+                    {
+                      "key": "currency",
+                      "value": "EUR"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "per",
+                      "value": "20"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"code\": \"ESP22AX002004\",\n      \"concept\": {\n        \"type\": \"journey\",\n        \"type_object\": {\n          \"charge_code\": \"P004\",\n          \"country\": \"ES\",\n          \"description\": \"2022-02-17. Sol, Madrid. P004\",\n          \"end_at\": \"2022-02-17T09:31:27.028Z\",\n          \"region\": \"madrid\",\n          \"start_at\": \"2022-02-17T09:30:34.831Z\"\n        }\n      },\n      \"currency\": \"EUR\",\n      \"invoice_date\": \"2022-02-21\",\n      \"price_details\": {\n        \"discount\": 0,\n        \"tax_rate\": 0,\n        \"tax_type\": \"iva\",\n        \"total\": 0\n      }\n    }\n  ],\n  \"page\": 1,\n  \"pages\": 1,\n  \"per\": 25,\n  \"total\": 3\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "a29e958e-4e53-4b55-a7ce-31539c9f0e9d",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v4",
+                    "sales"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "from",
+                      "value": "2021-12-01"
+                    },
+                    {
+                      "key": "to",
+                      "value": "2021-12-01"
+                    },
+                    {
+                      "key": "currency",
+                      "value": "EUR"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "per",
+                      "value": "20"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"Bad Request error message\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "53d54956-a3d5-4f31-85cd-abfec8a4d32d",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v4",
+                    "sales"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "from",
+                      "value": "2021-12-01"
+                    },
+                    {
+                      "key": "to",
+                      "value": "2021-12-01"
+                    },
+                    {
+                      "key": "currency",
+                      "value": "EUR"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "per",
+                      "value": "20"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"Unauthorized\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "b7f12296-b0ad-4977-b60f-2bf8e5170791",
+              "name": "Internal server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v4",
+                    "sales"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "from",
+                      "value": "2021-12-01"
+                    },
+                    {
+                      "key": "to",
+                      "value": "2021-12-01"
+                    },
+                    {
+                      "key": "currency",
+                      "value": "EUR"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "per",
+                      "value": "20"
+                    }
+                  ],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/text"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/text"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "af301eab-85e0-4ae8-8570-414d16885e89",
+          "name": "Get user's sales paginated",
+          "request": {
+            "name": "Get user's sales paginated",
+            "description": {
+              "content": "Fetch user's sales paginated",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v4",
+                "user",
+                ":user_id",
+                "sales"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [
+                {
+                  "disabled": false,
+                  "key": "from",
+                  "value": "<date>",
+                  "description": "(Required) Start date"
+                },
+                {
+                  "disabled": false,
+                  "key": "to",
+                  "value": "<date>",
+                  "description": "(Required) End date"
+                },
+                {
+                  "disabled": false,
+                  "key": "currency",
+                  "value": "EUR",
+                  "description": "(Required) Currency of the sale"
+                },
+                {
+                  "disabled": false,
+                  "key": "page",
+                  "value": "1",
+                  "description": "(Required) Number of page to fetch"
+                },
+                {
+                  "disabled": false,
+                  "key": "per",
+                  "value": "20",
+                  "description": "(Required) Amount of sales per page"
+                }
+              ],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "user_id",
+                  "description": "(Required) Id of the user"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "7b6fca8a-c32a-400c-96ee-3c92e21668a5",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v4",
+                    "user",
+                    ":user_id",
+                    "sales"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "from",
+                      "value": "2021-12-01"
+                    },
+                    {
+                      "key": "to",
+                      "value": "2021-12-01"
+                    },
+                    {
+                      "key": "currency",
+                      "value": "EUR"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "per",
+                      "value": "20"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "user_id",
+                      "description": "(Required) Id of the user"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"data\": [\n    {\n      \"code\": \"ESP22AX002004\",\n      \"concept\": {\n        \"type\": \"journey\",\n        \"type_object\": {\n          \"charge_code\": \"P004\",\n          \"country\": \"ES\",\n          \"description\": \"2022-02-17. Sol, Madrid. P004\",\n          \"dropoff\": {\n            \"addr\": \"Calle de oviedo\",\n            \"city\": \"Madrid\",\n            \"contact\": {\n              \"mobile_cc\": \"34\",\n              \"mobile_num\": \"123456789\",\n              \"name\": \"Jhon Doe\"\n            },\n            \"country\": \"ES\",\n            \"loc\": [\n              40.449074,\n              -3.700908\n            ],\n            \"name\": \"Home\",\n            \"num\": \"1428\"\n          },\n          \"end_at\": \"2022-02-17T09:31:27.028Z\",\n          \"pickup\": {\n            \"addr\": \"Calle de la cruz\",\n            \"city\": \"Madrid\",\n            \"contact\": {\n              \"mobile_cc\": \"34\",\n              \"mobile_num\": \"123456789\",\n              \"name\": \"Jhon Doe\"\n            },\n            \"country\": \"ES\",\n            \"loc\": [\n              40.4169335,\n              -3.7061872\n            ],\n            \"name\": \"Work\",\n            \"num\": \"1428\"\n          },\n          \"region\": \"madrid\",\n          \"start_at\": \"2022-02-17T09:30:34.831Z\"\n        }\n      },\n      \"currency\": \"EUR\",\n      \"invoice_date\": \"2022-02-21\",\n      \"price_details\": {\n        \"discount\": 0,\n        \"tax_rate\": 0,\n        \"tax_type\": \"iva\",\n        \"total\": 0\n      }\n    },\n    {\n      \"code\": \"ESP22AX002004\",\n      \"concept\": {\n        \"type\": \"journey\",\n        \"type_object\": {\n          \"charge_code\": \"P004\",\n          \"country\": \"ES\",\n          \"description\": \"2022-02-17. Sol, Madrid. P004\",\n          \"dropoff\": {\n            \"addr\": \"Calle de oviedo\",\n            \"city\": \"Madrid\",\n            \"contact\": {\n              \"mobile_cc\": \"34\",\n              \"mobile_num\": \"123456789\",\n              \"name\": \"Jhon Doe\"\n            },\n            \"country\": \"ES\",\n            \"loc\": [\n              40.449074,\n              -3.700908\n            ],\n            \"name\": \"Home\",\n            \"num\": \"1428\"\n          },\n          \"end_at\": \"2022-02-17T09:31:27.028Z\",\n          \"pickup\": {\n            \"addr\": \"Calle de la cruz\",\n            \"city\": \"Madrid\",\n            \"contact\": {\n              \"mobile_cc\": \"34\",\n              \"mobile_num\": \"123456789\",\n              \"name\": \"Jhon Doe\"\n            },\n            \"country\": \"ES\",\n            \"loc\": [\n              40.4169335,\n              -3.7061872\n            ],\n            \"name\": \"Work\",\n            \"num\": \"1428\"\n          },\n          \"region\": \"madrid\",\n          \"start_at\": \"2022-02-17T09:30:34.831Z\"\n        }\n      },\n      \"currency\": \"EUR\",\n      \"invoice_date\": \"2022-02-21\",\n      \"price_details\": {\n        \"discount\": 0,\n        \"tax_rate\": 0,\n        \"tax_type\": \"iva\",\n        \"total\": 0\n      }\n    }\n  ],\n  \"page\": 6498,\n  \"pages\": 8593,\n  \"per\": 1316,\n  \"total\": 2032\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "dd5a4dcc-a026-46b2-9561-fcd74ebd3cac",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v4",
+                    "user",
+                    ":user_id",
+                    "sales"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "from",
+                      "value": "2021-12-01"
+                    },
+                    {
+                      "key": "to",
+                      "value": "2021-12-01"
+                    },
+                    {
+                      "key": "currency",
+                      "value": "EUR"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "per",
+                      "value": "20"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "user_id",
+                      "description": "(Required) Id of the user"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"Bad Request error message\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0459269e-b6bc-4c9e-8467-760bee4e3914",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v4",
+                    "user",
+                    ":user_id",
+                    "sales"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "from",
+                      "value": "2021-12-01"
+                    },
+                    {
+                      "key": "to",
+                      "value": "2021-12-01"
+                    },
+                    {
+                      "key": "currency",
+                      "value": "EUR"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "per",
+                      "value": "20"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "user_id",
+                      "description": "(Required) Id of the user"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"Unauthorized\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "235eb33e-45e5-48c4-9dd8-36315991cb00",
+              "name": "Not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v4",
+                    "user",
+                    ":user_id",
+                    "sales"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "from",
+                      "value": "2021-12-01"
+                    },
+                    {
+                      "key": "to",
+                      "value": "2021-12-01"
+                    },
+                    {
+                      "key": "currency",
+                      "value": "EUR"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "per",
+                      "value": "20"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "user_id",
+                      "description": "(Required) Id of the user"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"user with provided ID does not exist\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "0cc9bd59-fcaa-479e-bc32-fba098376bbb",
+              "name": "Internal server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v4",
+                    "user",
+                    ":user_id",
+                    "sales"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [
+                    {
+                      "key": "from",
+                      "value": "2021-12-01"
+                    },
+                    {
+                      "key": "to",
+                      "value": "2021-12-01"
+                    },
+                    {
+                      "key": "currency",
+                      "value": "EUR"
+                    },
+                    {
+                      "key": "page",
+                      "value": "1"
+                    },
+                    {
+                      "key": "per",
+                      "value": "20"
+                    }
+                  ],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "user_id",
+                      "description": "(Required) Id of the user"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/text"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/text"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://logistics.api.cabify.com",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "a0f39b2e-43c2-4aff-9334-9d1bcd48e2b0",
+    "name": "Cabify Logistics delivery Sales API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Welcome to the Cabify Logistics API. This API allows you to create and manage parcel deliveries, track their status in real time, configure proof of delivery options, and receive live updates via webhooks. All requests must be authenticated using a Bearer token.\n\n\nContact Support:\n Email: p.delivery@cabify.com",
+      "type": "text/plain"
+    }
+  }
+}

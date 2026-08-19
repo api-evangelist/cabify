@@ -1,0 +1,115 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Cabify Logistics delivery Journeys API",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Journeys",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Journey State",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://logistics.api.cabify.com/api/v4/journey/:id/state",
+            "params": [
+              {
+                "name": "id",
+                "value": "f0397896-19aa-11ed-b6fe-7aaea8067492",
+                "type": "path",
+                "description": "UUID of the journey"
+              },
+              {
+                "name": "requester_id",
+                "value": "6f80363aa84fa61a58dc5720",
+                "type": "query",
+                "description": "ID of the user who requested the journey"
+              }
+            ]
+          },
+          "docs": "Returns the real-time operational state of an active journey: assigned driver, vehicle, and\nthe route waypoints collected so far.\n\nUse this endpoint for live tracking while a journey is in progress. It provides the data\nneeded to show the driver's position on a map and display vehicle/driver details to the rider.\n\n**Typical use cases:**\n- Show the assigned driver's name, phone number, and avatar.\n- Display the vehicle plate, model, and color so the rider can identify it.\n- Plot the driver's rout"
+        },
+        {
+          "info": {
+            "name": "Cancel Journey",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://logistics.api.cabify.com/api/v4/journey/:id/state",
+            "params": [
+              {
+                "name": "id",
+                "value": "f0397896-19aa-11ed-b6fe-7aaea8067492",
+                "type": "path",
+                "description": "Id of the journey"
+              }
+            ]
+          },
+          "docs": "Cancels an active journey. Journeys can only be cancelled free of charge before a driver has been assigned. After assignment, cancellation fees may apply if the courtesy period has elapsed (this varies by operating zone).\n\nReturns `409 Conflict` if the journey has already been completed, terminated, or is in a state that does not allow cancellation.\n"
+        },
+        {
+          "info": {
+            "name": "Create a journey",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://logistics.api.cabify.com/api/v4/journey",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Creates a new journey request for a ride.\n\n> ❗️ Prerequisites\n>\n> Before creating a journey, you **must** call the `/estimates` endpoint and use the returned\n> `product.id` as `product_id` in this request. This guarantees that the product is available\n> at the pickup location and provides accurate pricing shown to drivers.\n>\n> The estimate should be created within **5 minutes** of the journey request.\n\n## Journey States\n\nAfter creation, the journey progresses through these states:\n1. `hire` - Se"
+        },
+        {
+          "info": {
+            "name": "Get Journey details",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://logistics.api.cabify.com/api/v4/journey/:journey_id",
+            "params": [
+              {
+                "name": "journey_id",
+                "value": "f0397896-19aa-11ed-b6fe-7aaea8067492",
+                "type": "path",
+                "description": "UUID of the journey"
+              }
+            ]
+          },
+          "docs": "Returns the booking-level details of a journey: stops, pricing, timestamps, and lifecycle status.\n\nUse this endpoint to check whether a journey is finished, retrieve its cost breakdown, or read\nthe stops that were requested. The response is stable once the journey is created and only\nchanges when the journey ends (populating `end_state`, `end_at`, and `totals`).\n\n**Typical use cases:**\n- Display a journey's origin/destination and scheduled time.\n- Check if a journey has finished and why (`end_st"
+        },
+        {
+          "info": {
+            "name": "Keep searching drivers for a journey",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://logistics.api.cabify.com/api/v4/journey/:id/keep_searching",
+            "params": [
+              {
+                "name": "id",
+                "value": "",
+                "type": "path",
+                "description": "Id of the journey"
+              }
+            ]
+          },
+          "docs": "If there are no drivers available after having created a journey (meaning you receive a\n 'not found' state via webhooks or via the GET journey/state endpoints), with this\n endpoint, you can continue searching for drivers for the same exact journey without the\n  need of a new estimation.\n\nThe journey will enter again in the 'hire' state for another 5 minutes (this time cannot be changed).\n\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

@@ -1,0 +1,129 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Cabify Logistics delivery Sales API",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Sales",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get journey's sales",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://logistics.api.cabify.com/api/v4/journey/:journey_id/sales",
+            "params": [
+              {
+                "name": "journey_id",
+                "value": "6f80363aa84fa61a58dc5720",
+                "type": "path",
+                "description": "Id of the journey"
+              }
+            ]
+          },
+          "docs": "Fetch the sales of the journey"
+        },
+        {
+          "info": {
+            "name": "Fetch client's sales paginated",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://logistics.api.cabify.com/api/v4/sales",
+            "params": [
+              {
+                "name": "from",
+                "value": "2021-12-01",
+                "type": "query",
+                "description": "Start date"
+              },
+              {
+                "name": "to",
+                "value": "2021-12-01",
+                "type": "query",
+                "description": "End date"
+              },
+              {
+                "name": "currency",
+                "value": "EUR",
+                "type": "query",
+                "description": "Currency of the sale"
+              },
+              {
+                "name": "page",
+                "value": "1",
+                "type": "query",
+                "description": "Number of page to fetch"
+              },
+              {
+                "name": "per",
+                "value": "20",
+                "type": "query",
+                "description": "Amount of sales per page"
+              }
+            ]
+          },
+          "docs": "Get sales paginated"
+        },
+        {
+          "info": {
+            "name": "Get user's sales paginated",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://logistics.api.cabify.com/api/v4/user/:user_id/sales",
+            "params": [
+              {
+                "name": "user_id",
+                "value": "6f80363aa84fa61a58dc5720",
+                "type": "path",
+                "description": "Id of the user"
+              },
+              {
+                "name": "from",
+                "value": "2021-12-01",
+                "type": "query",
+                "description": "Start date"
+              },
+              {
+                "name": "to",
+                "value": "2021-12-01",
+                "type": "query",
+                "description": "End date"
+              },
+              {
+                "name": "currency",
+                "value": "EUR",
+                "type": "query",
+                "description": "Currency of the sale"
+              },
+              {
+                "name": "page",
+                "value": "1",
+                "type": "query",
+                "description": "Number of page to fetch"
+              },
+              {
+                "name": "per",
+                "value": "20",
+                "type": "query",
+                "description": "Amount of sales per page"
+              }
+            ]
+          },
+          "docs": "Fetch user's sales paginated"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

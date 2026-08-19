@@ -1,0 +1,41 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Cabify Logistics delivery label API",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "label",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get the warehouse label for a parcel (deprecated).",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://logistics.api.cabify.com/v1/parcels/:parcel_id/warehouse/label",
+            "params": [
+              {
+                "name": "parcel_id",
+                "value": "",
+                "type": "path",
+                "description": "UUID of the parcel."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "**This endpoint is deprecated.** Please use [GET /v1/parcels/{parcel_id}/label](https://developers.cabify.com/reference/labelparcel) instead.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

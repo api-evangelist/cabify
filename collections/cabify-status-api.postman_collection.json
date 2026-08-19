@@ -1,0 +1,498 @@
+{
+  "item": [
+    {
+      "id": "9100448f-f5dd-4696-b77a-e2edb8da12dd",
+      "name": "status",
+      "description": {
+        "content": "Track the real-time status and location of your parcels at any point during their delivery.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "aea42e32-e5ae-47bf-bd50-c5d6609d8732",
+          "name": "Get the current status of a parcel.",
+          "request": {
+            "name": "Get the current status of a parcel.",
+            "description": {
+              "content": "Returns the current state and tracking information for the specified parcel.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "parcels",
+                ":parcel_id",
+                "status"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "parcel_id",
+                  "description": "(Required) UUID of the parcel to track."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "ac2d5837-f5ec-4afc-9b31-12f9864ea476",
+              "name": "Parcel status retrieved successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "parcels",
+                    ":parcel_id",
+                    "status"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "parcel_id",
+                      "description": "(Required) UUID of the parcel to track."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n  \"external_id\": \"parcel_001\",\n  \"state\": \"pickupfailed\",\n  \"failure_reason\": \"no_payment_methods\",\n  \"delivery_attempt\": {\n    \"id_proof_of_delivery\": {\n      \"recipient_name\": \"Francisco\",\n      \"recipient_id_number\": \"11111111T\"\n    },\n    \"photo_proof_of_delivery\": {\n      \"photo_urls\": [\n        \"string\",\n        \"string\"\n      ],\n      \"photo_url\": \"https://s3.amazon.com/photo.jpg\"\n    },\n    \"comment_proof_of_delivery\": {\n      \"comment\": \"El paquete se ha dejado en la puerta\"\n    },\n    \"fail_reason\": \"wrong_address\",\n    \"support_ticket\": \"string\",\n    \"address\": \"string\",\n    \"feedback\": \"string\"\n  },\n  \"tracking\": {\n    \"eta_to_accept\": 90,\n    \"location\": {\n      \"lat\": 40.4489254,\n      \"lon\": -3.6730293\n    },\n    \"routes\": {\n      \"pick_up\": {\n        \"eta\": 120,\n        \"path\": \"fhdsa98fha87sdfhas76dgf8a\"\n      },\n      \"drop_off\": {\n        \"eta\": 120,\n        \"path\": \"fhdsa98fha87sdfhas76dgf8a\"\n      }\n    },\n    \"tracking_url\": \"string\"\n  },\n  \"asset\": {\n    \"reg_plate\": \"1111AAA\",\n    \"name\": \"Audi A3\",\n    \"color\": \"black\",\n    \"asset_kind\": \"van\"\n  },\n  \"driver\": {\n    \"photo_url\": \"https://s3.amazon.com/photo.jpg\",\n    \"name\": \"Pepe\",\n    \"phone\": \"+34658478854\"\n  },\n  \"pickup_failed\": {\n    \"reason\": \"address_wrong\",\n    \"failed_at\": \"2021-12-02T10:12:07.753Z\",\n    \"driver_comments\": \"can't find the address\"\n  },\n  \"shipping_type\": {\n    \"id\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n    \"name\": \"Same day default\",\n    \"modality\": \"same_day\"\n  }\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "e68ade9a-9e8f-4ae2-a0da-3f911013e721",
+              "name": "Unauthorized. Missing or invalid authentication token.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "parcels",
+                    ":parcel_id",
+                    "status"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "parcel_id",
+                      "description": "(Required) UUID of the parcel to track."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "09dad5b1-bb25-4540-bccf-ffcab40b66cf",
+              "name": "No parcel found with the given ID.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "parcels",
+                    ":parcel_id",
+                    "status"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "parcel_id",
+                      "description": "(Required) UUID of the parcel to track."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        },
+        {
+          "id": "1a84f5fe-0782-4c08-bdf0-e5a57526070b",
+          "name": "Get the state history of a parcel.",
+          "request": {
+            "name": "Get the state history of a parcel.",
+            "description": {
+              "content": "Returns the ordered list of state-change events for the specified parcel. Only parcels updated within the last 30 days can be queried.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "v1",
+                "parcels",
+                ":parcel_id",
+                "timeline"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<uuid>",
+                  "key": "parcel_id",
+                  "description": "(Required) UUID of the parcel whose history you want to retrieve."
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "{{bearerToken}}"
+                }
+              ]
+            }
+          },
+          "response": [
+            {
+              "id": "04fe71e5-420d-4dd2-961e-cfba802338d2",
+              "name": "Timeline retrieved successfully.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "parcels",
+                    ":parcel_id",
+                    "timeline"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "parcel_id",
+                      "description": "(Required) UUID of the parcel whose history you want to retrieve."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  },
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"id\": \"3fa85f64-5717-4562-b3fc-2c963f66afa6\",\n  \"timeline\": [\n    {\n      \"state\": \"delivered\",\n      \"state_updated_at\": \"2021-12-02T10:12:07.753Z\"\n    },\n    {\n      \"state\": \"delivering\",\n      \"state_updated_at\": \"2021-12-02T10:12:07.753Z\"\n    }\n  ],\n  \"external_id\": \"parcel_001\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "cae9213e-b81b-481a-868f-5b3c86e7e3bc",
+              "name": "Unauthorized. Missing or invalid authentication token.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "parcels",
+                    ":parcel_id",
+                    "timeline"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "parcel_id",
+                      "description": "(Required) UUID of the parcel whose history you want to retrieve."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "14104036-ea06-4c4e-bb1e-01442a8ba3bc",
+              "name": "This parcel does not belong to your account.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "parcels",
+                    ":parcel_id",
+                    "timeline"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "parcel_id",
+                      "description": "(Required) UUID of the parcel whose history you want to retrieve."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "91df81d3-3b02-4b35-be72-8e098ca41b8e",
+              "name": "No parcel found with the given ID.",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "v1",
+                    "parcels",
+                    ":parcel_id",
+                    "timeline"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<uuid>",
+                      "key": "parcel_id",
+                      "description": "(Required) UUID of the parcel whose history you want to retrieve."
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "description": {
+                      "content": "Added as a part of security scheme: bearer",
+                      "type": "text/plain"
+                    },
+                    "key": "Authorization",
+                    "value": "Bearer <token>"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://logistics.api.cabify.com",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "87f586b5-1371-491c-947e-4004bbe54ed7",
+    "name": "Cabify Logistics delivery status API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Welcome to the Cabify Logistics API. This API allows you to create and manage parcel deliveries, track their status in real time, configure proof of delivery options, and receive live updates via webhooks. All requests must be authenticated using a Bearer token.\n\n\nContact Support:\n Email: p.delivery@cabify.com",
+      "type": "text/plain"
+    }
+  }
+}

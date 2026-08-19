@@ -1,0 +1,262 @@
+{
+  "item": [
+    {
+      "id": "980dce44-668f-4a85-b431-e59e5b5cb164",
+      "name": "Estimates",
+      "description": {
+        "content": "This method returns prices, Id's and all the information for products that are available at the origin point. Before requesting a journey as a first step it is necessary to obtain the different products configured in your account in order to select the one that fits your needs and keep the Id that will be used in the Journey.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "5a404e92-1765-42fe-98dd-df4df6dcdd7c",
+          "name": "Create estimation",
+          "request": {
+            "name": "Create estimation",
+            "description": {
+              "content": "Obtain prices, product IDs, and all the information for products that are available at the origin point.\n\n> ❗️ Important\n>\n> You **must** call this endpoint before creating a Journey. The response provides the `product.id`\n> that should be passed to the journey creation endpoint.\n>\n> For **reserved** journeys, pass the same `start_at` used here to the journey creation request\n> to guarantee consistent product availability and pricing.\n>\n> We recommend estimating no more than **5 minutes** before creating the journey.\n\n## Response\n\nThe response contains an array of available products, each with:\n- `product.id` — pass as `product_id` when creating a journey\n- Estimated price and currency\n- ETA (estimated time of arrival)\n- Vehicle category information\n\n## Hub Information\n\nWhen the origin is within a large venue (airport, train station, etc.), each estimation object may include a `hub` field containing:\n- Hub metadata (uid, title, location_id)\n- A list of **meeting points** — designated pick-up locations with coordinates, images, and localized instructions\n\nThe `hub` field is resolved on a best-effort basis in parallel with pricing. It may be `null` if hub resolution does not complete in time or no hub exists at the origin.\n\n> 📘 Using Hub Data\n>\n> When a hub is present, present the meeting points to the user for selection and include the chosen one in the journey creation request via the `meeting_point` field in the origin stop.\n> Alternatively, use `GET /api/v4/hub` to look up hub data independently.\n",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                "api",
+                "v4",
+                "estimates"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": []
+            },
+            "header": [
+              {
+                "key": "Content-Type",
+                "value": "application/json"
+              },
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "POST",
+            "auth": null,
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"start_type\": \"<string>\",\n  \"requester_id\": \"<string>\",\n  \"stops\": [],\n  \"start_at\": \"<string>\"\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            }
+          },
+          "response": [
+            {
+              "id": "afe8373f-90c0-4a84-99d1-ccfafe710b5c",
+              "name": "Success",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v4",
+                    "estimates"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"requester_id\": \"0d3cd443da5f11eb89d7ea639ff4befb\",\n  \"start_at\": \"2022-07-01 10:00:00\",\n  \"start_type\": \"asap\",\n  \"stops\": [\n    {\n      \"loc\": [\n        40.4169335,\n        -3.7061872\n      ]\n    },\n    {\n      \"loc\": [\n        40.4169335,\n        -3.7061872\n      ]\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "[\n  {\n    \"distance\": 1831,\n    \"duration\": 1260,\n    \"eta\": {\n      \"formatted\": \"10 min\",\n      \"low_availability\": true\n    },\n    \"product\": {\n      \"description\": \"The standard option, with all the usual perkss\",\n      \"name\": \"Cabify Executive.\",\n      \"service_type\": \"WIP\",\n      \"slug\": \"slug_code_1000\"\n    },\n    \"route\": \"ukbvFnjhU[c@k@m@_@[SOMKKGKIIGGKW]???GAEAC?AAAAAIIIEGCI?I?MLELCHCJAJARDREXG`@AFELa@jBMp@i@~BKd@GZo@vCQt@GPOf@??SEUAS?SDSDSHQLONCBCDCDCBCDCDCDCDM^ANCNAPAR?P?T@P@RHb@J\\\\NZ]r@GLCHMRMTMVYj@Yd@y@|AWf@qA`CU`@Yf@OZSZO\\\\mAzBU\\\\ELGJGJEH]p@Wd@kAvBm@fAABOXWd@W`@m@jAeAlBwAjCW^mAzBWf@S^OTA@C@CBCBE@KF??UMYQSGo@w@w@y@WYwA}ACCWY[][]AAYYo@o@CC]_@CCOG??IKOOiAwAMOY]a@c@c@c@i@k@SQKK_A}@gA_As@k@USCAy@o@cAs@_@W]YIIc@a@AAc@[iAaA[Y_@]o@g@gA}@AAc@]_@W]UOKOIQKe@UIE_@QA?OGOGa@OA?OEOEYIICA?OEUEa@GYGWCKASCi@Gk@Cs@CG?WAg@AA?i@AA?e@?c@?c@Ac@?I?G?U?I?]@o@@W?K@W?c@@c@@c@@C?_@A[AG?EAOAM?AAG?OAIA_@EA?c@GOAw@MCAc@KMEOA[Kw@Uc@O}@]m@WKEc@Uy@e@o@a@QMgAw@OMAA]We@_@q@m@ECIIIIGECEw@s@[[yAsAi@i@AAEEYWCAUSOMMIGGWSGEECSOCAQMECKGQIAAYMSKKE]O[Kg@QWIc@Ky@SQCq@KMCG?_@GAA_@Em@I{G}@]Ga@IMEg@Mm@Qm@WWKOIe@WUK[Qa@Qk@]KGy@g@oAs@k@]i@]}AiA_@[GEmAcAo@m@EAGCKKWU[Ua@[g@Y}@e@ECuCkA[MGEGA[Ou@]sAu@??UAC?YQy@g@i@_@IGc@]cA_AMKm@m@aAeAEAQASYo@_AsAoBsA}B[m@[m@GMOYMYYo@u@iBu@oBg@}AEMq@}BKa@I]GWQq@GYWsAQiAM{@Gk@AIKu@AQE_@Em@Gk@Cm@C]AOEcACmACoA?wA?O?G?M@K?m@@o@Bo@HwAFcAB[?ANaBBY@OD[PwANaA?EJs@V{AJi@DQ?ABSx@qEPoANkALkALaBBY?A@[NaCDsAB}ABoB?oBAuBEuBGuBIgBM}BEUM_BQeBKw@MaAKw@Im@]oB_@mBUcASaAMe@c@eBe@_BGSUq@CGWy@Qi@Wq@m@yAc@gAQ_@Ue@Wi@m@kAYg@a@o@cAaBgBiC_@g@IKGKKKGI}@aAEGu@y@e@e@e@c@o@k@e@a@e@a@g@a@a@Yi@a@o@a@A?qAy@[Qe@We@Us@_@_@OUI[MEAk@UICQGOGKCcFqAoAWkAScAOmAMo@Gm@EYCu@CWAYAwAAa@?c@?c@?A?_B@qAB_CDE?a@@w@@W@wB@cA?cB@c@AaAAC?g@AgAGg@CYEA?WEKAUEUEA?YEUEQE[GOESEMEWGCAA?UIOEUIWIa@Ou@[[O]Ou@a@WO}@k@WSCAm@e@e@_@KIQQCAACWUs@s@k@m@MQKKq@{@QUCECCw@kAuAwBoCoE_@m@We@sCqE[i@uAyBS]AAGMMQIOaBiCmB}CsF{IGKOWa@o@iDqFOWKOe@w@mAqBGKc@q@EIi@{@Wc@QUGKa@q@g@s@AAW[UYEGOQIKKMOOIIYYUUm@m@KI]Y}@w@wCyB{@o@o@e@gC_BCC_@UQKy@e@w@c@o@]i@WsDgBoBy@oAg@g@QkAc@u@UEC[IA?]MwBk@oBg@MCi@MuDs@}@QOCw@I[E[EcAQmDc@??OQAAOEa@IoAQoAOa@G_@GQCSEQGEACCg@[UUGG[]g@g@UOQK]OEASE_@Ei@EMAA?MD??{EUeCOMCw@G??YMECEECAMS??AK?MAKAKCIEIEIIGAAAAA?AAAAA?A?AAA?AAA?A?A?A?IAE?G@GDIDEFGFEHCHAJALAH?J@J@JBHBHDFFFFBHDGd@?@?@@HADKf@GZETEJKNEFIDIBOBM?MCi@Ku@QYCUAW?W@_@Be@Bc@BA?[BG?MACAECGEA?IKOQ??FIBC@EBMCWCMEECCGCIAI@A@C@GDEFEN?P@F@DJNA^AL?@?D?FBHBHDHBBVPJDZJDBDFBB@P@B?BALAHCFADCBCDCBABGDCBA@_@VCDYLA@_@R_@PIDc@TSLOHQL[VIDSL[NIDKDSFoCr@g@N_AV[HgAVSFYFe@L]HcAL[D]Ho@LKBM?O?KA_@A_@BKD???AAA?AAA?AA??AC?A?A?C?A?A@A?A@A@?@A@CBA@ABA@?BA@?BA@?B?B?@?B?@?B@@C@ORCBWr@CH{@tB?@Sh@GPERCRGX?FC`@Ej@CNEPIVO\\\\_AvB]t@GNK\\\\c@z@Wh@MXEJWl@MXg@lA]v@s@~AUh@KV?@ADABAD?BAD?B?BAD?D@B?D?BBr@?BDv@D`ABX@N@H@J@FBF@FBJDNDJ@D@BNZLRT^^j@@@BD@D@BBD@F@D@F@N@H@H?J?D?F?JAF?DAFAHAFi@dCQv@UjASbAPzA?FDZLzA?@Dl@Dj@Bp@Dl@Bt@@LD`A?D?h@Al@Af@?FAv@Ad@??LOJOBAPc@@ARo@z@eCFSTu@BE@C@CBABE@ABCBABADCDABAVC\\\\?H?fAFb@Bb@BF?D?F@H?BA\",\n    \"supplements\": [\n      {\n        \"kind\": \"toll\",\n        \"name\": \"toll name\",\n        \"pay_to_driver\": true,\n        \"price\": {\n          \"amount\": 2332,\n          \"currency\": \"EUR\"\n        }\n      }\n    ],\n    \"total\": {\n      \"amount\": 2332,\n      \"currency\": \"EUR\"\n    }\n  }\n]",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "ccc33f42-ae19-4bf7-9f69-d72e900184d3",
+              "name": "Bad request",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v4",
+                    "estimates"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"requester_id\": \"0d3cd443da5f11eb89d7ea639ff4befb\",\n  \"start_at\": \"2022-07-01 10:00:00\",\n  \"start_type\": \"asap\",\n  \"stops\": [\n    {\n      \"loc\": [\n        40.4169335,\n        -3.7061872\n      ]\n    },\n    {\n      \"loc\": [\n        40.4169335,\n        -3.7061872\n      ]\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Bad Request",
+              "code": 400,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"Bad Request error message\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "67edab6e-fb2a-4741-8ce7-c3b637577a13",
+              "name": "Unauthorized",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v4",
+                    "estimates"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"requester_id\": \"0d3cd443da5f11eb89d7ea639ff4befb\",\n  \"start_at\": \"2022-07-01 10:00:00\",\n  \"start_type\": \"asap\",\n  \"stops\": [\n    {\n      \"loc\": [\n        40.4169335,\n        -3.7061872\n      ]\n    },\n    {\n      \"loc\": [\n        40.4169335,\n        -3.7061872\n      ]\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"error\": \"Unauthorized\"\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "bde7a5b0-6c00-40c8-bdd0-0c16ba732558",
+              "name": "Internal server error",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    "api",
+                    "v4",
+                    "estimates"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": []
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/text"
+                  }
+                ],
+                "method": "POST",
+                "body": {
+                  "mode": "raw",
+                  "raw": "{\n  \"requester_id\": \"0d3cd443da5f11eb89d7ea639ff4befb\",\n  \"start_at\": \"2022-07-01 10:00:00\",\n  \"start_type\": \"asap\",\n  \"stops\": [\n    {\n      \"loc\": [\n        40.4169335,\n        -3.7061872\n      ]\n    },\n    {\n      \"loc\": [\n        40.4169335,\n        -3.7061872\n      ]\n    }\n  ]\n}",
+                  "options": {
+                    "raw": {
+                      "language": "json"
+                    }
+                  }
+                }
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/text"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "type": "string",
+      "value": "https://logistics.api.cabify.com",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "0dba7372-b675-4206-82fc-2d5fb2784449",
+    "name": "Cabify Logistics delivery Estimates API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "Welcome to the Cabify Logistics API. This API allows you to create and manage parcel deliveries, track their status in real time, configure proof of delivery options, and receive live updates via webhooks. All requests must be authenticated using a Bearer token.\n\n\nContact Support:\n Email: p.delivery@cabify.com",
+      "type": "text/plain"
+    }
+  }
+}

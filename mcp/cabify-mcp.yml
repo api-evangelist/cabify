@@ -136,3 +136,9 @@ tools:
 - name: warehouseLabelParcel
   description: Get the warehouse label for a parcel (deprecated).
   source_operation: openapi/cabify-logistics-openapi.yml#warehouseLabelParcel
+deployment:
+  mode: none
+  verified: derived
+  tools: 42
+  checked: '2026-08-12'
+  source: catalog MCP census

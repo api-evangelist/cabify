@@ -1,0 +1,56 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Cabify Logistics delivery shipment API",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "shipment",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Estimate the cost and timing of a shipment.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://logistics.api.cabify.com/v3/parcels/estimate",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Calculates the estimated price, pickup time, and delivery time for the given parcels using the specified shipping type.\n"
+        },
+        {
+          "info": {
+            "name": "Ship the specified parcels.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://logistics.api.cabify.com/v1/parcels/ship",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Marks the given parcels as ready to ship using the specified shipping type.\n\nThe available shipping types for your account and location can be retrieved from the\n[GET /v1/shipping_types/available](https://developers.cabify.com/reference/shippingtypesavailable) endpoint.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

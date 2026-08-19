@@ -1,0 +1,132 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Cabify Logistics delivery users API",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "users",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List users belonging to your account.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://logistics.api.cabify.com/v1/users",
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns all Cabify users associated with your account."
+        },
+        {
+          "info": {
+            "name": "Get Users in bulk",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://logistics.api.cabify.com/api/v4/users",
+            "params": [
+              {
+                "name": "state",
+                "value": "active",
+                "type": "query",
+                "description": "id of the User, UUIDv4 format without hyphens"
+              },
+              {
+                "name": "page",
+                "value": "1",
+                "type": "query",
+                "description": "Number of page to return"
+              },
+              {
+                "name": "per",
+                "value": "20",
+                "type": "query",
+                "description": "Number of elements per page"
+              }
+            ]
+          },
+          "docs": "Gets multiple Users"
+        },
+        {
+          "info": {
+            "name": "Create Users in bulk",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://logistics.api.cabify.com/api/v4/users",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Create Users in bulk"
+        },
+        {
+          "info": {
+            "name": "Update Users in bulk",
+            "type": "http"
+          },
+          "http": {
+            "method": "PATCH",
+            "url": "https://logistics.api.cabify.com/api/v4/users",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            }
+          },
+          "docs": "Update Users in bulk"
+        },
+        {
+          "info": {
+            "name": "Get User by email",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://logistics.api.cabify.com/api/v4/users/email/:email",
+            "params": [
+              {
+                "name": "email",
+                "value": "john.doe@example.com",
+                "type": "path",
+                "description": "Email of the User to search"
+              }
+            ]
+          },
+          "docs": "Gets a User by email"
+        },
+        {
+          "info": {
+            "name": "Get User by ID",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://logistics.api.cabify.com/api/v4/users/:id",
+            "params": [
+              {
+                "name": "id",
+                "value": "1.2345678901234568e+30",
+                "type": "path",
+                "description": "ID of the User to search"
+              }
+            ]
+          },
+          "docs": "Get User by id"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

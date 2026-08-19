@@ -1,0 +1,75 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Cabify Logistics delivery webhooks API",
+    "version": "1.0.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "webhooks",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Unsubscribe from a webhook.",
+            "type": "http"
+          },
+          "http": {
+            "method": "DELETE",
+            "url": "https://logistics.api.cabify.com/v1/webhooks/:hook",
+            "params": [
+              {
+                "name": "hook",
+                "value": "",
+                "type": "path",
+                "description": "The event type to unsubscribe from."
+              }
+            ],
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Removes the webhook subscription for the specified event type."
+        },
+        {
+          "info": {
+            "name": "List your active webhook subscriptions.",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "https://logistics.api.cabify.com/v1/webhooks",
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Returns all active webhook subscriptions registered for your account."
+        },
+        {
+          "info": {
+            "name": "Subscribe to parcel update notifications.",
+            "type": "http"
+          },
+          "http": {
+            "method": "POST",
+            "url": "https://logistics.api.cabify.com/v1/webhooks",
+            "body": {
+              "type": "json",
+              "data": "{}"
+            },
+            "auth": {
+              "type": "bearer",
+              "token": "{{bearerToken}}"
+            }
+          },
+          "docs": "Register a webhook to receive real-time notifications when parcels are updated.\n\n**Securing your webhook endpoint:**\n1. Include a custom authorization header in the subscription request. Our API will forward\n   it with every notification:\n   ```\n   Authorization: Bearer <your-auth-token>\n   ```\n2. For enhanced security using OAuth (client credentials), contact us to set up authentication\n   with a `clientId` and `clientSecret`.\n"
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
