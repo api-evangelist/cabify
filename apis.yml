@@ -39,6 +39,16 @@ tags:
 - Logistics
 - Delivery
 - Last Mile Delivery
+- Webhook
+- Authentication
+tags_raw:
+- Company
+- Transportation
+- Ride Hailing
+- Mobility
+- Logistics
+- Delivery
+- Last Mile Delivery
 - Webhooks
 - OAuth
 maintainers:
@@ -55,6 +65,8 @@ apis:
   humanURL: https://developers.cabify.com/docs/ride-hailing
   baseURL: https://cabify.com/api/v4
   tags:
+  - Delivery
+  tags_raw:
   - delivery
   properties:
   - type: OpenAPI
@@ -94,6 +106,8 @@ apis:
   humanURL: https://developers.cabify.com/docs/ride-hailing
   baseURL: https://cabify.com/api/v4
   tags:
+  - Hub
+  tags_raw:
   - hubs
   properties:
   - type: OpenAPI
@@ -129,6 +143,8 @@ apis:
   humanURL: https://developers.cabify.com/docs/ride-hailing
   baseURL: https://cabify.com/api/v4
   tags:
+  - Label
+  tags_raw:
   - label
   properties:
   - type: OpenAPI
@@ -171,6 +187,8 @@ apis:
   humanURL: https://developers.cabify.com/docs/ride-hailing
   baseURL: https://cabify.com/api/v4
   tags:
+  - Parcels
+  tags_raw:
   - parcels
   properties:
   - type: OpenAPI
@@ -209,6 +227,8 @@ apis:
   humanURL: https://developers.cabify.com/docs/ride-hailing
   baseURL: https://cabify.com/api/v4
   tags:
+  - Shipment
+  tags_raw:
   - shipment
   properties:
   - type: OpenAPI
@@ -224,7 +244,8 @@ apis:
   description: The shipping_types API from Cabify — 1 operation(s) for shipping_types.
   humanURL: https://developers.cabify.com/docs/ride-hailing
   baseURL: https://cabify.com/api/v4
-  tags:
+  tags: []
+  tags_raw:
   - shipping_types
   properties:
   - type: OpenAPI
@@ -242,6 +263,8 @@ apis:
   humanURL: https://developers.cabify.com/docs/ride-hailing
   baseURL: https://cabify.com/api/v4
   tags:
+  - Status
+  tags_raw:
   - status
   properties:
   - type: OpenAPI
@@ -258,6 +281,8 @@ apis:
   humanURL: https://developers.cabify.com/docs/ride-hailing
   baseURL: https://cabify.com/api/v4
   tags:
+  - User
+  tags_raw:
   - users
   properties:
   - type: OpenAPI
@@ -276,6 +301,8 @@ apis:
   humanURL: https://developers.cabify.com/docs/ride-hailing
   baseURL: https://cabify.com/api/v4
   tags:
+  - Webhook
+  tags_raw:
   - webhooks
   properties:
   - type: OpenAPI
