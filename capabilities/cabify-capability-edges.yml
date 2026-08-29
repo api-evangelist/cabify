@@ -1,0 +1,46 @@
+slug: cabify
+provider: Cabify
+generated_by: planning/capability-mapping/scripts/classify_capabilities.py
+model: claude-opus-5
+frame:
+- Transportation & Logistics
+min_confidence: 0.7
+capability_model:
+  source: https://github.com/vincentmakes/turbo-ea-capabilities
+  license: CC-BY-4.0
+  attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
+    CC BY 4.0
+  notice: NOTICE
+edge_count: 3
+edges:
+- tag: status
+  spec_file: cabify-status-api-openapi.yml
+  capability_id: BC-2510.20
+  capability_id_l1: BC-2510
+  capability_name: Shipment Tracking Management
+  confidence: 0.85
+  evidence: GET /v1/parcels/{parcel_id}/status  'Get the current status of a parcel.' and GET /v1/parcels/{parcel_id}/timeline
+    'Get the state history of a parcel.' with schemas ParcelStatus, ParcelTimeline, TimelineEvent
+  reason: Operations resolve and expose parcel delivery status and event history for last-mile parcels
+    — this is shipment status resolution/tracking, not generic HTTP status or health checks.
+- tag: delivery
+  spec_file: cabify-delivery-api-openapi.yml
+  capability_id: BC-2420.40
+  capability_id_l1: BC-2420
+  capability_name: Last-Mile Delivery Operations Management
+  confidence: 0.8
+  evidence: POST /v1/parcels/deliver/cancel  cancelParcels  Cancel the delivery of the specified parcels.;
+    GET /v1/parcels/deliver/pickup  Check whether a pickup location is within an operating area.
+  reason: Operations govern execution of parcel deliveries and serviceability of pickup locations within
+    the operating area — final-leg delivery operations for a last-mile logistics service.
+- tag: parcels
+  spec_file: cabify-parcels-api-openapi.yml
+  capability_id: BC-2420.40
+  capability_id_l1: BC-2420
+  capability_name: Last-Mile Delivery Operations Management
+  confidence: 0.8
+  evidence: POST /v1/parcels/{parcel_id}/proof_configuration  createProofConfigurationParcel  Set proof
+    of delivery configuration for a parcel.
+  reason: Full parcel lifecycle for last-mile delivery — create/list/update parcels by state, pickup and
+    dropoff points, shipping labels, proof-of-delivery configuration and event notification. Matches final-leg
+    delivery execution including proof of delivery.
