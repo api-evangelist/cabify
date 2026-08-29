@@ -1,10 +1,10 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
   description: 'Welcome to the Cabify Logistics API. This API allows you to create and manage parcel deliveries, track their status in real time, configure proof of delivery options, and receive live updates via webhooks. All requests must be authenticated using a Bearer token.
 
     '
   version: 1.0.0
-  title: Cabify Logistics delivery shipment API
+  title: Cabify Logistics Shipment API
   contact:
     email: p.delivery@cabify.com
 servers:
@@ -122,37 +122,38 @@ paths:
       - bearer_token: []
 components:
   schemas:
-    AssetKind:
-      type: string
-      description: The type of vehicle assigned to carry the parcel.
-      enum:
-      - bicycle
-      - car
-      - moped
-      - scooter
-      - van
-    Address:
+    Money:
+      type: object
+      description: A monetary amount represented in the smallest currency unit (e.g. cents).
+      required:
+      - amount
+      - currency
+      properties:
+        amount:
+          description: 'Amount in the smallest currency unit, following the ISO 4217 standard (e.g. €6.30 → `630`).
+
+            '
+          type: integer
+          example: 630
+        currency:
+          type: string
+          description: ISO 4217 currency code.
+          example: EUR
+    ShipParcelsResponse:
       type: object
       required:
-      - address
+      - parcels
+      - shipping_type_id
       properties:
-        address:
+        parcels:
+          type: array
+          description: List of parcels with their assigned tracking URLs.
+          items:
+            $ref: '#/components/schemas/ParcelShipment'
+        shipping_type_id:
           type: string
-          description: Address of the location
-          example: Calle de la Princesa, 1, 28008 Madrid
-    ParcelWeight:
-      type: object
-      description: Weight of the parcel.
-      properties:
-        value:
-          type: integer
-          minimum: 0
-          example: 1500
-        unit:
-          type: string
-          description: Unit of weight. Defaults to `g` (grams) if omitted or set to an invalid value.
-          enum:
-          - g
+          format: uuid
+          description: UUID of the shipping type used for this shipment.
     EstimateV3Request:
       type: object
       required:
@@ -175,21 +176,59 @@ components:
           format: date-time
           description: Desired pickup time, formatted according to RFC 3339, section 5.6.
           example: '2021-12-02T10:12:07.753Z'
-    ShipParcelsResponse:
+    EstimateLocation:
+      type: object
+      description: A single parcel's pickup and drop-off locations used to calculate a shipping estimate.
+      required:
+      - pickup_location
+      - dropoff_location
+      properties:
+        external_id:
+          type: string
+          description: Your own identifier for this parcel. Used to correlate estimate results with your own records.
+          example: parcel_001
+        pickup_location:
+          description: Pickup location. Provide either geographic coordinates or a text address.
+          oneOf:
+          - $ref: '#/components/schemas/Point'
+          - $ref: '#/components/schemas/Address'
+        dropoff_location:
+          description: Drop-off location. Provide either geographic coordinates or a text address.
+          oneOf:
+          - $ref: '#/components/schemas/Point'
+          - $ref: '#/components/schemas/Address'
+        dimensions:
+          $ref: '#/components/schemas/ParcelDimensions'
+        weight:
+          $ref: '#/components/schemas/ParcelWeight'
+    DeliveryEstimate:
       type: object
       required:
-      - parcels
-      - shipping_type_id
+      - estimation
       properties:
         parcels:
           type: array
-          description: List of parcels with their assigned tracking URLs.
           items:
-            $ref: '#/components/schemas/ParcelShipment'
-        shipping_type_id:
-          type: string
-          format: uuid
-          description: UUID of the shipping type used for this shipment.
+            $ref: '#/components/schemas/EstimateLocation'
+        estimation:
+          $ref: '#/components/schemas/DeliveryEstimation'
+    Point:
+      type: object
+      description: A geographic coordinate expressed as latitude and longitude.
+      required:
+      - lat
+      - lon
+      properties:
+        lat:
+          type: number
+          format: float
+          description: Latitude in decimal degrees.
+          example: 40.4489254
+        lon:
+          type: number
+          format: float
+          description: Longitude in decimal degrees.
+          example: -3.6730293
     EstimateV3Response:
       type: object
       required:
@@ -199,27 +238,65 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/DeliveryEstimate'
-    ParcelDimensions:
+    AssetKind:
+      type: string
+      description: The type of vehicle assigned to carry the parcel.
+      enum:
+      - bicycle
+      - car
+      - moped
+      - scooter
+      - van
+    ParcelWeight:
       type: object
-      description: Physical dimensions of the parcel.
+      description: Weight of the parcel.
       properties:
-        height:
+        value:
           type: integer
           minimum: 0
-          example: 10
-        length:
-          type: integer
-          minimum: 0
-          example: 10
-        width:
-          type: integer
-          minimum: 0
-          example: 10
+          example: 1500
         unit:
           type: string
-          description: Unit of measure for the dimensions. Defaults to `cm` if omitted or set to an invalid value.
+          description: Unit of weight. Defaults to `g` (grams) if omitted or set to an invalid value.
           enum:
-          - cm
+          - g
+    ParcelShipment:
+      type: object
+      description: Summary of a parcel after it has been submitted for shipment.
+      required:
+      - id
+      - shipping_type_id
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: System-generated UUID for this parcel.
+          example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+        tracking_url:
+          type: string
+          description: Public URL where the parcel's live tracking can be viewed.
+          example: https://logistics.follow.cabify.com/abcdefghi/e
+          format: url
+    RequestError:
+      type: object
+      description: Standard error response body returned when a request fails.
+      required:
+      - errors
+      properties:
+        errors:
+          type: array
+          description: List of human-readable error messages describing what went wrong.
+          items:
+            type: string
+    Address:
+      type: object
+      required:
+      - address
+      properties:
+        address:
+          type: string
+          description: Address of the location
+          example: Calle de la Princesa, 1, 28008 Madrid
     ShipParcels:
       type: object
       required:
@@ -264,104 +341,27 @@ components:
           format: date-time
           description: Estimated time when the parcel will be delivered to the recipient.
           example: '2021-12-02T10:12:47.753Z'
-    DeliveryEstimate:
+    ParcelDimensions:
       type: object
-      required:
-      - estimation
+      description: Physical dimensions of the parcel.
       properties:
-        parcels:
-          type: array
-          items:
-            $ref: '#/components/schemas/EstimateLocation'
-        estimation:
-          $ref: '#/components/schemas/DeliveryEstimation'
-    RequestError:
-      type: object
-      description: Standard error response body returned when a request fails.
-      required:
-      - errors
-      properties:
-        errors:
-          type: array
-          description: List of human-readable error messages describing what went wrong.
-          items:
-            type: string
-    ParcelShipment:
-      type: object
-      description: Summary of a parcel after it has been submitted for shipment.
-      required:
-      - id
-      - shipping_type_id
-      properties:
-        id:
-          type: string
-          format: uuid
-          description: System-generated UUID for this parcel.
-          example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
-        tracking_url:
-          type: string
-          description: Public URL where the parcel's live tracking can be viewed.
-          example: https://logistics.follow.cabify.com/abcdefghi/e
-          format: url
-    Money:
-      type: object
-      description: A monetary amount represented in the smallest currency unit (e.g. cents).
-      required:
-      - amount
-      - currency
-      properties:
-        amount:
-          description: 'Amount in the smallest currency unit, following the ISO 4217 standard (e.g. €6.30 → `630`).
-
-            '
+        height:
           type: integer
-          example: 630
-        currency:
+          minimum: 0
+          example: 10
+        length:
+          type: integer
+          minimum: 0
+          example: 10
+        width:
+          type: integer
+          minimum: 0
+          example: 10
+        unit:
           type: string
-          description: ISO 4217 currency code.
-          example: EUR
-    EstimateLocation:
-      type: object
-      description: A single parcel's pickup and drop-off locations used to calculate a shipping estimate.
-      required:
-      - pickup_location
-      - dropoff_location
-      properties:
-        external_id:
-          type: string
-          description: Your own identifier for this parcel. Used to correlate estimate results with your own records.
-          example: parcel_001
-        pickup_location:
-          description: Pickup location. Provide either geographic coordinates or a text address.
-          oneOf:
-          - $ref: '#/components/schemas/Point'
-          - $ref: '#/components/schemas/Address'
-        dropoff_location:
-          description: Drop-off location. Provide either geographic coordinates or a text address.
-          oneOf:
-          - $ref: '#/components/schemas/Point'
-          - $ref: '#/components/schemas/Address'
-        dimensions:
-          $ref: '#/components/schemas/ParcelDimensions'
-        weight:
-          $ref: '#/components/schemas/ParcelWeight'
-    Point:
-      type: object
-      description: A geographic coordinate expressed as latitude and longitude.
-      required:
-      - lat
-      - lon
-      properties:
-        lat:
-          type: number
-          format: float
-          description: Latitude in decimal degrees.
-          example: 40.4489254
-        lon:
-          type: number
-          format: float
-          description: Longitude in decimal degrees.
-          example: -3.6730293
+          description: Unit of measure for the dimensions. Defaults to `cm` if omitted or set to an invalid value.
+          enum:
+          - cm
   securitySchemes:
     bearer_token:
       type: http

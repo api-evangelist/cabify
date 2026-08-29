@@ -1,41 +1,56 @@
 {
   "provider": "cabify",
   "sources": [
-    "cabify-delivery-api-openapi.yml",
-    "cabify-estimates-api-openapi.yml",
-    "cabify-hubs-api-openapi.yml",
-    "cabify-journeys-api-openapi.yml",
-    "cabify-label-api-openapi.yml",
-    "cabify-labels-api-openapi.yml",
-    "cabify-parcels-api-openapi.yml",
-    "cabify-sales-api-openapi.yml",
-    "cabify-shipment-api-openapi.yml",
-    "cabify-shipping-types-api-openapi.yml",
-    "cabify-status-api-openapi.yml",
-    "cabify-users-api-openapi.yml",
-    "cabify-webhooks-api-openapi.yml"
+    "_original/cabify-logistics-openapi.yml",
+    "_original/cabify-ride-hailing-openapi.yml"
   ],
   "outputs": [
     "cabify-delivery-api-openapi.yml",
-    "cabify-estimates-api-openapi.yml",
     "cabify-hubs-api-openapi.yml",
-    "cabify-journeys-api-openapi.yml",
     "cabify-label-api-openapi.yml",
-    "cabify-labels-api-openapi.yml",
     "cabify-parcels-api-openapi.yml",
-    "cabify-sales-api-openapi.yml",
     "cabify-shipment-api-openapi.yml",
     "cabify-shipping-types-api-openapi.yml",
     "cabify-status-api-openapi.yml",
     "cabify-users-api-openapi.yml",
-    "cabify-webhooks-api-openapi.yml"
+    "cabify-webhooks-api-openapi.yml",
+    "cabify-estimates-api-openapi.yml",
+    "cabify-journeys-api-openapi.yml",
+    "cabify-labels-api-openapi.yml",
+    "cabify-sales-api-openapi.yml"
   ],
   "archived": [],
   "errors": [
-    "cabify-hubs-api-openapi.yml: dangling $ref: #/paths/~1v1~1hubs~1none~1%7Bhub_external_id%7D/get/responses/200/content/application~1json/schema",
-    "cabify-parcels-api-openapi.yml: dangling $ref: #/paths/~1v1~1parcels~1%7Bparcel_id%7D~1notify/post/responses/400/content/application~1json/schema"
+    "cabify-logistics-openapi.yml: dangling $ref: #/paths/~1v1~1hubs~1none~1%7Bhub_external_id%7D/get/responses/200/content/application~1json/schema",
+    "cabify-logistics-openapi.yml: dangling $ref: #/paths/~1v1~1parcels~1%7Bparcel_id%7D~1notify/post/responses/400/content/application~1json/schema"
   ],
   "warnings": [],
-  "notes": [],
-  "skipped": []
+  "notes": [
+    "sourced from openapi/_original/ (2 archived document(s)); previously refined output at the top level was skipped rather than re-split",
+    "cabify-logistics-openapi.yml: upgraded openapi 3.0.0 -> OpenAPI 3.2.0",
+    "cabify-logistics-openapi.yml: declared missing tag: label",
+    "cabify-logistics-openapi.yml: declared missing tag: shipment",
+    "cabify-logistics-openapi.yml: declared missing tag: shipping_types",
+    "cabify-logistics-openapi.yml: declared missing tag: users",
+    "cabify-ride-hailing-openapi.yml: upgraded openapi 3.0.0 -> OpenAPI 3.2.0",
+    "cabify-ride-hailing-openapi.yml: declared missing tag: Hubs",
+    "cabify-ride-hailing-openapi.yml: declared missing tag: Users",
+    "tag 'hubs' spans 2 source specs (cabify-logistics-openapi.yml, cabify-ride-hailing-openapi.yml): per-path servers applied",
+    "tag 'users' spans 2 source specs (cabify-logistics-openapi.yml, cabify-ride-hailing-openapi.yml): per-path servers applied"
+  ],
+  "skipped": [
+    "cabify-delivery-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "cabify-estimates-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "cabify-hubs-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "cabify-journeys-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "cabify-label-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "cabify-labels-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "cabify-parcels-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "cabify-sales-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "cabify-shipment-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "cabify-shipping-types-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "cabify-status-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "cabify-users-api-openapi.yml: previously refined output, superseded by openapi/_original/",
+    "cabify-webhooks-api-openapi.yml: previously refined output, superseded by openapi/_original/"
+  ]
 }

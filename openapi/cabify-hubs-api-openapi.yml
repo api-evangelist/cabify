@@ -1,16 +1,16 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
-  description: 'Welcome to the Cabify Logistics API. This API allows you to create and manage parcel deliveries, track their status in real time, configure proof of delivery options, and receive live updates via webhooks. All requests must be authenticated using a Bearer token.
-
-    '
-  version: 1.0.0
-  title: Cabify Logistics delivery hubs API
-  contact:
-    email: p.delivery@cabify.com
+  title: Cabify Hubs API
+  version: '1.0'
+  description: 'Operations tagged hubs across 2 of this provider''s published API definitions: cabify-logistics-openapi.yml, cabify-ride-hailing-openapi.yml. Each path carries the servers of the definition it was published in.'
 servers:
 - url: https://logistics.api.cabify.com
   description: Production
 - url: https://logistics.api.cabify-sandbox.com
+  description: Sandbox
+- url: https://cabify.com
+  description: Production
+- url: https://cabify-sandbox.com
   description: Sandbox
 tags:
 - name: hubs
@@ -111,6 +111,11 @@ paths:
           description: Unauthorized. Missing or invalid authentication token.
       security:
       - bearer_token: []
+    servers:
+    - url: https://logistics.api.cabify.com
+      description: Production
+    - url: https://logistics.api.cabify-sandbox.com
+      description: Sandbox
   /v1/hubs/none/{hub_external_id}:
     get:
       tags:
@@ -207,6 +212,11 @@ paths:
           description: Unauthorized. Missing or invalid authentication token.
       security:
       - bearer_token: []
+    servers:
+    - url: https://logistics.api.cabify.com
+      description: Production
+    - url: https://logistics.api.cabify-sandbox.com
+      description: Sandbox
   /api/v4/hub:
     get:
       callbacks: {}
@@ -283,8 +293,31 @@ paths:
       summary: Get Hub by coordinates
       tags:
       - hubs
+      security:
+      - access_token: []
+    servers:
+    - url: https://cabify.com
+      description: Production
+    - url: https://cabify-sandbox.com
+      description: Sandbox
 components:
   schemas:
+    HubResponse:
+      description: Hub information for a given set of coordinates. Returns null inside the data field when no hub exists at those coordinates.
+      properties:
+        data:
+          $ref: '#/components/schemas/HubObject'
+      title: HubResponse
+      type: object
+    UnauthorizedRequest:
+      description: The token used is invalid either because it is expired or because it is incorrect.
+      example:
+        error: Unauthorized
+      properties:
+        error:
+          type: string
+      title: UnauthorizedRequest
+      type: object
     HubObject:
       description: A hub is a large venue (e.g. airport, train station) with designated pick-up/drop-off meeting points.
       example:
@@ -308,7 +341,6 @@ components:
           en: Madrid Barajas
           es: Madrid Barajas
         uid: hub-loc4
-      nullable: true
       properties:
         active:
           description: Whether the hub is currently active.
@@ -322,8 +354,9 @@ components:
             properties:
               bottom_image_url:
                 description: URL for the bottom image of the meeting point.
-                nullable: true
-                type: string
+                type:
+                - string
+                - 'null'
               coordinates:
                 description: GPS coordinates of the meeting point.
                 properties:
@@ -334,8 +367,9 @@ components:
                 type: object
               header_image_url:
                 description: URL for the header image of the meeting point.
-                nullable: true
-                type: string
+                type:
+                - string
+                - 'null'
               instructions:
                 description: Step-by-step instructions to reach the meeting point.
                 items:
@@ -345,8 +379,9 @@ components:
                     es:
                       type: string
                     step_image_url:
-                      nullable: true
-                      type: string
+                      type:
+                      - string
+                      - 'null'
                   type: object
                 type: array
               title:
@@ -368,7 +403,9 @@ components:
           description: Unique identifier of the hub.
           type: string
       title: HubObject
-      type: object
+      type:
+      - object
+      - 'null'
     BadRequest:
       description: Indicates that the server cannot or will not process the request due to something that is perceived to be a client error (for example, malformed request syntax, invalid request message framing, or deceptive request routing).
       example:
@@ -378,23 +415,13 @@ components:
           type: string
       title: BadRequest
       type: object
-    UnauthorizedRequest:
-      description: The token used is invalid either because it is expired or because it is incorrect.
-      example:
-        error: Unauthorized
-      properties:
-        error:
-          type: string
-      title: UnauthorizedRequest
-      type: object
-    HubResponse:
-      description: Hub information for a given set of coordinates. Returns null inside the data field when no hub exists at those coordinates.
-      properties:
-        data:
-          $ref: '#/components/schemas/HubObject'
-      title: HubResponse
-      type: object
   securitySchemes:
     bearer_token:
       type: http
       scheme: bearer
+    access_token:
+      scheme: bearer
+      type: http
+x-refined-from:
+- cabify-logistics-openapi.yml
+- cabify-ride-hailing-openapi.yml

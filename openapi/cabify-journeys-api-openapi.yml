@@ -1,17 +1,20 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
-  description: 'Welcome to the Cabify Logistics API. This API allows you to create and manage parcel deliveries, track their status in real time, configure proof of delivery options, and receive live updates via webhooks. All requests must be authenticated using a Bearer token.
-
-    '
-  version: 1.0.0
-  title: Cabify Logistics delivery Journeys API
   contact:
-    email: p.delivery@cabify.com
+    email: ridehailing.api@cabify.support
+  license:
+    name: Cabify Api support
+    url: https://cabify.com
+  title: Cabify Ride-Hailing Journeys API
+  version: '4.0'
+  description: This section covers the mobility solution for all companies looking to transport their employees in a simple, safe and comfortable way. We offer different types of vehicles with private drivers and provide everything you need to enjoy your journey, such as a good driver and a top-of-the-range car.
 servers:
-- url: https://logistics.api.cabify.com
+- url: https://cabify.com
   description: Production
-- url: https://logistics.api.cabify-sandbox.com
+- url: https://cabify-sandbox.com
   description: Sandbox
+security:
+- access_token: []
 tags:
 - description: This section covers the mobility solution for all companies looking to transport their employees in a simple, safe and comfortable way. We offer different types of vehicles with private drivers and provide everything you need to enjoy your journey, such as a good driver and a top-of-the-range car.
   name: Journeys
@@ -411,53 +414,6 @@ paths:
       - Journeys
 components:
   schemas:
-    MeetingPoint:
-      description: A specific meeting point within a hub location (e.g. a terminal at an airport). Obtained from the hub data returned in the estimates response.
-      example:
-        id: mp_001
-        loc:
-        - 40.4722
-        - -3.5608
-        name: Terminal 1 - Puerta de llegadas
-      properties:
-        id:
-          description: Unique identifier of the meeting point.
-          type: string
-        loc:
-          description: Coordinates of the meeting point as [latitude, longitude].
-          items:
-            format: float
-            type: number
-          maxItems: 2
-          minItems: 2
-          type: array
-        name:
-          description: Display name of the meeting point.
-          type: string
-      required:
-      - id
-      - loc
-      - name
-      title: MeetingPoint
-      type: object
-    BadRequest:
-      description: Indicates that the server cannot or will not process the request due to something that is perceived to be a client error (for example, malformed request syntax, invalid request message framing, or deceptive request routing).
-      example:
-        error: Bad Request error message
-      properties:
-        message:
-          type: string
-      title: BadRequest
-      type: object
-    InternalServerError:
-      description: indicates that an internal server error occurred
-      example:
-        error: Something went wrong
-      properties:
-        error:
-          type: string
-      title: InternalServerError
-      type: object
     UnauthorizedRequest:
       description: The token used is invalid either because it is expired or because it is incorrect.
       example:
@@ -466,174 +422,6 @@ components:
         error:
           type: string
       title: UnauthorizedRequest
-      type: object
-    Journey:
-      description: Booking-level details of a journey including stops, pricing, timestamps, and lifecycle status.
-      example:
-        created_at: '2022-08-04T19:28:18.375Z'
-        current_state: terminated
-        end_at: '2022-02-17T09:30:34.831Z'
-        end_state: drop off
-        finished: true
-        id: 96fc6f24-142b-11ed-bba7-56a6f40ef0bf
-        label_slug: apiV4
-        product_id: 75dd566797369d1f0927102e5356ce59
-        public_url: /j/5ceg7v77qm8x28c9
-        region_id: madrid
-        start_at: '2022-02-17T09:30:34.831Z'
-        start_type: asap
-        stops:
-        - addr: Calle de la cruz
-          city: Madrid
-          contact:
-            mobile_cc: '34'
-            mobile_num: '123456789'
-            name: Jhon Doe
-            stop_action: pickup
-          country: ES
-          id: '123'
-          loc:
-          - 40.4169335
-          - -3.7061872
-          name: Work
-          num: '1428'
-        totals:
-          discount:
-            amount: 0
-            currency: EUR
-          price:
-            amount: 100
-            currency: EUR
-          price_total:
-            amount: 100
-            currency: EUR
-        user_id: 0dfc7c0bbbd300e6f9212827106e8911
-      properties:
-        created_at:
-          description: ISO 8601 datetime when the journey was created.
-          format: date-time
-          type: string
-        current_state:
-          description: Current lifecycle state of the journey (e.g. hire, hired, arrived, pick up, terminated).
-          type: string
-        end_at:
-          description: ISO 8601 datetime when the journey ended. Null while still active.
-          nullable: true
-          type: string
-        end_state:
-          default: not found
-          description: The reason the journey ended. Null while the journey is still active.
-          enum:
-          - drop off
-          - driver cancel
-          - not found
-          - no show
-          - rider cancel
-          nullable: true
-          type: string
-        finished:
-          description: Whether the journey has reached an end state (drop off, cancel, no show, or not found).
-          type: boolean
-        id:
-          description: UUID of the journey.
-          type: string
-        label_slug:
-          description: Slug of the label (cost center, project code) associated with this journey for expense reporting.
-          type: string
-        product_id:
-          description: ID of the vehicle category/product used for this journey, as returned by the estimates endpoint.
-          type: string
-        public_url:
-          description: Shareable URL that allows anyone to track the journey in real time without authentication.
-          nullable: true
-          type: string
-        region_id:
-          description: Identifier of the city/region where the journey takes place.
-          type: string
-        start_at:
-          description: ISO 8601 datetime when the journey started (driver began moving toward pickup). Null for journeys still in `hire` state.
-          nullable: true
-          type: string
-        start_type:
-          description: Whether the journey was requested immediately or scheduled for a future time.
-          enum:
-          - asap
-          - reserved
-          nullable: false
-          type: string
-        stops:
-          items:
-            $ref: '#/components/schemas/StopResponse'
-          type: array
-        totals:
-          $ref: '#/components/schemas/Totals'
-        user_id:
-          description: ID of the user who requested the journey.
-          type: string
-      required:
-      - id
-      title: Journey
-      type: object
-    Price:
-      description: Price in the currency smallest unit.
-      example:
-        amount: 100
-        currency: EUR
-      nullable: false
-      properties:
-        amount:
-          description: Amount in cents. *For CLP this field is in currency units
-          nullable: false
-          type: integer
-        currency:
-          description: Currency code in ISO_4217 format
-          nullable: false
-          type: string
-      title: Price
-      type: object
-    Driver:
-      description: Driver's information.
-      example:
-        avatar_url: https://secure.gravatar.com/avatar/675ee8c314586d36a7b33c6c773565e9?r=pg&s=80&=blank
-        id: e8417e8cd14c11ec869eb2e3f32e3b38
-        name: John
-        phone_number: '34611111111'
-      properties:
-        avatar_url:
-          description: Driver's picture.
-          type: string
-        id:
-          description: Id of the driver
-          nullable: false
-          type: string
-        name:
-          description: Driver's name.
-          type: string
-        phone_number:
-          description: Driver's phone number.
-          type: string
-      title: Driver
-      type: object
-    Mobile:
-      description: Input Mobile Number. Required when the rider is external. Journey's SMS state updates will arrive to this mobile.
-      example:
-        mobile_cc: '34'
-        mobile_num: '123456789'
-      properties:
-        mobile_cc:
-          description: Mobile Country Code. Required if mobileNum is provided.
-          nullable: false
-          pattern: ^\+?\d+$
-          type: string
-        mobile_num:
-          description: Rider's phone number.
-          nullable: false
-          pattern: ^[0-9]+$
-          type: string
-      required:
-      - mobile_cc
-      - mobile_num
-      title: Mobile
       type: object
     JourneyRequest:
       additionalProperties: false
@@ -705,36 +493,39 @@ components:
       properties:
         label_slug:
           description: If your company has the labels feature enabled (used to categorize expenses, receipts) than a valid label can be provided and it will be associated to a journey for later financial reporting purposes. Custom string which does not allow an empty string value '' Note that it can have a null value.
-          nullable: true
-          type: string
+          type:
+          - string
+          - 'null'
         message:
           description: A message that be associated to a journey that driver can see after they accept the ride. It's usually used to give any extra information that might help the driver in the pickup or to give any information that might help improving the journey experience.
-          nullable: true
-          type: string
+          type:
+          - string
+          - 'null'
         preferred_driver_id:
           description: Id of the preferred driver for this journey (UUID without hyphens). Only available for clients that have their own driver fleet.
-          nullable: true
-          type: string
+          type:
+          - string
+          - 'null'
         product_id:
           description: The product/vehicle category to book. **Must** come from a recent `/estimates` response (`product.id`). Products are dynamic and vary by location and time — never hardcode IDs. Always estimate first to discover available products.
-          nullable: false
           type: string
         reason:
           description: Free text explaining the motive of the journey. It is available later in all expenditure reports together with the label (if used). Note that this has to be a valid string if the company decides to have this field as mandatory.
-          nullable: true
-          type: string
+          type:
+          - string
+          - 'null'
         requester_id:
           description: It represents the person who creates the ride and is also the passenger of the ride. Nevertheless if the rider object is provided then the passenger (rider) is a different person (check rider attribute for more info). The value of requesterIdshould correspond to a user.id of an registered user in the account.
-          nullable: false
           pattern: ^[a-f0-9]{32}$
           type: string
         rider:
           $ref: '#/components/schemas/Rider'
         start_at:
           description: "Defines when the journey should start. Format: `YYYY-MM-DD HH:MM:SS` (local time of the pickup location).\n\n- **ASAP rides**: Leave as `null` (or omit the field).\n- **Reservations**: Set to a future time. **Use the same `start_at` value you provided in the `/estimates` request** to ensure consistent product availability and pricing.\n  - Minimum: 30 minutes from now\n  - Maximum: 60 days in advance\n"
-          nullable: true
           pattern: '[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[1-2][0-9]|3[0-1]) (2[0-3]|[01][0-9]):[0-5][0-9]:[0-5][0-9]'
-          type: string
+          type:
+          - string
+          - 'null'
         stops:
           items:
             $ref: '#/components/schemas/StopRequest'
@@ -748,74 +539,29 @@ components:
       - stops
       title: JourneyRequest
       type: object
-    Conflict:
-      description: The request conflicts with the current state of the resource. For journey cancellation, this means the journey has already been cancelled, terminated, or is in a non-cancellable state.
+    Totals:
+      description: Price breakdown for the journey. Only populated after the journey reaches `terminated` state.
       example:
-        error: journey has already been terminated
+        discount:
+          amount: 0
+          currency: EUR
+        price:
+          amount: 100
+          currency: EUR
+        price_total:
+          amount: 100
+          currency: EUR
       properties:
-        error:
-          type: string
-      title: Conflict
-      type: object
-    JourneyResponse:
-      example:
-        id: 0397896-19aa-11ed-b6fe-7aaea8067492
-      properties:
-        id:
-          description: journey_id of the current operation.
-          type: string
-      title: JourneyResponse
-      type: object
-    PreassignedDriver:
-      description: 'Driver preassigned to the journey (for example on a reservation) before the journey is actually assigned. It does not include the phone number, and it may change or disappear before the journey starts. `driver` always takes precedence: once a driver is assigned, that `driver` is authoritative and this field is only informative about who had been preassigned.'
-      example:
-        avatar_url: https://secure.gravatar.com/avatar/1a79a4d60de6718e8e5b326e338ae533?r=pg&s=80&=blank
-        id: a1b2c3d4e5f611ec869eb2e3f32e3b38
-        name: Diana
-      nullable: true
-      properties:
-        avatar_url:
-          description: Preassigned driver's picture.
-          type: string
-        id:
-          description: Id of the preassigned driver
-          nullable: false
-          type: string
-        name:
-          description: Preassigned driver's first name.
-          type: string
-      title: PreassignedDriver
-      type: object
-    Rider:
-      description: Input data defining the rider of a journey.
-      example:
-        email: riderEmail@example.com
-        locale: ES
-        mobile:
-          mobile_cc: '34'
-          mobile_num: '123456789'
-        name: John Doe
-      properties:
-        email:
-          description: Rider's email.
-          format: email
-          nullable: true
-          type: string
-        id:
-          description: Id of the Rider that will travel, if the Rider is a User of your company this will be the User's id (can be same as requester_id to request a journey for yourself). Leave empty when the Rider is external to your company.
-          pattern: ^[a-f0-9]{32}$
-          type: string
-        locale:
-          description: Rider's Locale. Syntax consists of language two-letter tag which then will be suffixed with Client's country.
-          nullable: true
-          type: string
-        mobile:
-          $ref: '#/components/schemas/Mobile'
-        name:
-          description: Rider's name. Required when the rider is external.
-          type: string
-      title: Rider
-      type: object
+        discount:
+          $ref: '#/components/schemas/Price'
+        price:
+          $ref: '#/components/schemas/Price'
+        price_total:
+          $ref: '#/components/schemas/Price'
+      title: Totals
+      type:
+      - object
+      - 'null'
     StopResponse:
       description: 'Stop of a journey. A journey needs to have at least 2 stops: the first one is considered the pickup point the last one the destination.'
       example:
@@ -884,6 +630,210 @@ components:
       - loc
       title: StopResponse
       type: object
+    Mobile:
+      description: Input Mobile Number. Required when the rider is external. Journey's SMS state updates will arrive to this mobile.
+      example:
+        mobile_cc: '34'
+        mobile_num: '123456789'
+      properties:
+        mobile_cc:
+          description: Mobile Country Code. Required if mobileNum is provided.
+          pattern: ^\+?\d+$
+          type: string
+        mobile_num:
+          description: Rider's phone number.
+          pattern: ^[0-9]+$
+          type: string
+      required:
+      - mobile_cc
+      - mobile_num
+      title: Mobile
+      type: object
+    Journey:
+      description: Booking-level details of a journey including stops, pricing, timestamps, and lifecycle status.
+      example:
+        created_at: '2022-08-04T19:28:18.375Z'
+        current_state: terminated
+        end_at: '2022-02-17T09:30:34.831Z'
+        end_state: drop off
+        finished: true
+        id: 96fc6f24-142b-11ed-bba7-56a6f40ef0bf
+        label_slug: apiV4
+        product_id: 75dd566797369d1f0927102e5356ce59
+        public_url: /j/5ceg7v77qm8x28c9
+        region_id: madrid
+        start_at: '2022-02-17T09:30:34.831Z'
+        start_type: asap
+        stops:
+        - addr: Calle de la cruz
+          city: Madrid
+          contact:
+            mobile_cc: '34'
+            mobile_num: '123456789'
+            name: Jhon Doe
+            stop_action: pickup
+          country: ES
+          id: '123'
+          loc:
+          - 40.4169335
+          - -3.7061872
+          name: Work
+          num: '1428'
+        totals:
+          discount:
+            amount: 0
+            currency: EUR
+          price:
+            amount: 100
+            currency: EUR
+          price_total:
+            amount: 100
+            currency: EUR
+        user_id: 0dfc7c0bbbd300e6f9212827106e8911
+      properties:
+        created_at:
+          description: ISO 8601 datetime when the journey was created.
+          format: date-time
+          type: string
+        current_state:
+          description: Current lifecycle state of the journey (e.g. hire, hired, arrived, pick up, terminated).
+          type: string
+        end_at:
+          description: ISO 8601 datetime when the journey ended. Null while still active.
+          type:
+          - string
+          - 'null'
+        end_state:
+          default: not found
+          description: The reason the journey ended. Null while the journey is still active.
+          enum:
+          - drop off
+          - driver cancel
+          - not found
+          - no show
+          - rider cancel
+          type:
+          - string
+          - 'null'
+        finished:
+          description: Whether the journey has reached an end state (drop off, cancel, no show, or not found).
+          type: boolean
+        id:
+          description: UUID of the journey.
+          type: string
+        label_slug:
+          description: Slug of the label (cost center, project code) associated with this journey for expense reporting.
+          type: string
+        product_id:
+          description: ID of the vehicle category/product used for this journey, as returned by the estimates endpoint.
+          type: string
+        public_url:
+          description: Shareable URL that allows anyone to track the journey in real time without authentication.
+          type:
+          - string
+          - 'null'
+        region_id:
+          description: Identifier of the city/region where the journey takes place.
+          type: string
+        start_at:
+          description: ISO 8601 datetime when the journey started (driver began moving toward pickup). Null for journeys still in `hire` state.
+          type:
+          - string
+          - 'null'
+        start_type:
+          description: Whether the journey was requested immediately or scheduled for a future time.
+          enum:
+          - asap
+          - reserved
+          type: string
+        stops:
+          items:
+            $ref: '#/components/schemas/StopResponse'
+          type: array
+        totals:
+          $ref: '#/components/schemas/Totals'
+        user_id:
+          description: ID of the user who requested the journey.
+          type: string
+      required:
+      - id
+      title: Journey
+      type: object
+    JourneyResponse:
+      example:
+        id: 0397896-19aa-11ed-b6fe-7aaea8067492
+      properties:
+        id:
+          description: journey_id of the current operation.
+          type: string
+      title: JourneyResponse
+      type: object
+    JourneyState:
+      description: 'Real-time operational state of an active journey: the assigned driver, their vehicle, and the route waypoints recorded so far.'
+      example:
+        driver:
+          avatar_url: https://secure.gravatar.com/avatar/675ee8c314586d36a7b33c6c773565e9?r=pg&s=80&=blank
+          id: e8417e8cd14c11ec869eb2e3f32e3b38
+          name: John
+          phone_number: '34611111111'
+        driver_stop_before_pickup:
+          loc:
+          - 40.4201
+          - -3.7056
+        is_driver_on_another_journey: true
+        journey_id: f0397896-19aa-11ed-b6fe-7aaea8067492
+        preassigned_driver:
+          avatar_url: https://secure.gravatar.com/avatar/1a79a4d60de6718e8e5b326e338ae533?r=pg&s=80&=blank
+          id: a1b2c3d4e5f611ec869eb2e3f32e3b38
+          name: Diana
+        vehicle:
+          color: red
+          name: Seat ibiza
+          plate: QXJ4758
+        waypoints:
+          rows:
+          - loc:
+            - 40.4169335
+            - -3.7061872
+            state_name: hired
+          total: 48
+      properties:
+        driver:
+          $ref: '#/components/schemas/Driver'
+        driver_stop_before_pickup:
+          $ref: '#/components/schemas/DriverStopBeforePickup'
+        is_driver_on_another_journey:
+          description: Whether the assigned driver is currently completing another trip before heading to the pickup.
+          type: boolean
+        journey_id:
+          description: UUID of the journey.
+          type: string
+        preassigned_driver:
+          $ref: '#/components/schemas/PreassignedDriver'
+        vehicle:
+          $ref: '#/components/schemas/Vehicle'
+        waypoints:
+          $ref: '#/components/schemas/Waypoint'
+      title: JourneyState
+      type: object
+    Vehicle:
+      description: Journey's vehicle information.
+      example:
+        color: red
+        name: Seat ibiza
+        plate: QXJ4758
+      properties:
+        color:
+          description: Vehicle color.
+          type: string
+        name:
+          description: Vehicle model.
+          type: string
+        plate:
+          description: Vehicle plate number.
+          type: string
+      title: Vehicle
+      type: object
     Row:
       description: Point and state through which the driver passed during the journey.
       example:
@@ -901,7 +851,6 @@ components:
           type: array
         state_name:
           description: Status of the journey at the time the driver passed through that point.
-          nullable: false
           type: string
       title: Row
       type: object
@@ -914,27 +863,37 @@ components:
           type: string
       title: NotFound
       type: object
-    Totals:
-      description: Price breakdown for the journey. Only populated after the journey reaches `terminated` state.
+    Rider:
+      description: Input data defining the rider of a journey.
       example:
-        discount:
-          amount: 0
-          currency: EUR
-        price:
-          amount: 100
-          currency: EUR
-        price_total:
-          amount: 100
-          currency: EUR
-      nullable: true
+        email: riderEmail@example.com
+        locale: ES
+        mobile:
+          mobile_cc: '34'
+          mobile_num: '123456789'
+        name: John Doe
       properties:
-        discount:
-          $ref: '#/components/schemas/Price'
-        price:
-          $ref: '#/components/schemas/Price'
-        price_total:
-          $ref: '#/components/schemas/Price'
-      title: Totals
+        email:
+          description: Rider's email.
+          format: email
+          type:
+          - string
+          - 'null'
+        id:
+          description: Id of the Rider that will travel, if the Rider is a User of your company this will be the User's id (can be same as requester_id to request a journey for yourself). Leave empty when the Rider is external to your company.
+          pattern: ^[a-f0-9]{32}$
+          type: string
+        locale:
+          description: Rider's Locale. Syntax consists of language two-letter tag which then will be suffixed with Client's country.
+          type:
+          - string
+          - 'null'
+        mobile:
+          $ref: '#/components/schemas/Mobile'
+        name:
+          description: Rider's name. Required when the rider is external.
+          type: string
+      title: Rider
       type: object
     StopRequest:
       description: 'Stop of a journey. A journey needs to have at least 2 stops: the first one is considered the pickup point the last one the destination.'
@@ -1007,55 +966,50 @@ components:
       - loc
       title: StopRequest
       type: object
-    JourneyState:
-      description: 'Real-time operational state of an active journey: the assigned driver, their vehicle, and the route waypoints recorded so far.'
+    Price:
+      description: Price in the currency smallest unit.
       example:
-        driver:
-          avatar_url: https://secure.gravatar.com/avatar/675ee8c314586d36a7b33c6c773565e9?r=pg&s=80&=blank
-          id: e8417e8cd14c11ec869eb2e3f32e3b38
-          name: John
-          phone_number: '34611111111'
-        driver_stop_before_pickup:
-          loc:
-          - 40.4201
-          - -3.7056
-        is_driver_on_another_journey: true
-        journey_id: f0397896-19aa-11ed-b6fe-7aaea8067492
-        preassigned_driver:
-          avatar_url: https://secure.gravatar.com/avatar/1a79a4d60de6718e8e5b326e338ae533?r=pg&s=80&=blank
-          id: a1b2c3d4e5f611ec869eb2e3f32e3b38
-          name: Diana
-        vehicle:
-          color: red
-          name: Seat ibiza
-          plate: QXJ4758
-        waypoints:
-          rows:
-          - loc:
-            - 40.4169335
-            - -3.7061872
-            state_name: hired
-          total: 48
+        amount: 100
+        currency: EUR
       properties:
-        driver:
-          $ref: '#/components/schemas/Driver'
-        driver_stop_before_pickup:
-          $ref: '#/components/schemas/DriverStopBeforePickup'
-        is_driver_on_another_journey:
-          description: Whether the assigned driver is currently completing another trip before heading to the pickup.
-          nullable: false
-          type: boolean
-        journey_id:
-          description: UUID of the journey.
-          nullable: false
+        amount:
+          description: Amount in cents. *For CLP this field is in currency units
+          type: integer
+        currency:
+          description: Currency code in ISO_4217 format
           type: string
-        preassigned_driver:
-          $ref: '#/components/schemas/PreassignedDriver'
-        vehicle:
-          $ref: '#/components/schemas/Vehicle'
-        waypoints:
-          $ref: '#/components/schemas/Waypoint'
-      title: JourneyState
+      title: Price
+      type: object
+    InternalServerError:
+      description: indicates that an internal server error occurred
+      example:
+        error: Something went wrong
+      properties:
+        error:
+          type: string
+      title: InternalServerError
+      type: object
+    Driver:
+      description: Driver's information.
+      example:
+        avatar_url: https://secure.gravatar.com/avatar/675ee8c314586d36a7b33c6c773565e9?r=pg&s=80&=blank
+        id: e8417e8cd14c11ec869eb2e3f32e3b38
+        name: John
+        phone_number: '34611111111'
+      properties:
+        avatar_url:
+          description: Driver's picture.
+          type: string
+        id:
+          description: Id of the driver
+          type: string
+        name:
+          description: Driver's name.
+          type: string
+        phone_number:
+          description: Driver's phone number.
+          type: string
+      title: Driver
       type: object
     Contact:
       description: Contact details on each Stop. Include this object if you want the Driver to see additional Contact details on each Stop.
@@ -1079,27 +1033,8 @@ components:
           enum:
           - pickup
           - dropoff
-          nullable: false
           type: string
       title: Contact
-      type: object
-    Vehicle:
-      description: Journey's vehicle information.
-      example:
-        color: red
-        name: Seat ibiza
-        plate: QXJ4758
-      properties:
-        color:
-          description: Vehicle color.
-          type: string
-        name:
-          description: Vehicle model.
-          type: string
-        plate:
-          description: Vehicle plate number.
-          type: string
-      title: Vehicle
       type: object
     Waypoint:
       description: Information about the different points through which the driver passed during the journey.
@@ -1119,9 +1054,48 @@ components:
         total:
           default: 0
           description: Total number of rows
-          nullable: true
-          type: integer
+          type:
+          - integer
+          - 'null'
       title: Waypoint
+      type: object
+    BadRequest:
+      description: Indicates that the server cannot or will not process the request due to something that is perceived to be a client error (for example, malformed request syntax, invalid request message framing, or deceptive request routing).
+      example:
+        error: Bad Request error message
+      properties:
+        message:
+          type: string
+      title: BadRequest
+      type: object
+    MeetingPoint:
+      description: A specific meeting point within a hub location (e.g. a terminal at an airport). Obtained from the hub data returned in the estimates response.
+      example:
+        id: mp_001
+        loc:
+        - 40.4722
+        - -3.5608
+        name: Terminal 1 - Puerta de llegadas
+      properties:
+        id:
+          description: Unique identifier of the meeting point.
+          type: string
+        loc:
+          description: Coordinates of the meeting point as [latitude, longitude].
+          items:
+            format: float
+            type: number
+          maxItems: 2
+          minItems: 2
+          type: array
+        name:
+          description: Display name of the meeting point.
+          type: string
+      required:
+      - id
+      - loc
+      - name
+      title: MeetingPoint
       type: object
     DriverStopBeforePickup:
       description: Best-effort location where the driver is heading before coming to the pickup. May be null even when is_driver_on_another_journey is true.
@@ -1129,18 +1103,47 @@ components:
         loc:
         - 40.4201
         - -3.7056
-      nullable: true
       properties:
         loc:
           description: Latitude and longitude of the driver's current destination.
           items:
             format: float
             type: number
-          nullable: false
           type: array
       title: DriverStopBeforePickup
+      type:
+      - object
+      - 'null'
+    PreassignedDriver:
+      description: 'Driver preassigned to the journey (for example on a reservation) before the journey is actually assigned. It does not include the phone number, and it may change or disappear before the journey starts. `driver` always takes precedence: once a driver is assigned, that `driver` is authoritative and this field is only informative about who had been preassigned.'
+      example:
+        avatar_url: https://secure.gravatar.com/avatar/1a79a4d60de6718e8e5b326e338ae533?r=pg&s=80&=blank
+        id: a1b2c3d4e5f611ec869eb2e3f32e3b38
+        name: Diana
+      properties:
+        avatar_url:
+          description: Preassigned driver's picture.
+          type: string
+        id:
+          description: Id of the preassigned driver
+          type: string
+        name:
+          description: Preassigned driver's first name.
+          type: string
+      title: PreassignedDriver
+      type:
+      - object
+      - 'null'
+    Conflict:
+      description: The request conflicts with the current state of the resource. For journey cancellation, this means the journey has already been cancelled, terminated, or is in a non-cancellable state.
+      example:
+        error: journey has already been terminated
+      properties:
+        error:
+          type: string
+      title: Conflict
       type: object
   securitySchemes:
-    bearer_token:
-      type: http
+    access_token:
       scheme: bearer
+      type: http

@@ -1,17 +1,20 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
-  description: 'Welcome to the Cabify Logistics API. This API allows you to create and manage parcel deliveries, track their status in real time, configure proof of delivery options, and receive live updates via webhooks. All requests must be authenticated using a Bearer token.
-
-    '
-  version: 1.0.0
-  title: Cabify Logistics delivery Estimates API
   contact:
-    email: p.delivery@cabify.com
+    email: ridehailing.api@cabify.support
+  license:
+    name: Cabify Api support
+    url: https://cabify.com
+  title: Cabify Ride-Hailing Estimates API
+  version: '4.0'
+  description: This method returns prices, Id's and all the information for products that are available at the origin point. Before requesting a journey as a first step it is necessary to obtain the different products configured in your account in order to select the one that fits your needs and keep the Id that will be used in the Journey.
 servers:
-- url: https://logistics.api.cabify.com
+- url: https://cabify.com
   description: Production
-- url: https://logistics.api.cabify-sandbox.com
+- url: https://cabify-sandbox.com
   description: Sandbox
+security:
+- access_token: []
 tags:
 - description: This method returns prices, Id's and all the information for products that are available at the origin point. Before requesting a journey as a first step it is necessary to obtain the different products configured in your account in order to select the one that fits your needs and keep the Id that will be used in the Journey.
   name: Estimates
@@ -116,108 +119,6 @@ paths:
       - Estimates
 components:
   schemas:
-    HubObject:
-      description: A hub is a large venue (e.g. airport, train station) with designated pick-up/drop-off meeting points.
-      example:
-        active: true
-        location_id: location-4
-        meeting_points:
-        - bottom_image_url: https://example.com/t1-bottom.png
-          coordinates:
-            latitude: 40.4722
-            longitude: -3.5608
-          header_image_url: https://example.com/t1-header.png
-          instructions:
-          - en: Head to the main gate of Terminal 1
-            es: Dirígete a la puerta principal de la Terminal 1
-            step_image_url: https://example.com/step1.png
-          title:
-            en: Terminal 1
-            es: Terminal 1
-          uid: mp-loc4-1
-        title:
-          en: Madrid Barajas
-          es: Madrid Barajas
-        uid: hub-loc4
-      nullable: true
-      properties:
-        active:
-          description: Whether the hub is currently active.
-          type: boolean
-        location_id:
-          description: Location identifier used to look up this hub.
-          type: string
-        meeting_points:
-          description: Designated pick-up/drop-off points within the hub. Present one of these to the user as their boarding location.
-          items:
-            properties:
-              bottom_image_url:
-                description: URL for the bottom image of the meeting point.
-                nullable: true
-                type: string
-              coordinates:
-                description: GPS coordinates of the meeting point.
-                properties:
-                  latitude:
-                    type: number
-                  longitude:
-                    type: number
-                type: object
-              header_image_url:
-                description: URL for the header image of the meeting point.
-                nullable: true
-                type: string
-              instructions:
-                description: Step-by-step instructions to reach the meeting point.
-                items:
-                  properties:
-                    en:
-                      type: string
-                    es:
-                      type: string
-                    step_image_url:
-                      nullable: true
-                      type: string
-                  type: object
-                type: array
-              title:
-                additionalProperties:
-                  type: string
-                description: Localized name of the meeting point, keyed by BCP 47 language tag.
-                type: object
-              uid:
-                description: Unique identifier of the meeting point.
-                type: string
-            type: object
-          type: array
-        title:
-          additionalProperties:
-            type: string
-          description: Localized name of the hub, keyed by BCP 47 language tag.
-          type: object
-        uid:
-          description: Unique identifier of the hub.
-          type: string
-      title: HubObject
-      type: object
-    InternalServerError:
-      description: indicates that an internal server error occurred
-      example:
-        error: Something went wrong
-      properties:
-        error:
-          type: string
-      title: InternalServerError
-      type: object
-    BadRequest:
-      description: Indicates that the server cannot or will not process the request due to something that is perceived to be a client error (for example, malformed request syntax, invalid request message framing, or deceptive request routing).
-      example:
-        error: Bad Request error message
-      properties:
-        message:
-          type: string
-      title: BadRequest
-      type: object
     UnauthorizedRequest:
       description: The token used is invalid either because it is expired or because it is incorrect.
       example:
@@ -227,69 +128,14 @@ components:
           type: string
       title: UnauthorizedRequest
       type: object
-    EstimateRequest:
-      additionalProperties: false
-      description: 'Request an estimate before creating a journey.
-
-
-        The estimation response provides the `product.id` value that **must** be passed to the journey
-
-        creation endpoint. For **reserved** journeys, also pass the same `start_at` used here to the
-
-        journey creation request to ensure consistent pricing and availability.
-
-
-        We recommend requesting a new estimate no more than **5 minutes** before creating a journey.
-
-        '
+    InternalServerError:
+      description: indicates that an internal server error occurred
       example:
-        requester_id: 0d3cd443da5f11eb89d7ea639ff4befb
-        start_at: '2022-07-01 10:00:00'
-        start_type: asap
-        stops:
-        - loc:
-          - 40.4169335
-          - -3.7061872
-        - loc:
-          - 40.4169335
-          - -3.7061872
+        error: Something went wrong
       properties:
-        requester_id:
-          description: User to which the estimates would be scoped.
-          nullable: false
-          pattern: ^[a-f0-9]{32}$
+        error:
           type: string
-        start_at:
-          description: When using startType RESERVED this attribute defines the date and time of the reservation. Accepted format must be YYYY-MM-DD HH:MM:SS. It should be in the local time of the pick up location.
-          nullable: true
-          pattern: ^([0-9]+(-[0-9]+)+)\s+([0-9]+(:[0-9]+)+)$
-          type: string
-        start_type:
-          description: Specifies whether the journey should start right now or it should be a reservation later in time. Note that if the value is RESERVED startAt attribute has to be a valid date. If ASAP startAt will be ignored.
-          enum:
-          - asap
-          - reserved
-          nullable: false
-          type: string
-        stops:
-          default: []
-          description: The actual coordinates of the address. Required two floats per location latitude and longitude.
-          items:
-            properties:
-              loc:
-                items:
-                  type: number
-                maxItems: 2
-                minItems: 2
-                type: array
-            type: object
-          minItems: 2
-          type: array
-      required:
-      - start_type
-      - requester_id
-      - stops
-      title: EstimateRequest
+      title: InternalServerError
       type: object
     EstimateResponse:
       description: 'List of available products with pricing for the requested route.
@@ -405,7 +251,167 @@ components:
         type: object
       title: EstimateResponse
       type: array
+    BadRequest:
+      description: Indicates that the server cannot or will not process the request due to something that is perceived to be a client error (for example, malformed request syntax, invalid request message framing, or deceptive request routing).
+      example:
+        error: Bad Request error message
+      properties:
+        message:
+          type: string
+      title: BadRequest
+      type: object
+    EstimateRequest:
+      additionalProperties: false
+      description: 'Request an estimate before creating a journey.
+
+
+        The estimation response provides the `product.id` value that **must** be passed to the journey
+
+        creation endpoint. For **reserved** journeys, also pass the same `start_at` used here to the
+
+        journey creation request to ensure consistent pricing and availability.
+
+
+        We recommend requesting a new estimate no more than **5 minutes** before creating a journey.
+
+        '
+      example:
+        requester_id: 0d3cd443da5f11eb89d7ea639ff4befb
+        start_at: '2022-07-01 10:00:00'
+        start_type: asap
+        stops:
+        - loc:
+          - 40.4169335
+          - -3.7061872
+        - loc:
+          - 40.4169335
+          - -3.7061872
+      properties:
+        requester_id:
+          description: User to which the estimates would be scoped.
+          pattern: ^[a-f0-9]{32}$
+          type: string
+        start_at:
+          description: When using startType RESERVED this attribute defines the date and time of the reservation. Accepted format must be YYYY-MM-DD HH:MM:SS. It should be in the local time of the pick up location.
+          pattern: ^([0-9]+(-[0-9]+)+)\s+([0-9]+(:[0-9]+)+)$
+          type:
+          - string
+          - 'null'
+        start_type:
+          description: Specifies whether the journey should start right now or it should be a reservation later in time. Note that if the value is RESERVED startAt attribute has to be a valid date. If ASAP startAt will be ignored.
+          enum:
+          - asap
+          - reserved
+          type: string
+        stops:
+          default: []
+          description: The actual coordinates of the address. Required two floats per location latitude and longitude.
+          items:
+            properties:
+              loc:
+                items:
+                  type: number
+                maxItems: 2
+                minItems: 2
+                type: array
+            type: object
+          minItems: 2
+          type: array
+      required:
+      - start_type
+      - requester_id
+      - stops
+      title: EstimateRequest
+      type: object
+    HubObject:
+      description: A hub is a large venue (e.g. airport, train station) with designated pick-up/drop-off meeting points.
+      example:
+        active: true
+        location_id: location-4
+        meeting_points:
+        - bottom_image_url: https://example.com/t1-bottom.png
+          coordinates:
+            latitude: 40.4722
+            longitude: -3.5608
+          header_image_url: https://example.com/t1-header.png
+          instructions:
+          - en: Head to the main gate of Terminal 1
+            es: Dirígete a la puerta principal de la Terminal 1
+            step_image_url: https://example.com/step1.png
+          title:
+            en: Terminal 1
+            es: Terminal 1
+          uid: mp-loc4-1
+        title:
+          en: Madrid Barajas
+          es: Madrid Barajas
+        uid: hub-loc4
+      properties:
+        active:
+          description: Whether the hub is currently active.
+          type: boolean
+        location_id:
+          description: Location identifier used to look up this hub.
+          type: string
+        meeting_points:
+          description: Designated pick-up/drop-off points within the hub. Present one of these to the user as their boarding location.
+          items:
+            properties:
+              bottom_image_url:
+                description: URL for the bottom image of the meeting point.
+                type:
+                - string
+                - 'null'
+              coordinates:
+                description: GPS coordinates of the meeting point.
+                properties:
+                  latitude:
+                    type: number
+                  longitude:
+                    type: number
+                type: object
+              header_image_url:
+                description: URL for the header image of the meeting point.
+                type:
+                - string
+                - 'null'
+              instructions:
+                description: Step-by-step instructions to reach the meeting point.
+                items:
+                  properties:
+                    en:
+                      type: string
+                    es:
+                      type: string
+                    step_image_url:
+                      type:
+                      - string
+                      - 'null'
+                  type: object
+                type: array
+              title:
+                additionalProperties:
+                  type: string
+                description: Localized name of the meeting point, keyed by BCP 47 language tag.
+                type: object
+              uid:
+                description: Unique identifier of the meeting point.
+                type: string
+            type: object
+          type: array
+        title:
+          additionalProperties:
+            type: string
+          description: Localized name of the hub, keyed by BCP 47 language tag.
+          type: object
+        uid:
+          description: Unique identifier of the hub.
+          type: string
+      title: HubObject
+      type:
+      - object
+      - 'null'
   securitySchemes:
-    bearer_token:
-      type: http
+    access_token:
       scheme: bearer
+      type: http

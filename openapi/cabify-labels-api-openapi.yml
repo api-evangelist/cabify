@@ -1,17 +1,20 @@
-openapi: 3.0.0
+openapi: 3.2.0
 info:
-  description: 'Welcome to the Cabify Logistics API. This API allows you to create and manage parcel deliveries, track their status in real time, configure proof of delivery options, and receive live updates via webhooks. All requests must be authenticated using a Bearer token.
-
-    '
-  version: 1.0.0
-  title: Cabify Logistics delivery Labels API
   contact:
-    email: p.delivery@cabify.com
+    email: ridehailing.api@cabify.support
+  license:
+    name: Cabify Api support
+    url: https://cabify.com
+  title: Cabify Ride-Hailing Labels API
+  version: '4.0'
+  description: Cabify offers to its clients a feature where the client’s employees have to input a journey motive or a project or a dynamic cost center associated with the new journey before requesting it. This is usually used for financial budgeting and reporting purposes since every journey now comes with this data linked to it, in other words, clients can segment their invoices by these Labels. <br> <br> Since some companies have a lot of Labels (projects/cost centers) that need to be managed they can use our API to do so. We allow creating, modifying, and disabling them directly from, for example, the client’s ERP (SAP, NetSuite, MSDynamics, etc.).
 servers:
-- url: https://logistics.api.cabify.com
+- url: https://cabify.com
   description: Production
-- url: https://logistics.api.cabify-sandbox.com
+- url: https://cabify-sandbox.com
   description: Sandbox
+security:
+- access_token: []
 tags:
 - description: Cabify offers to its clients a feature where the client’s employees have to input a journey motive or a project or a dynamic cost center associated with the new journey before requesting it. This is usually used for financial budgeting and reporting purposes since every journey now comes with this data linked to it, in other words, clients can segment their invoices by these Labels. <br> <br> Since some companies have a lot of Labels (projects/cost centers) that need to be managed they can use our API to do so. We allow creating, modifying, and disabling them directly from, for example, the client’s ERP (SAP, NetSuite, MSDynamics, etc.).
   name: Labels
@@ -206,32 +209,39 @@ paths:
       - Labels
 components:
   schemas:
-    NotFound:
-      description: The server did not find a current representation for the target resource
+    PaginatedLabelResponse:
+      description: Response schema for a list of labels
       example:
-        error: user with provided ID does not exist
+        data:
+        - active: true
+          client_id: 5ad782201d2e111dba689aa86d149702
+          description: Cabify label example
+          id: 9a0e2da7-f93a-4b24-bce4-7a8b10d3997a
+          name: ' Name of the Label'
+          slug: name-of-the-label
+        page: 1
+        pages: 1
+        per: 20
+        total: 3
       properties:
-        message:
-          type: string
-      title: NotFound
-      type: object
-    BadRequest:
-      description: Indicates that the server cannot or will not process the request due to something that is perceived to be a client error (for example, malformed request syntax, invalid request message framing, or deceptive request routing).
-      example:
-        error: Bad Request error message
-      properties:
-        message:
-          type: string
-      title: BadRequest
-      type: object
-    InternalServerError:
-      description: indicates that an internal server error occurred
-      example:
-        error: Something went wrong
-      properties:
-        error:
-          type: string
-      title: InternalServerError
+        data:
+          description: The list of labels
+          items:
+            $ref: '#/components/schemas/Label'
+          type: array
+        page:
+          description: Current page.
+          type: integer
+        pages:
+          description: Number of pages fetched.
+          type: integer
+        per:
+          description: Amount of labels per page.
+          type: integer
+        total:
+          description: total of results.
+          type: integer
+      title: PaginatedLabelResponse
       type: object
     UnauthorizedRequest:
       description: The token used is invalid either because it is expired or because it is incorrect.
@@ -241,6 +251,15 @@ components:
         error:
           type: string
       title: UnauthorizedRequest
+      type: object
+    InternalServerError:
+      description: indicates that an internal server error occurred
+      example:
+        error: Something went wrong
+      properties:
+        error:
+          type: string
+      title: InternalServerError
       type: object
     LabelResponse:
       description: Response schema for single label
@@ -292,6 +311,24 @@ components:
           type: string
       title: LabelUpdateRequest
       type: object
+    NotFound:
+      description: The server did not find a current representation for the target resource
+      example:
+        error: user with provided ID does not exist
+      properties:
+        message:
+          type: string
+      title: NotFound
+      type: object
+    BadRequest:
+      description: Indicates that the server cannot or will not process the request due to something that is perceived to be a client error (for example, malformed request syntax, invalid request message framing, or deceptive request routing).
+      example:
+        error: Bad Request error message
+      properties:
+        message:
+          type: string
+      title: BadRequest
+      type: object
     Label:
       example:
         active: true
@@ -324,41 +361,7 @@ components:
       - slug
       title: Label
       type: object
-    PaginatedLabelResponse:
-      description: Response schema for a list of labels
-      example:
-        data:
-        - active: true
-          client_id: 5ad782201d2e111dba689aa86d149702
-          description: Cabify label example
-          id: 9a0e2da7-f93a-4b24-bce4-7a8b10d3997a
-          name: ' Name of the Label'
-          slug: name-of-the-label
-        page: 1
-        pages: 1
-        per: 20
-        total: 3
-      properties:
-        data:
-          description: The list of labels
-          items:
-            $ref: '#/components/schemas/Label'
-          type: array
-        page:
-          description: Current page.
-          type: integer
-        pages:
-          description: Number of pages fetched.
-          type: integer
-        per:
-          description: Amount of labels per page.
-          type: integer
-        total:
-          description: total of results.
-          type: integer
-      title: PaginatedLabelResponse
-      type: object
   securitySchemes:
-    bearer_token:
-      type: http
+    access_token:
       scheme: bearer
+      type: http
