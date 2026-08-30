@@ -77,7 +77,7 @@ apis:
   humanURL: https://developers.cabify.com/docs/ride-hailing
   baseURL: https://cabify.com/api/v4
   tags:
-  - Delivery
+  - delivery
   tags_raw:
   - delivery
   properties:
@@ -118,7 +118,7 @@ apis:
   humanURL: https://developers.cabify.com/docs/ride-hailing
   baseURL: https://cabify.com/api/v4
   tags:
-  - Hub
+  - hubs
   tags_raw:
   - hubs
   properties:
@@ -155,7 +155,7 @@ apis:
   humanURL: https://developers.cabify.com/docs/ride-hailing
   baseURL: https://cabify.com/api/v4
   tags:
-  - Label
+  - label
   tags_raw:
   - label
   properties:
@@ -199,7 +199,7 @@ apis:
   humanURL: https://developers.cabify.com/docs/ride-hailing
   baseURL: https://cabify.com/api/v4
   tags:
-  - Parcels
+  - parcels
   tags_raw:
   - parcels
   properties:
