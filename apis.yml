@@ -77,7 +77,7 @@ apis:
   humanURL: https://developers.cabify.com/docs/ride-hailing
   baseURL: https://cabify.com/api/v4
   tags:
-  - delivery
+  - Delivery
   tags_raw:
   - delivery
   properties:
@@ -118,7 +118,7 @@ apis:
   humanURL: https://developers.cabify.com/docs/ride-hailing
   baseURL: https://cabify.com/api/v4
   tags:
-  - hubs
+  - Hub
   tags_raw:
   - hubs
   properties:
@@ -155,7 +155,7 @@ apis:
   humanURL: https://developers.cabify.com/docs/ride-hailing
   baseURL: https://cabify.com/api/v4
   tags:
-  - label
+  - Label
   tags_raw:
   - label
   properties:
@@ -199,7 +199,7 @@ apis:
   humanURL: https://developers.cabify.com/docs/ride-hailing
   baseURL: https://cabify.com/api/v4
   tags:
-  - parcels
+  - Parcels
   tags_raw:
   - parcels
   properties:
@@ -256,7 +256,8 @@ apis:
   description: The shipping_types API from Cabify — 1 operation(s) for shipping_types.
   humanURL: https://developers.cabify.com/docs/ride-hailing
   baseURL: https://cabify.com/api/v4
-  tags: []
+  tags:
+  - ShippingTypes
   tags_raw:
   - shipping_types
   properties:
