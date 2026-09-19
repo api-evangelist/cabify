@@ -199,7 +199,7 @@ apis:
   humanURL: https://developers.cabify.com/docs/ride-hailing
   baseURL: https://cabify.com/api/v4
   tags:
-  - Parcels
+  - Parcel
   tags_raw:
   - parcels
   properties:
