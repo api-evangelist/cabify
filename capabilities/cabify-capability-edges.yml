@@ -11,8 +11,19 @@ capability_model:
   attribution: Turbo EA Capabilities by Vincent Verdet — Turbo EA, https://github.com/vincentmakes/turbo-ea-capabilities,
     CC BY 4.0
   notice: NOTICE
-edge_count: 3
+edge_count: 6
 edges:
+- tag: Journeys
+  spec_file: cabify-journeys-api-openapi.yml
+  capability_id: BC-3490.20
+  capability_id_l1: BC-3490
+  capability_name: Trip and Booking Operations
+  confidence: 0.95
+  evidence: POST /api/v4/journey createJourney "Create a journey"; POST /api/v4/journey/{id}/state "Cancel
+    Journey"; "Keep searching drivers for a journey"
+  reason: Operations capture, dispatch-match and manage the lifecycle of ride bookings — exactly trip
+    and booking operations for an on-demand mobility service.
+  recovered_from: vertical-automotive-mobility-edges.json
 - tag: status
   spec_file: cabify-status-api-openapi.yml
   capability_id: BC-2510.20
@@ -44,3 +55,26 @@ edges:
   reason: Full parcel lifecycle for last-mile delivery — create/list/update parcels by state, pickup and
     dropoff points, shipping labels, proof-of-delivery configuration and event notification. Matches final-leg
     delivery execution including proof of delivery.
+- tag: shipment
+  spec_file: cabify-shipment-api-openapi.yml
+  capability_id: BC-520.50
+  capability_id_l1: BC-520
+  capability_name: Logistics Operations Management
+  confidence: 0.8
+  evidence: POST /v1/parcels/ship shipParcels "Ship the specified parcels."; POST /v3/parcels/estimate
+    "Estimate the cost and timing of a shipment."
+  reason: Shipment despatch and delivery cost/time estimation are transport execution activities within
+    logistics operations.
+  recovered_from: vertical-automotive-mobility-edges.json
+- tag: Estimates
+  spec_file: cabify-estimates-api-openapi.yml
+  capability_id: BC-3490
+  capability_id_l1: BC-3490
+  capability_name: Mobility Services Operations Management
+  confidence: 0.75
+  evidence: POST /api/v4/estimates getEstimation Create estimation — "returns prices, Id's and all the
+    information for products that are available at the origin point"
+  reason: Pre-booking price/product estimation for a ride-hailing service is part of mobility services
+    operations (service catalogue and pricing quoted before a trip). Evidence does not clearly pin one
+    L2 (catalogue vs booking vs dynamic pricing), so L2 left unmapped.
+  recovered_from: vertical-automotive-mobility-edges.json
