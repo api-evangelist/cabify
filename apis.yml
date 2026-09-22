@@ -43,6 +43,9 @@ image: https://cabify.com/static/head/cover.png
 specificationVersion: '0.23'
 created: '2026-07-17'
 modified: '2026-07-18'
+x-docs-platform: readme
+x-docs-platform-confidence: medium
+x-docs-platform-checked: 2026-09-21
 tags:
 - Company
 - Transportation
