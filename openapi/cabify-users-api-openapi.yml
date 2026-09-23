@@ -13,13 +13,13 @@ servers:
 - url: https://cabify-sandbox.com
   description: Sandbox
 tags:
-- name: users
+- name: Users
 paths:
   /v1/users:
     get:
       tags:
-      - users
-      summary: List users belonging to your account.
+      - Users
+      summary: List users belonging to your account
       description: Returns all Cabify users associated with your account.
       operationId: getUsers
       responses:
@@ -49,7 +49,6 @@ paths:
   /api/v4/users:
     post:
       callbacks: {}
-      description: Create Users in bulk
       operationId: createUsers
       parameters: []
       requestBody:
@@ -86,7 +85,7 @@ paths:
           description: Internal server error
       summary: Create Users in bulk
       tags:
-      - users
+      - Users
       security:
       - access_token: []
     get:
@@ -146,12 +145,11 @@ paths:
           description: Internal server error
       summary: Get Users in bulk
       tags:
-      - users
+      - Users
       security:
       - access_token: []
     patch:
       callbacks: {}
-      description: Update Users in bulk
       operationId: updateUsers
       parameters: []
       requestBody:
@@ -188,7 +186,7 @@ paths:
           description: Internal server error
       summary: Update Users in bulk
       tags:
-      - users
+      - Users
       security:
       - access_token: []
     servers:
@@ -243,7 +241,7 @@ paths:
           description: Internal server error
       summary: Get User by email
       tags:
-      - users
+      - Users
       security:
       - access_token: []
     servers:
@@ -298,7 +296,7 @@ paths:
           description: Internal server error
       summary: Get User by ID
       tags:
-      - users
+      - Users
       security:
       - access_token: []
     servers:
@@ -328,23 +326,71 @@ components:
           type: boolean
           description: Whether the user has a valid payment method configured.
           example: true
-    UnauthorizedRequest:
-      description: The token used is invalid either because it is expired or because it is incorrect.
+    User_2:
       example:
-        error: Unauthorized
+        email: john.doe@example.com
+        id: 9a0e2da7f93a4b24bce47a8b10d3997a
+        mobile_cc: '34'
+        mobile_num: '612345678'
+        name: John
+        surname: Doe
       properties:
-        error:
+        can_manage:
+          description: Whether User is an admin or regular User
+          type: boolean
+        can_order_for_others:
+          description: If true, user will be able to order journeys for others
+          type: boolean
+        default_charge_code:
+          description: User's Default Charge Code
           type: string
-      title: UnauthorizedRequest
-      type: object
-    InternalServerError:
-      description: indicates that an internal server error occurred
-      example:
-        error: Something went wrong
-      properties:
-        error:
+        disabled:
+          description: Whether the User is enabled or disabled
+          type: boolean
+        email:
+          description: Email of User. Must be unique
+          format: email
           type: string
-      title: InternalServerError
+        email_cc:
+          description: List of email addresses (for journey related emails only)
+          items:
+            type: string
+          type: array
+        employee_code:
+          description: User's Employee Code, useful to map with company's code
+          type: string
+        id:
+          description: id of the User, UUIDv4 format without hyphens
+          pattern: ^[a-f0-9]{32}$
+          type: string
+        locale:
+          description: 'User''s Locale. Syntax consists of language two-letter tag which then will be suffixed with Client''s country, e.g.: es-ES'
+          type: string
+        mobile_cc:
+          description: 'Mobile Country Code. Can be checked here: https://countrycode.org/'
+          type: string
+        mobile_num:
+          description: Mobile Number of User
+          type: string
+        name:
+          description: Name of the User
+          type: string
+        permission_group_id:
+          description: User's TravelPolicy
+          type:
+          - string
+          - 'null'
+        surname:
+          description: Surname of the User
+          type: string
+      required:
+      - id
+      - email
+      - name
+      - surname
+      - mobile_cc
+      - mobile_num
+      title: User
       type: object
     CreateUser:
       example:
@@ -412,72 +458,93 @@ components:
       - mobile_num
       title: CreateUser
       type: object
-    User_2:
+    PageResponse:
       example:
-        email: john.doe@example.com
-        id: 9a0e2da7f93a4b24bce47a8b10d3997a
-        mobile_cc: '34'
-        mobile_num: '612345678'
-        name: John
-        surname: Doe
+        data: []
+        page: 2
+        pages: 0
+        per: 1
+        total: 0
       properties:
-        can_manage:
-          description: Whether User is an admin or regular User
-          type: boolean
-        can_order_for_others:
-          description: If true, user will be able to order journeys for others
-          type: boolean
-        default_charge_code:
-          description: User's Default Charge Code
-          type: string
-        disabled:
-          description: Whether the User is enabled or disabled
-          type: boolean
-        email:
-          description: Email of User. Must be unique
-          format: email
-          type: string
-        email_cc:
-          description: List of email addresses (for journey related emails only)
+        data:
+          description: List of Users
           items:
-            type: string
+            $ref: '#/components/schemas/User_2'
           type: array
-        employee_code:
-          description: User's Employee Code, useful to map with company's code
-          type: string
-        id:
-          description: id of the User, UUIDv4 format without hyphens
-          pattern: ^[a-f0-9]{32}$
-          type: string
-        locale:
-          description: 'User''s Locale. Syntax consists of language two-letter tag which then will be suffixed with Client''s country, e.g.: es-ES'
-          type: string
-        mobile_cc:
-          description: 'Mobile Country Code. Can be checked here: https://countrycode.org/'
-          type: string
-        mobile_num:
-          description: Mobile Number of User
-          type: string
-        name:
-          description: Name of the User
-          type: string
-        permission_group_id:
-          description: User's TravelPolicy
-          type:
-          - string
-          - 'null'
-        surname:
-          description: Surname of the User
+        page:
+          description: Number of page returned
+          type: number
+        pages:
+          description: Number of total available pages
+          type: number
+        per:
+          description: Number of elements per page
+          type: number
+        total:
+          description: Number of total available elements
+          type: number
+      required:
+      - data
+      - per
+      - page
+      - total
+      - pages
+      title: PageResponse
+      type: object
+    CreateUsersRequest:
+      description: List of new data to create new Users with it
+      items:
+        $ref: '#/components/schemas/CreateUser'
+      minItems: 1
+      title: CreateUsersRequest
+      type: array
+    MutationResponse:
+      description: Response coming either from a Create or Update request
+      example:
+        job_id: 7e3b1f8a4c92d5e0a6b17c3f
+      properties:
+        job_id:
+          description: id of job processing the update. The results will be sent asynchronously to predefined webhooks URL upon job termination
+          pattern: ^[a-f0-9]{24}$
           type: string
       required:
-      - id
-      - email
-      - name
-      - surname
-      - mobile_cc
-      - mobile_num
-      title: User
+      - job_id
+      title: MutationResponse
       type: object
+    UnauthorizedRequest:
+      description: The token used is invalid either because it is expired or because it is incorrect.
+      example:
+        error: Unauthorized
+      properties:
+        error:
+          type: string
+      title: UnauthorizedRequest
+      type: object
+    BadRequest:
+      description: Indicates that the server cannot or will not process the request due to something that is perceived to be a client error (for example, malformed request syntax, invalid request message framing, or deceptive request routing).
+      example:
+        error: Bad Request error message
+      properties:
+        message:
+          type: string
+      title: BadRequest
+      type: object
+    InternalServerError:
+      description: indicates that an internal server error occurred
+      example:
+        error: Something went wrong
+      properties:
+        error:
+          type: string
+      title: InternalServerError
+      type: object
+    UpdateUsersRequest:
+      description: List of Users update data
+      items:
+        $ref: '#/components/schemas/UpdateUser'
+      minItems: 1
+      title: UpdateUsersRequest
+      type: array
     UpdateUser:
       example:
         email: john.doe@example.com
@@ -547,75 +614,6 @@ components:
         message:
           type: string
       title: NotFound
-      type: object
-    CreateUsersRequest:
-      description: List of new data to create new Users with it
-      items:
-        $ref: '#/components/schemas/CreateUser'
-      minItems: 1
-      title: CreateUsersRequest
-      type: array
-    UpdateUsersRequest:
-      description: List of Users update data
-      items:
-        $ref: '#/components/schemas/UpdateUser'
-      minItems: 1
-      title: UpdateUsersRequest
-      type: array
-    BadRequest:
-      description: Indicates that the server cannot or will not process the request due to something that is perceived to be a client error (for example, malformed request syntax, invalid request message framing, or deceptive request routing).
-      example:
-        error: Bad Request error message
-      properties:
-        message:
-          type: string
-      title: BadRequest
-      type: object
-    PageResponse:
-      example:
-        data: []
-        page: 2
-        pages: 0
-        per: 1
-        total: 0
-      properties:
-        data:
-          description: List of Users
-          items:
-            $ref: '#/components/schemas/User_2'
-          type: array
-        page:
-          description: Number of page returned
-          type: number
-        pages:
-          description: Number of total available pages
-          type: number
-        per:
-          description: Number of elements per page
-          type: number
-        total:
-          description: Number of total available elements
-          type: number
-      required:
-      - data
-      - per
-      - page
-      - total
-      - pages
-      title: PageResponse
-      type: object
-    MutationResponse:
-      description: Response coming either from a Create or Update request
-      example:
-        job_id: 7e3b1f8a4c92d5e0a6b17c3f
-      properties:
-        job_id:
-          description: id of job processing the update. The results will be sent asynchronously to predefined webhooks URL upon job termination
-          pattern: ^[a-f0-9]{24}$
-          type: string
-      required:
-      - job_id
-      title: MutationResponse
       type: object
   securitySchemes:
     bearer_token:

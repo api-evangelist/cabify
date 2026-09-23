@@ -1,8 +1,6 @@
 openapi: 3.2.0
 info:
-  description: 'Welcome to the Cabify Logistics API. This API allows you to create and manage parcel deliveries, track their status in real time, configure proof of delivery options, and receive live updates via webhooks. All requests must be authenticated using a Bearer token.
-
-    '
+  description: Welcome to the Cabify Logistics API. This API allows you to create and manage parcel deliveries, track their status in real time, configure proof of delivery options, and receive live updates via webhooks. All requests must be authenticated using a Bearer token.
   version: 1.0.0
   title: Cabify Logistics Parcels API
   contact:
@@ -13,22 +11,18 @@ servers:
 - url: https://logistics.api.cabify-sandbox.com
   description: Sandbox
 tags:
-- name: parcels
-  description: 'A parcel is the package you need to ship. Each parcel is identified by a unique ID and contains a pickup point (where the driver collects the package) and a drop-off point (the destination). Parcels must be created before they can be shipped.
-
-    '
+- name: Parcels
+  description: A parcel is the package you need to ship. Each parcel is identified by a unique ID and contains a pickup point (where the driver collects the package) and a drop-off point (the destination). Parcels must be created before they can be shipped.
 paths:
   /v1/parcels:
     post:
       tags:
-      - parcels
-      summary: Create new parcels.
+      - Parcels
+      summary: Create new parcels
       description: 'Create one or more parcels to be shipped. Note that creating a parcel does not trigger a delivery — you must call `/v1/parcels/ship` afterwards to schedule the pickup.
 
 
-        Each parcel requires a pickup and a drop-off location. You can provide a location using one of the following fields in the `pickup_info` or `dropoff_info` schemas: `loc` (coordinates), `addr` (address string), or `hub_external_id` (reference to a registered hub).
-
-        '
+        Each parcel requires a pickup and a drop-off location. You can provide a location using one of the following fields in the `pickup_info` or `dropoff_info` schemas: `loc` (coordinates), `addr` (address string), or `hub_external_id` (reference to a registered hub).'
       operationId: addParcels
       requestBody:
         content:
@@ -64,8 +58,8 @@ paths:
       - bearer_token: []
     get:
       tags:
-      - parcels
-      summary: List parcels filtered by state.
+      - Parcels
+      summary: List parcels filtered by state
       description: Returns a paginated list of parcels that match the specified states.
       operationId: getParcels
       parameters:
@@ -130,8 +124,8 @@ paths:
   /v1/parcels/{parcel_id}/proof_configuration:
     post:
       tags:
-      - parcels
-      summary: Set proof of delivery configuration for a parcel.
+      - Parcels
+      summary: Set proof of delivery configuration for a parcel
       description: Creates or replaces the proof of delivery methods configured for the specified parcel.
       operationId: createProofConfigurationParcel
       requestBody:
@@ -162,8 +156,8 @@ paths:
       - bearer_token: []
     get:
       tags:
-      - parcels
-      summary: Get proof of delivery configuration for a parcel.
+      - Parcels
+      summary: Get proof of delivery configuration for a parcel
       description: Returns the proof of delivery methods currently configured for the specified parcel.
       operationId: proofConfigurationParcel
       parameters:
@@ -190,11 +184,9 @@ paths:
   /v1/parcels/delete:
     post:
       tags:
-      - parcels
-      summary: Delete parcels by ID.
-      description: 'Permanently deletes the specified parcels. Only parcels that have not yet been shipped can be deleted. This is an **all-or-nothing** operation — if any parcel cannot be deleted, none of the parcels in the request will be deleted.
-
-        '
+      - Parcels
+      summary: Delete parcels by ID
+      description: Permanently deletes the specified parcels. Only parcels that have not yet been shipped can be deleted. This is an **all-or-nothing** operation — if any parcel cannot be deleted, none of the parcels in the request will be deleted.
       operationId: deleteParcels
       requestBody:
         content:
@@ -213,8 +205,8 @@ paths:
   /v1/parcels/{parcel_id}:
     get:
       tags:
-      - parcels
-      summary: Get a parcel by ID.
+      - Parcels
+      summary: Get a parcel by ID
       description: Returns the full details of a parcel identified by its UUID.
       operationId: getParcel
       parameters:
@@ -240,17 +232,15 @@ paths:
       - bearer_token: []
     put:
       tags:
-      - parcels
-      summary: Update a parcel by ID.
+      - Parcels
+      summary: Update a parcel by ID
       description: 'Update editable fields of an existing parcel. The set of fields that can be modified depends on the parcel''s current state:
 
 
         **All fields** can be updated when the parcel is in one of these states: `ready`, `pickupfailed`, `requestercancel`, or `returnedtoorigin`.
 
 
-        **Instructions only** (`pickup_info.instr`, `dropoff_info.instr`) can be updated in all other active states.
-
-        '
+        **Instructions only** (`pickup_info.instr`, `dropoff_info.instr`) can be updated in all other active states.'
       operationId: updateParcel
       parameters:
       - in: path
@@ -305,14 +295,12 @@ paths:
   /v1/parcels/{parcel_id}/tip:
     get:
       tags:
-      - parcels
-      summary: Get the tip for a parcel.
+      - Parcels
+      summary: Get the tip for a parcel
       description: '> **Note:** This feature is not available to all clients. Please contact us before using it.
 
 
-        Returns the tip configured for the specified parcel, if one exists.
-
-        '
+        Returns the tip configured for the specified parcel, if one exists.'
       operationId: getTipParcel
       parameters:
       - name: parcel_id
@@ -351,8 +339,8 @@ paths:
       - bearer_token: []
     post:
       tags:
-      - parcels
-      summary: Add a tip for a parcel delivery.
+      - Parcels
+      summary: Add a tip for a parcel delivery
       description: '> **Note:** This feature is not available to all clients. Please contact us before using it.
 
 
@@ -360,9 +348,7 @@ paths:
 
         point before the parcel is delivered. The tip amount must be formatted according to ISO 4217
 
-        (e.g. €6.30 → `630` in EUR).
-
-        '
+        (e.g. €6.30 → `630` in EUR).'
       operationId: tipParcel
       parameters:
       - name: parcel_id
@@ -421,11 +407,9 @@ paths:
   /v1/parcels/{parcel_id}/label:
     get:
       tags:
-      - parcels
-      summary: Get the shipping label for a parcel.
-      description: 'Returns the shipping label for the specified parcel as a PDF. This label is scanned by the driver during pickup and delivery operations.
-
-        '
+      - Parcels
+      summary: Get the shipping label for a parcel
+      description: Returns the shipping label for the specified parcel as a PDF. This label is scanned by the driver during pickup and delivery operations.
       operationId: labelParcel
       parameters:
       - in: path
@@ -454,8 +438,8 @@ paths:
   /v1/parcels/{parcel_id}/notify:
     post:
       tags:
-      - parcels
-      summary: Notify an event for the given parcel.
+      - Parcels
+      summary: Notify an event for the given parcel
       description: 'Sends an event notification for the specified parcel. Currently, only the `ready_to_pickup`
 
         event is supported.
@@ -463,9 +447,7 @@ paths:
 
         This event is typically used in food delivery workflows to signal that an order is prepared
 
-        and ready to be collected by a driver.
-
-        '
+        and ready to be collected by a driver.'
       operationId: notifyParcel
       parameters:
       - name: parcel_id
@@ -536,17 +518,6 @@ paths:
       - bearer_token: []
 components:
   schemas:
-    DeleteParcels:
-      type: object
-      required:
-      - parcel_ids
-      properties:
-        parcel_ids:
-          type: array
-          description: List of parcels to be deleted
-          items:
-            type: string
-            format: uuid
     ParcelWeight:
       type: object
       description: Weight of the parcel.
@@ -560,55 +531,45 @@ components:
           description: Unit of weight. Defaults to `g` (grams) if omitted or set to an invalid value.
           enum:
           - g
-    RequestError:
-      type: object
-      description: Standard error response body returned when a request fails.
-      required:
-      - errors
-      properties:
-        errors:
-          type: array
-          description: List of human-readable error messages describing what went wrong.
-          items:
-            type: string
-    NewParcels:
+    ParcelPointPickupInfo:
       type: object
       required:
-      - parcels
+      - contact
+      description: 'Information about the pickup point. You must provide exactly one of the following location fields: `loc` (coordinates), `addr` (address string), or `hub_external_id` (reference to a registered hub).
+
+        '
       properties:
-        parcels:
-          type: array
-          items:
-            $ref: '#/components/schemas/NewParcel'
-    ParcelDimensions:
-      type: object
-      description: Physical dimensions of the parcel.
-      properties:
-        height:
-          type: integer
-          minimum: 0
-          example: 10
-        length:
-          type: integer
-          minimum: 0
-          example: 10
-        width:
-          type: integer
-          minimum: 0
-          example: 10
-        unit:
+        addr:
           type: string
-          description: Unit of measure for the dimensions. Defaults to `cm` if omitted or set to an invalid value.
-          enum:
-          - cm
-    Tip:
+          description: Full address where the parcel should be picked up.
+          example: Calle de Pradillo, 42, Madrid
+        contact:
+          $ref: '#/components/schemas/NewParcelPickupContact'
+        instr:
+          type:
+          - string
+          - 'null'
+          description: Additional instructions for the driver at the pickup location.
+          example: Knock the door three times
+        loc:
+          $ref: '#/components/schemas/Point'
+        code:
+          type:
+          - string
+          - 'null'
+          description: 'Alphanumeric code (typically 4–6 characters) shown to the driver to confirm the pickup. Only one code is shown per delivery, so only use this field when the delivery consists of a single parcel.
+
+            '
+          example: ABC123
+        hub_external_id:
+          type: string
+          description: External ID of a client hub to use as the pickup location.
+          example: magic_store_santa_fe
+    CreateTip:
+      required:
+      - amount
       type: object
       properties:
-        parcel_id:
-          type: string
-          format: uuid
-          description: UUID of the parcel this tip is associated with.
-          example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
         amount:
           minimum: 0
           type: integer
@@ -616,51 +577,6 @@ components:
 
             '
           example: 100
-        currency:
-          type: string
-          description: ISO 4217 currency code.
-          example: ARS
-    Parcel:
-      type: object
-      properties:
-        id:
-          type: string
-          format: uuid
-          description: System-generated UUID for this parcel.
-          example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
-        external_id:
-          type: string
-          description: Your own identifier for this parcel, as provided when the parcel was created.
-          example: parcel_001
-        pickup_info:
-          $ref: '#/components/schemas/ParcelPointPickupInfo'
-        dropoff_info:
-          $ref: '#/components/schemas/ParcelPointDropoffInfo'
-        dimensions:
-          $ref: '#/components/schemas/ParcelDimensions'
-        weight:
-          $ref: '#/components/schemas/ParcelWeight'
-        price:
-          $ref: '#/components/schemas/Price'
-        created_at:
-          type: string
-          format: date-time
-          description: Timestamp when the parcel was created, formatted according to RFC 3339, section 5.6.
-          example: '2021-12-02T10:12:07.753Z'
-        updated_at:
-          type: string
-          format: date-time
-          description: Timestamp of the most recent update to the parcel, formatted according to RFC 3339, section 5.6.
-          example: '2021-12-02T10:12:07.753Z'
-    Parcels:
-      type: object
-      required:
-      - parcels
-      properties:
-        parcels:
-          type: array
-          items:
-            $ref: '#/components/schemas/Parcel'
     CreateProofConfiguration:
       type: object
       description: Request body for creating or replacing proof of delivery configuration for a parcel.
@@ -709,30 +625,232 @@ components:
                   type: boolean
                   description: Activates or deactivates this proof method. Defaults to `false` if omitted.
                   example: true
-    PaginatedParcels:
+    NewParcel:
+      type: object
+      required:
+      - pickup_info
+      - dropoff_info
+      properties:
+        external_id:
+          type: string
+          description: 'Your own identifier for this parcel. Use this field to correlate parcels in the Cabify system with records in your own system. Must be unique across all your parcels.
+
+            '
+          example: parcel_001
+        pickup_info:
+          $ref: '#/components/schemas/ParcelPointPickupInfo'
+        dropoff_info:
+          $ref: '#/components/schemas/ParcelPointDropoffInfo'
+        dimensions:
+          $ref: '#/components/schemas/ParcelDimensions'
+        weight:
+          $ref: '#/components/schemas/ParcelWeight'
+        price:
+          $ref: '#/components/schemas/Price'
+        delivery_from:
+          type: string
+          format: date-time
+          description: 'Start of the requested delivery time window, formatted according to RFC 3339, section 5.6. The parcel will not be delivered before this time.
+
+            '
+          example: '2021-12-02T10:12:07.753Z'
+        delivery_to:
+          type: string
+          format: date-time
+          description: 'End of the requested delivery time window, formatted according to RFC 3339, section 5.6. The parcel should be delivered before this time.
+
+            '
+          example: '2021-12-02T10:12:07.753Z'
+    ParcelDimensions:
+      type: object
+      description: Physical dimensions of the parcel.
+      properties:
+        height:
+          type: integer
+          minimum: 0
+          example: 10
+        length:
+          type: integer
+          minimum: 0
+          example: 10
+        width:
+          type: integer
+          minimum: 0
+          example: 10
+        unit:
+          type: string
+          description: Unit of measure for the dimensions. Defaults to `cm` if omitted or set to an invalid value.
+          enum:
+          - cm
+    Parcels:
       type: object
       required:
       - parcels
-      - page
-      - page_size
-      - more_pages
       properties:
         parcels:
           type: array
           items:
             $ref: '#/components/schemas/Parcel'
-        page:
+    ParcelPointDropoffInfo:
+      type: object
+      required:
+      - contact
+      description: 'Information about the drop-off (destination) point. You must provide exactly one of the following location fields: `loc` (coordinates), `addr` (address string), or `hub_external_id` (reference to a registered hub).
+
+        '
+      properties:
+        addr:
+          type: string
+          description: Full address where the parcel should be delivered.
+          example: Calle de Pradillo, 42, Madrid
+        contact:
+          $ref: '#/components/schemas/NewParcelDropoffContact'
+        instr:
+          type:
+          - string
+          - 'null'
+          description: Additional instructions for the driver at the drop-off location.
+          example: Knock the door three times
+        loc:
+          $ref: '#/components/schemas/Point'
+        hub_external_id:
+          type: string
+          description: External ID of a client hub to use as the drop-off location.
+          example: magic_store_santa_fe
+    Price:
+      type: object
+      description: Price information for the parcel, used in cash-on-delivery scenarios.
+      properties:
+        declared_value:
+          type: integer
+          description: 'Declared value of the parcel''s contents, in the smallest currency unit following the ISO 4217 standard (e.g. €6.30 → `630`).
+
+            '
+          example: 630
+        collected_value:
+          type: integer
+          description: 'Amount to be collected from the recipient upon delivery, in the smallest currency unit following the ISO 4217 standard (e.g. €6.30 → `630`).
+
+            '
+          example: 630
+        currency:
+          type: string
+          description: ISO 4217 currency code.
+          example: EUR
+    NewParcels:
+      type: object
+      required:
+      - parcels
+      properties:
+        parcels:
+          type: array
+          items:
+            $ref: '#/components/schemas/NewParcel'
+    Point:
+      type: object
+      description: A geographic coordinate expressed as latitude and longitude.
+      required:
+      - lat
+      - lon
+      properties:
+        lat:
           type: number
-          description: The current page number returned.
-          example: 2
-        page_size:
+          format: float
+          description: Latitude in decimal degrees.
+          example: 40.4489254
+        lon:
           type: number
-          description: The number of parcels returned per page.
-          example: 20
-        more_pages:
-          type: boolean
-          description: Whether additional pages of results are available.
-          example: true
+          format: float
+          description: Longitude in decimal degrees.
+          example: -3.6730293
+    Parcel:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          description: System-generated UUID for this parcel.
+          example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+        external_id:
+          type: string
+          description: Your own identifier for this parcel, as provided when the parcel was created.
+          example: parcel_001
+        pickup_info:
+          $ref: '#/components/schemas/ParcelPointPickupInfo'
+        dropoff_info:
+          $ref: '#/components/schemas/ParcelPointDropoffInfo'
+        dimensions:
+          $ref: '#/components/schemas/ParcelDimensions'
+        weight:
+          $ref: '#/components/schemas/ParcelWeight'
+        price:
+          $ref: '#/components/schemas/Price'
+        created_at:
+          type: string
+          format: date-time
+          description: Timestamp when the parcel was created, formatted according to RFC 3339, section 5.6.
+          example: '2021-12-02T10:12:07.753Z'
+        updated_at:
+          type: string
+          format: date-time
+          description: Timestamp of the most recent update to the parcel, formatted according to RFC 3339, section 5.6.
+          example: '2021-12-02T10:12:07.753Z'
+    NewParcelPickupContact:
+      type: object
+      properties:
+        name:
+          type:
+          - string
+          - 'null'
+          description: Name of the contact person at the pickup location.
+          example: John
+        phone:
+          type:
+          - string
+          - 'null'
+          description: Phone number of the contact person at the pickup location.
+          example: '+34666000000'
+    DeleteParcels:
+      type: object
+      required:
+      - parcel_ids
+      properties:
+        parcel_ids:
+          type: array
+          description: List of parcels to be deleted
+          items:
+            type: string
+            format: uuid
+    Tip:
+      type: object
+      properties:
+        parcel_id:
+          type: string
+          format: uuid
+          description: UUID of the parcel this tip is associated with.
+          example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+        amount:
+          minimum: 0
+          type: integer
+          description: 'Tip amount in the smallest currency unit, following the ISO 4217 standard (e.g. €6.30 → `630`).
+
+            '
+          example: 100
+        currency:
+          type: string
+          description: ISO 4217 currency code.
+          example: ARS
+    RequestError:
+      type: object
+      description: Standard error response body returned when a request fails.
+      required:
+      - errors
+      properties:
+        errors:
+          type: array
+          description: List of human-readable error messages describing what went wrong.
+          items:
+            type: string
     UpdateParcel:
       type: object
       description: Fields that can be updated on an existing parcel. Only fields included in the request will be modified.
@@ -765,41 +883,19 @@ components:
           example: '2021-12-02T10:12:07.753Z'
         price:
           $ref: '#/components/schemas/Price'
-    NewParcelPickupContact:
+    NewParcelDropoffContact:
       type: object
       properties:
         name:
-          type:
-          - string
-          - 'null'
-          description: Name of the contact person at the pickup location.
+          type: string
+          description: Name of the recipient at the drop-off location.
           example: John
         phone:
           type:
           - string
           - 'null'
-          description: Phone number of the contact person at the pickup location.
+          description: Phone number of the recipient at the drop-off location.
           example: '+34666000000'
-    Price:
-      type: object
-      description: Price information for the parcel, used in cash-on-delivery scenarios.
-      properties:
-        declared_value:
-          type: integer
-          description: 'Declared value of the parcel''s contents, in the smallest currency unit following the ISO 4217 standard (e.g. €6.30 → `630`).
-
-            '
-          example: 630
-        collected_value:
-          type: integer
-          description: 'Amount to be collected from the recipient upon delivery, in the smallest currency unit following the ISO 4217 standard (e.g. €6.30 → `630`).
-
-            '
-          example: 630
-        currency:
-          type: string
-          description: ISO 4217 currency code.
-          example: EUR
     ProofConfiguration:
       type: object
       description: The proof of delivery methods configured for a parcel.
@@ -869,144 +965,30 @@ components:
                   type: boolean
                   description: Whether this proof method is active for the parcel.
                   example: true
-    Point:
+    PaginatedParcels:
       type: object
-      description: A geographic coordinate expressed as latitude and longitude.
       required:
-      - lat
-      - lon
+      - parcels
+      - page
+      - page_size
+      - more_pages
       properties:
-        lat:
+        parcels:
+          type: array
+          items:
+            $ref: '#/components/schemas/Parcel'
+        page:
           type: number
-          format: float
-          description: Latitude in decimal degrees.
-          example: 40.4489254
-        lon:
+          description: The current page number returned.
+          example: 2
+        page_size:
           type: number
-          format: float
-          description: Longitude in decimal degrees.
-          example: -3.6730293
-    ParcelPointPickupInfo:
-      type: object
-      required:
-      - contact
-      description: 'Information about the pickup point. You must provide exactly one of the following location fields: `loc` (coordinates), `addr` (address string), or `hub_external_id` (reference to a registered hub).
-
-        '
-      properties:
-        addr:
-          type: string
-          description: Full address where the parcel should be picked up.
-          example: Calle de Pradillo, 42, Madrid
-        contact:
-          $ref: '#/components/schemas/NewParcelPickupContact'
-        instr:
-          type:
-          - string
-          - 'null'
-          description: Additional instructions for the driver at the pickup location.
-          example: Knock the door three times
-        loc:
-          $ref: '#/components/schemas/Point'
-        code:
-          type:
-          - string
-          - 'null'
-          description: 'Alphanumeric code (typically 4–6 characters) shown to the driver to confirm the pickup. Only one code is shown per delivery, so only use this field when the delivery consists of a single parcel.
-
-            '
-          example: ABC123
-        hub_external_id:
-          type: string
-          description: External ID of a client hub to use as the pickup location.
-          example: magic_store_santa_fe
-    ParcelPointDropoffInfo:
-      type: object
-      required:
-      - contact
-      description: 'Information about the drop-off (destination) point. You must provide exactly one of the following location fields: `loc` (coordinates), `addr` (address string), or `hub_external_id` (reference to a registered hub).
-
-        '
-      properties:
-        addr:
-          type: string
-          description: Full address where the parcel should be delivered.
-          example: Calle de Pradillo, 42, Madrid
-        contact:
-          $ref: '#/components/schemas/NewParcelDropoffContact'
-        instr:
-          type:
-          - string
-          - 'null'
-          description: Additional instructions for the driver at the drop-off location.
-          example: Knock the door three times
-        loc:
-          $ref: '#/components/schemas/Point'
-        hub_external_id:
-          type: string
-          description: External ID of a client hub to use as the drop-off location.
-          example: magic_store_santa_fe
-    NewParcel:
-      type: object
-      required:
-      - pickup_info
-      - dropoff_info
-      properties:
-        external_id:
-          type: string
-          description: 'Your own identifier for this parcel. Use this field to correlate parcels in the Cabify system with records in your own system. Must be unique across all your parcels.
-
-            '
-          example: parcel_001
-        pickup_info:
-          $ref: '#/components/schemas/ParcelPointPickupInfo'
-        dropoff_info:
-          $ref: '#/components/schemas/ParcelPointDropoffInfo'
-        dimensions:
-          $ref: '#/components/schemas/ParcelDimensions'
-        weight:
-          $ref: '#/components/schemas/ParcelWeight'
-        price:
-          $ref: '#/components/schemas/Price'
-        delivery_from:
-          type: string
-          format: date-time
-          description: 'Start of the requested delivery time window, formatted according to RFC 3339, section 5.6. The parcel will not be delivered before this time.
-
-            '
-          example: '2021-12-02T10:12:07.753Z'
-        delivery_to:
-          type: string
-          format: date-time
-          description: 'End of the requested delivery time window, formatted according to RFC 3339, section 5.6. The parcel should be delivered before this time.
-
-            '
-          example: '2021-12-02T10:12:07.753Z'
-    NewParcelDropoffContact:
-      type: object
-      properties:
-        name:
-          type: string
-          description: Name of the recipient at the drop-off location.
-          example: John
-        phone:
-          type:
-          - string
-          - 'null'
-          description: Phone number of the recipient at the drop-off location.
-          example: '+34666000000'
-    CreateTip:
-      required:
-      - amount
-      type: object
-      properties:
-        amount:
-          minimum: 0
-          type: integer
-          description: 'Tip amount in the smallest currency unit, following the ISO 4217 standard (e.g. €6.30 → `630`).
-
-            '
-          example: 100
+          description: The number of parcels returned per page.
+          example: 20
+        more_pages:
+          type: boolean
+          description: Whether additional pages of results are available.
+          example: true
   securitySchemes:
     bearer_token:
       type: http

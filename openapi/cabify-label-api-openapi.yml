@@ -1,8 +1,6 @@
 openapi: 3.2.0
 info:
-  description: 'Welcome to the Cabify Logistics API. This API allows you to create and manage parcel deliveries, track their status in real time, configure proof of delivery options, and receive live updates via webhooks. All requests must be authenticated using a Bearer token.
-
-    '
+  description: Welcome to the Cabify Logistics API. This API allows you to create and manage parcel deliveries, track their status in real time, configure proof of delivery options, and receive live updates via webhooks. All requests must be authenticated using a Bearer token.
   version: 1.0.0
   title: Cabify Logistics Label API
   contact:
@@ -13,16 +11,14 @@ servers:
 - url: https://logistics.api.cabify-sandbox.com
   description: Sandbox
 tags:
-- name: label
+- name: Label
 paths:
   /v1/parcels/{parcel_id}/warehouse/label:
     get:
       tags:
-      - label
-      summary: Get the warehouse label for a parcel (deprecated).
-      description: '**This endpoint is deprecated.** Please use [GET /v1/parcels/{parcel_id}/label](https://developers.cabify.com/reference/labelparcel) instead.
-
-        '
+      - Label
+      summary: Get the warehouse label for a parcel (deprecated)
+      description: '**This endpoint is deprecated.** Please use GET /v1/parcels/{parcel_id}/label instead.'
       operationId: warehouseLabelParcel
       parameters:
       - in: path

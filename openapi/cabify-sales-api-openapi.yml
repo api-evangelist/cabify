@@ -7,7 +7,13 @@ info:
     url: https://cabify.com
   title: Cabify Ride-Hailing Sales API
   version: '4.0'
-  description: "Sales objects are created once a journey transitions into the terminated state and they are associated with the user who requested the journey (which not necessarily is the rider).\n            <br> <br>The transition to terminated happens automatically after 2 hours in production (10 minutes in sandbox environment).\n            <br> <br>You can request them per user (requester of the journey), the client (all of your sales), or journey (all Sales associated to a specific journey which in most cases is just one)."
+  description: 'Sales objects are created once a journey transitions into the terminated state and they are associated with the user who requested the journey (which not necessarily is the rider).
+
+
+    The transition to terminated happens automatically after 2 hours in production (10 minutes in sandbox environment).
+
+
+    You can request them per user (requester of the journey), the client (all of your sales), or journey (all Sales associated to a specific journey which in most cases is just one).'
 servers:
 - url: https://cabify.com
   description: Production
@@ -16,7 +22,13 @@ servers:
 security:
 - access_token: []
 tags:
-- description: "Sales objects are created once a journey transitions into the terminated state and they are associated with the user who requested the journey (which not necessarily is the rider).\n            <br> <br>The transition to terminated happens automatically after 2 hours in production (10 minutes in sandbox environment).\n            <br> <br>You can request them per user (requester of the journey), the client (all of your sales), or journey (all Sales associated to a specific journey which in most cases is just one)."
+- description: 'Sales objects are created once a journey transitions into the terminated state and they are associated with the user who requested the journey (which not necessarily is the rider).
+
+
+    The transition to terminated happens automatically after 2 hours in production (10 minutes in sandbox environment).
+
+
+    You can request them per user (requester of the journey), the client (all of your sales), or journey (all Sales associated to a specific journey which in most cases is just one).'
   name: Sales
 paths:
   /api/v4/journey/{journey_id}/sales:
@@ -253,6 +265,242 @@ paths:
       - Sales
 components:
   schemas:
+    Sale:
+      example:
+        code: ESP22AX002004
+        concept:
+          type: journey
+          type_object:
+            charge_code: P004
+            country: ES
+            description: 2022-02-17. Sol, Madrid. P004
+            dropoff:
+              addr: Calle de oviedo
+              city: Madrid
+              contact:
+                mobile_cc: '34'
+                mobile_num: '123456789'
+                name: Jhon Doe
+              country: ES
+              loc:
+              - 40.449074
+              - -3.700908
+              name: Home
+              num: '1428'
+            end_at: '2022-02-17T09:31:27.028Z'
+            id: 41f11290-8fd4-11ec-879a-acde48001122
+            pickup:
+              addr: Calle de la cruz
+              city: Madrid
+              contact:
+                mobile_cc: '34'
+                mobile_num: '123456789'
+                name: Jhon Doe
+              country: ES
+              loc:
+              - 40.4169335
+              - -3.7061872
+              name: Work
+              num: '1428'
+            region: madrid
+            start_at: '2022-02-17T09:30:34.831Z'
+        currency: EUR
+        invoice_date: '2022-02-21'
+        price_details:
+          discount: 0
+          tax_rate: 0
+          tax_type: iva
+          total: 0
+      properties:
+        code:
+          description: Code of the Sale.
+          type: string
+        concept:
+          $ref: '#/components/schemas/Concept'
+        currency:
+          description: Currency of the Sale.
+          type: string
+        invoice_date:
+          description: Date of the Invoice of the Sale.
+          format: date
+          type: string
+        price_details:
+          $ref: '#/components/schemas/PriceDetail'
+      title: Sale
+      type: object
+    Concept:
+      description: Prices of the Sale detailed.
+      example:
+        type: journey
+        type_object:
+          charge_code: P004
+          country: ES
+          description: 2022-02-17. Sol, Madrid. P004
+          dropoff:
+            addr: Calle de oviedo
+            city: Madrid
+            contact:
+              mobile_cc: '34'
+              mobile_num: '123456789'
+              name: Jhon Doe
+            country: ES
+            loc:
+            - 40.449074
+            - -3.700908
+            name: Home
+            num: '1428'
+          end_at: '2022-02-17T09:31:27.028Z'
+          id: 41f11290-8fd4-11ec-879a-acde48001122
+          pickup:
+            addr: Calle de la cruz
+            city: Madrid
+            contact:
+              mobile_cc: '34'
+              mobile_num: '123456789'
+              name: Jhon Doe
+            country: ES
+            loc:
+            - 40.4169335
+            - -3.7061872
+            name: Work
+            num: '1428'
+          region: madrid
+          start_at: '2022-02-17T09:30:34.831Z'
+      properties:
+        type:
+          description: Type of the element being sold.
+          type: string
+        type_object:
+          $ref: '#/components/schemas/TypeObject'
+      title: Concept
+      type: object
+    Expense:
+      example:
+        data:
+        - code: ESP22AX002004
+          concept:
+            type: journey
+            type_object:
+              charge_code: P004
+              country: ES
+              description: 2022-02-17. Sol, Madrid. P004
+              end_at: '2022-02-17T09:31:27.028Z'
+              id: 41f11290-8fd4-11ec-879a-acde48001122
+              region: madrid
+              start_at: '2022-02-17T09:30:34.831Z'
+          currency: EUR
+          invoice_date: '2022-02-21'
+          price_details:
+            discount: 0
+            tax_rate: 0
+            tax_type: iva
+            total: 0
+        page: 1
+        pages: 1
+        per: 25
+        total: 3
+      properties:
+        data:
+          description: List of sales
+          items:
+            $ref: '#/components/schemas/Sale'
+          type: array
+        page:
+          description: Number of page to fetch.
+          type: integer
+        pages:
+          description: Total amount of pages.
+          type: integer
+        per:
+          description: Amount of sales by page.
+          type: integer
+        total:
+          description: Amount total of users obtained in all the pages.
+          type: integer
+      title: Expense
+      type: object
+    TypeObjectSale:
+      description: Entity description in a Sale.
+      example:
+        charge_code: P004
+        country: ES
+        description: 2022-02-17. Sol, Madrid. P004
+        dropoff:
+          addr: Calle de oviedo
+          city: Madrid
+          contact:
+            mobile_cc: '34'
+            mobile_num: '123456789'
+            name: Jhon Doe
+          country: ES
+          loc:
+          - 40.449074
+          - -3.700908
+          name: Home
+          num: '1428'
+        end_at: '2022-02-17T09:31:27.028Z'
+        id: 41f11290-8fd4-11ec-879a-acde48001122
+        pickup:
+          addr: Calle de la cruz
+          city: Madrid
+          contact:
+            mobile_cc: '34'
+            mobile_num: '123456789'
+            name: Jhon Doe
+          country: ES
+          loc:
+          - 40.4169335
+          - -3.7061872
+          name: Work
+          num: '1428'
+        region: madrid
+        start_at: '2022-02-17T09:30:34.831Z'
+      properties:
+        charge_code:
+          description: Charge code of the Journey of the Sale.
+          type: string
+        country:
+          description: Country of the Journey of the Sale.
+          type: string
+        description:
+          description: The Description includes the detail of the Journey associated to the Sale.
+          type: string
+        dropoff:
+          $ref: '#/components/schemas/StopResponse'
+        end_at:
+          description: DateTime when the Journey ended.
+          format: date-time
+          type: string
+        id:
+          description: ID of the Journey of the Sale.
+          type: string
+        pickup:
+          $ref: '#/components/schemas/StopResponse'
+        region:
+          description: Region where the Journey happened.
+          type: string
+        start_at:
+          description: DateTime when the Journey started.
+          format: date-time
+          type: string
+      title: TypeObjectSale
+      type: object
+    TypeObject:
+      anyOf:
+      - $ref: '#/components/schemas/TypeObjectSale'
+      - $ref: '#/components/schemas/TypeObjectRectification'
+      title: TypeObject
+      type: object
+    TypeObjectRectification:
+      properties:
+        description:
+          description: Description usually indicating the reason of the Rectification.
+          type: string
+        rectified_sale_id:
+          description: ID of the Sale which was rectified.
+          type: string
+      title: TypeObjectRectification
+      type: object
     StopResponse:
       description: 'Stop of a journey. A journey needs to have at least 2 stops: the first one is considered the pickup point the last one the destination.'
       example:
@@ -321,14 +569,29 @@ components:
       - loc
       title: StopResponse
       type: object
-    UnauthorizedRequest:
-      description: The token used is invalid either because it is expired or because it is incorrect.
+    PriceDetail:
       example:
-        error: Unauthorized
+        discount: 0
+        tax_rate: 0
+        tax_type: iva
+        total: 0
       properties:
-        error:
+        discount:
+          default: 0
+          description: Total discount in cents with taxes.
+          type: integer
+        tax_rate:
+          default: 0
+          description: Tax Rate.
+          type: integer
+        tax_type:
+          description: Tax Type. Usually is 'iva_av'.
           type: string
-      title: UnauthorizedRequest
+        total:
+          default: 0
+          description: Total amount in cents with taxes.
+          type: integer
+      title: PriceDetail
       type: object
     InternalServerError:
       description: indicates that an internal server error occurred
@@ -339,50 +602,23 @@ components:
           type: string
       title: InternalServerError
       type: object
-    Expense:
+    UnauthorizedRequest:
+      description: The token used is invalid either because it is expired or because it is incorrect.
       example:
-        data:
-        - code: ESP22AX002004
-          concept:
-            type: journey
-            type_object:
-              charge_code: P004
-              country: ES
-              description: 2022-02-17. Sol, Madrid. P004
-              end_at: '2022-02-17T09:31:27.028Z'
-              id: 41f11290-8fd4-11ec-879a-acde48001122
-              region: madrid
-              start_at: '2022-02-17T09:30:34.831Z'
-          currency: EUR
-          invoice_date: '2022-02-21'
-          price_details:
-            discount: 0
-            tax_rate: 0
-            tax_type: iva
-            total: 0
-        page: 1
-        pages: 1
-        per: 25
-        total: 3
+        error: Unauthorized
       properties:
-        data:
-          description: List of sales
-          items:
-            $ref: '#/components/schemas/Sale'
-          type: array
-        page:
-          description: Number of page to fetch.
-          type: integer
-        pages:
-          description: Total amount of pages.
-          type: integer
-        per:
-          description: Amount of sales by page.
-          type: integer
-        total:
-          description: Amount total of users obtained in all the pages.
-          type: integer
-      title: Expense
+        error:
+          type: string
+      title: UnauthorizedRequest
+      type: object
+    BadRequest:
+      description: Indicates that the server cannot or will not process the request due to something that is perceived to be a client error (for example, malformed request syntax, invalid request message framing, or deceptive request routing).
+      example:
+        error: Bad Request error message
+      properties:
+        message:
+          type: string
+      title: BadRequest
       type: object
     Contact:
       description: Contact details on each Stop. Include this object if you want the Driver to see additional Contact details on each Stop.
@@ -408,164 +644,6 @@ components:
           - dropoff
           type: string
       title: Contact
-      type: object
-    Concept:
-      description: Prices of the Sale detailed.
-      example:
-        type: journey
-        type_object:
-          charge_code: P004
-          country: ES
-          description: 2022-02-17. Sol, Madrid. P004
-          dropoff:
-            addr: Calle de oviedo
-            city: Madrid
-            contact:
-              mobile_cc: '34'
-              mobile_num: '123456789'
-              name: Jhon Doe
-            country: ES
-            loc:
-            - 40.449074
-            - -3.700908
-            name: Home
-            num: '1428'
-          end_at: '2022-02-17T09:31:27.028Z'
-          id: 41f11290-8fd4-11ec-879a-acde48001122
-          pickup:
-            addr: Calle de la cruz
-            city: Madrid
-            contact:
-              mobile_cc: '34'
-              mobile_num: '123456789'
-              name: Jhon Doe
-            country: ES
-            loc:
-            - 40.4169335
-            - -3.7061872
-            name: Work
-            num: '1428'
-          region: madrid
-          start_at: '2022-02-17T09:30:34.831Z'
-      properties:
-        type:
-          description: Type of the element being sold.
-          type: string
-        type_object:
-          $ref: '#/components/schemas/TypeObject'
-      title: Concept
-      type: object
-    TypeObjectRectification:
-      properties:
-        description:
-          description: Description usually indicating the reason of the Rectification.
-          type: string
-        rectified_sale_id:
-          description: ID of the Sale which was rectified.
-          type: string
-      title: TypeObjectRectification
-      type: object
-    TypeObject:
-      anyOf:
-      - $ref: '#/components/schemas/TypeObjectSale'
-      - $ref: '#/components/schemas/TypeObjectRectification'
-      title: TypeObject
-      type: object
-    Sale:
-      example:
-        code: ESP22AX002004
-        concept:
-          type: journey
-          type_object:
-            charge_code: P004
-            country: ES
-            description: 2022-02-17. Sol, Madrid. P004
-            dropoff:
-              addr: Calle de oviedo
-              city: Madrid
-              contact:
-                mobile_cc: '34'
-                mobile_num: '123456789'
-                name: Jhon Doe
-              country: ES
-              loc:
-              - 40.449074
-              - -3.700908
-              name: Home
-              num: '1428'
-            end_at: '2022-02-17T09:31:27.028Z'
-            id: 41f11290-8fd4-11ec-879a-acde48001122
-            pickup:
-              addr: Calle de la cruz
-              city: Madrid
-              contact:
-                mobile_cc: '34'
-                mobile_num: '123456789'
-                name: Jhon Doe
-              country: ES
-              loc:
-              - 40.4169335
-              - -3.7061872
-              name: Work
-              num: '1428'
-            region: madrid
-            start_at: '2022-02-17T09:30:34.831Z'
-        currency: EUR
-        invoice_date: '2022-02-21'
-        price_details:
-          discount: 0
-          tax_rate: 0
-          tax_type: iva
-          total: 0
-      properties:
-        code:
-          description: Code of the Sale.
-          type: string
-        concept:
-          $ref: '#/components/schemas/Concept'
-        currency:
-          description: Currency of the Sale.
-          type: string
-        invoice_date:
-          description: Date of the Invoice of the Sale.
-          format: date
-          type: string
-        price_details:
-          $ref: '#/components/schemas/PriceDetail'
-      title: Sale
-      type: object
-    PriceDetail:
-      example:
-        discount: 0
-        tax_rate: 0
-        tax_type: iva
-        total: 0
-      properties:
-        discount:
-          default: 0
-          description: Total discount in cents with taxes.
-          type: integer
-        tax_rate:
-          default: 0
-          description: Tax Rate.
-          type: integer
-        tax_type:
-          description: Tax Type. Usually is 'iva_av'.
-          type: string
-        total:
-          default: 0
-          description: Total amount in cents with taxes.
-          type: integer
-      title: PriceDetail
-      type: object
-    BadRequest:
-      description: Indicates that the server cannot or will not process the request due to something that is perceived to be a client error (for example, malformed request syntax, invalid request message framing, or deceptive request routing).
-      example:
-        error: Bad Request error message
-      properties:
-        message:
-          type: string
-      title: BadRequest
       type: object
     MeetingPoint:
       description: A specific meeting point within a hub location (e.g. a terminal at an airport). Obtained from the hub data returned in the estimates response.
@@ -604,72 +682,6 @@ components:
         message:
           type: string
       title: NotFound
-      type: object
-    TypeObjectSale:
-      description: Entity description in a Sale.
-      example:
-        charge_code: P004
-        country: ES
-        description: 2022-02-17. Sol, Madrid. P004
-        dropoff:
-          addr: Calle de oviedo
-          city: Madrid
-          contact:
-            mobile_cc: '34'
-            mobile_num: '123456789'
-            name: Jhon Doe
-          country: ES
-          loc:
-          - 40.449074
-          - -3.700908
-          name: Home
-          num: '1428'
-        end_at: '2022-02-17T09:31:27.028Z'
-        id: 41f11290-8fd4-11ec-879a-acde48001122
-        pickup:
-          addr: Calle de la cruz
-          city: Madrid
-          contact:
-            mobile_cc: '34'
-            mobile_num: '123456789'
-            name: Jhon Doe
-          country: ES
-          loc:
-          - 40.4169335
-          - -3.7061872
-          name: Work
-          num: '1428'
-        region: madrid
-        start_at: '2022-02-17T09:30:34.831Z'
-      properties:
-        charge_code:
-          description: Charge code of the Journey of the Sale.
-          type: string
-        country:
-          description: Country of the Journey of the Sale.
-          type: string
-        description:
-          description: The Description includes the detail of the Journey associated to the Sale.
-          type: string
-        dropoff:
-          $ref: '#/components/schemas/StopResponse'
-        end_at:
-          description: DateTime when the Journey ended.
-          format: date-time
-          type: string
-        id:
-          description: ID of the Journey of the Sale.
-          type: string
-        pickup:
-          $ref: '#/components/schemas/StopResponse'
-        region:
-          description: Region where the Journey happened.
-          type: string
-        start_at:
-          description: DateTime when the Journey started.
-          format: date-time
-          type: string
-      title: TypeObjectSale
       type: object
   securitySchemes:
     access_token:

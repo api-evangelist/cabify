@@ -77,9 +77,7 @@ paths:
 
         > When a hub is present, present the meeting points to the user for selection and include the chosen one in the journey creation request via the `meeting_point` field in the origin stop.
 
-        > Alternatively, use `GET /api/v4/hub` to look up hub data independently.
-
-        '
+        > Alternatively, use `GET /api/v4/hub` to look up hub data independently.'
       operationId: getEstimation
       parameters: []
       requestBody:
@@ -119,23 +117,68 @@ paths:
       - Estimates
 components:
   schemas:
-    UnauthorizedRequest:
-      description: The token used is invalid either because it is expired or because it is incorrect.
+    EstimateRequest:
+      additionalProperties: false
+      description: 'Request an estimate before creating a journey.
+
+
+        The estimation response provides the `product.id` value that **must** be passed to the journey
+
+        creation endpoint. For **reserved** journeys, also pass the same `start_at` used here to the
+
+        journey creation request to ensure consistent pricing and availability.
+
+
+        We recommend requesting a new estimate no more than **5 minutes** before creating a journey.
+
+        '
       example:
-        error: Unauthorized
+        requester_id: 0d3cd443da5f11eb89d7ea639ff4befb
+        start_at: '2022-07-01 10:00:00'
+        start_type: asap
+        stops:
+        - loc:
+          - 40.4169335
+          - -3.7061872
+        - loc:
+          - 40.4169335
+          - -3.7061872
       properties:
-        error:
+        requester_id:
+          description: User to which the estimates would be scoped.
+          pattern: ^[a-f0-9]{32}$
           type: string
-      title: UnauthorizedRequest
-      type: object
-    InternalServerError:
-      description: indicates that an internal server error occurred
-      example:
-        error: Something went wrong
-      properties:
-        error:
+        start_at:
+          description: When using startType RESERVED this attribute defines the date and time of the reservation. Accepted format must be YYYY-MM-DD HH:MM:SS. It should be in the local time of the pick up location.
+          pattern: ^([0-9]+(-[0-9]+)+)\s+([0-9]+(:[0-9]+)+)$
+          type:
+          - string
+          - 'null'
+        start_type:
+          description: Specifies whether the journey should start right now or it should be a reservation later in time. Note that if the value is RESERVED startAt attribute has to be a valid date. If ASAP startAt will be ignored.
+          enum:
+          - asap
+          - reserved
           type: string
-      title: InternalServerError
+        stops:
+          default: []
+          description: The actual coordinates of the address. Required two floats per location latitude and longitude.
+          items:
+            properties:
+              loc:
+                items:
+                  type: number
+                maxItems: 2
+                minItems: 2
+                type: array
+            type: object
+          minItems: 2
+          type: array
+      required:
+      - start_type
+      - requester_id
+      - stops
+      title: EstimateRequest
       type: object
     EstimateResponse:
       description: 'List of available products with pricing for the requested route.
@@ -251,78 +294,6 @@ components:
         type: object
       title: EstimateResponse
       type: array
-    BadRequest:
-      description: Indicates that the server cannot or will not process the request due to something that is perceived to be a client error (for example, malformed request syntax, invalid request message framing, or deceptive request routing).
-      example:
-        error: Bad Request error message
-      properties:
-        message:
-          type: string
-      title: BadRequest
-      type: object
-    EstimateRequest:
-      additionalProperties: false
-      description: 'Request an estimate before creating a journey.
-
-
-        The estimation response provides the `product.id` value that **must** be passed to the journey
-
-        creation endpoint. For **reserved** journeys, also pass the same `start_at` used here to the
-
-        journey creation request to ensure consistent pricing and availability.
-
-
-        We recommend requesting a new estimate no more than **5 minutes** before creating a journey.
-
-        '
-      example:
-        requester_id: 0d3cd443da5f11eb89d7ea639ff4befb
-        start_at: '2022-07-01 10:00:00'
-        start_type: asap
-        stops:
-        - loc:
-          - 40.4169335
-          - -3.7061872
-        - loc:
-          - 40.4169335
-          - -3.7061872
-      properties:
-        requester_id:
-          description: User to which the estimates would be scoped.
-          pattern: ^[a-f0-9]{32}$
-          type: string
-        start_at:
-          description: When using startType RESERVED this attribute defines the date and time of the reservation. Accepted format must be YYYY-MM-DD HH:MM:SS. It should be in the local time of the pick up location.
-          pattern: ^([0-9]+(-[0-9]+)+)\s+([0-9]+(:[0-9]+)+)$
-          type:
-          - string
-          - 'null'
-        start_type:
-          description: Specifies whether the journey should start right now or it should be a reservation later in time. Note that if the value is RESERVED startAt attribute has to be a valid date. If ASAP startAt will be ignored.
-          enum:
-          - asap
-          - reserved
-          type: string
-        stops:
-          default: []
-          description: The actual coordinates of the address. Required two floats per location latitude and longitude.
-          items:
-            properties:
-              loc:
-                items:
-                  type: number
-                maxItems: 2
-                minItems: 2
-                type: array
-            type: object
-          minItems: 2
-          type: array
-      required:
-      - start_type
-      - requester_id
-      - stops
-      title: EstimateRequest
-      type: object
     HubObject:
       description: A hub is a large venue (e.g. airport, train station) with designated pick-up/drop-off meeting points.
       example:
@@ -411,6 +382,33 @@ components:
       type:
       - object
       - 'null'
+    InternalServerError:
+      description: indicates that an internal server error occurred
+      example:
+        error: Something went wrong
+      properties:
+        error:
+          type: string
+      title: InternalServerError
+      type: object
+    UnauthorizedRequest:
+      description: The token used is invalid either because it is expired or because it is incorrect.
+      example:
+        error: Unauthorized
+      properties:
+        error:
+          type: string
+      title: UnauthorizedRequest
+      type: object
+    BadRequest:
+      description: Indicates that the server cannot or will not process the request due to something that is perceived to be a client error (for example, malformed request syntax, invalid request message framing, or deceptive request routing).
+      example:
+        error: Bad Request error message
+      properties:
+        message:
+          type: string
+      title: BadRequest
+      type: object
   securitySchemes:
     access_token:
       scheme: bearer

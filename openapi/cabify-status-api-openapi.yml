@@ -1,8 +1,6 @@
 openapi: 3.2.0
 info:
-  description: 'Welcome to the Cabify Logistics API. This API allows you to create and manage parcel deliveries, track their status in real time, configure proof of delivery options, and receive live updates via webhooks. All requests must be authenticated using a Bearer token.
-
-    '
+  description: Welcome to the Cabify Logistics API. This API allows you to create and manage parcel deliveries, track their status in real time, configure proof of delivery options, and receive live updates via webhooks. All requests must be authenticated using a Bearer token.
   version: 1.0.0
   title: Cabify Logistics Status API
   contact:
@@ -13,14 +11,14 @@ servers:
 - url: https://logistics.api.cabify-sandbox.com
   description: Sandbox
 tags:
-- name: status
+- name: Status
   description: Track the real-time status and location of your parcels at any point during their delivery.
 paths:
   /v1/parcels/{parcel_id}/status:
     get:
       tags:
-      - status
-      summary: Get the current status of a parcel.
+      - Status
+      summary: Get the current status of a parcel
       description: Returns the current state and tracking information for the specified parcel.
       operationId: statusParcel
       parameters:
@@ -47,11 +45,9 @@ paths:
   /v1/parcels/{parcel_id}/timeline:
     get:
       tags:
-      - status
-      summary: Get the state history of a parcel.
-      description: 'Returns the ordered list of state-change events for the specified parcel. Only parcels updated within the last 30 days can be queried.
-
-        '
+      - Status
+      summary: Get the state history of a parcel
+      description: Returns the ordered list of state-change events for the specified parcel. Only parcels updated within the last 30 days can be queried.
       operationId: timelineParcel
       parameters:
       - in: path
@@ -78,21 +74,26 @@ paths:
       - bearer_token: []
 components:
   schemas:
-    ParcelStatusRoute:
+    ParcelTimeline:
       type: object
-      description: Route information between two points during a delivery.
       required:
-      - eta
-      - path
+      - id
+      - timeline
       properties:
-        eta:
-          type: integer
-          example: 120
-          description: Estimated time of arrival in seconds.
-        path:
+        id:
           type: string
-          example: fhdsa98fha87sdfhas76dgf8a
-          description: Encoded polyline representing the route path.
+          format: uuid
+          description: System-generated UUID for this parcel.
+          example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+        external_id:
+          type: string
+          description: Your own identifier for this parcel, as provided when the parcel was created.
+          example: parcel_001
+        timeline:
+          type: array
+          description: Chronological list of state-change events for this parcel.
+          items:
+            $ref: '#/components/schemas/TimelineEvent'
     PickupFailed:
       type: object
       description: '**Deprecated.** Use `pickup_attempt` instead. Details of a failed pickup attempt.
@@ -130,6 +131,99 @@ components:
           type: string
           description: Comments left by the driver explaining why the pickup failed.
           example: can't find the address
+    ParcelStatusRoute:
+      type: object
+      description: Route information between two points during a delivery.
+      required:
+      - eta
+      - path
+      properties:
+        eta:
+          type: integer
+          example: 120
+          description: Estimated time of arrival in seconds.
+        path:
+          type: string
+          example: fhdsa98fha87sdfhas76dgf8a
+          description: Encoded polyline representing the route path.
+    TimelineEvent:
+      type: object
+      required:
+      - state
+      - state_updated_at
+      properties:
+        state:
+          type: string
+          description: 'The lifecycle state the parcel transitioned into. See [parcel states](https://developers.cabify.com/reference/logistics-introduction#parcel) for a full description of each value.
+
+            '
+          enum:
+          - ready
+          - qualifiedforpickup
+          - pickingup
+          - intransit
+          - delivering
+          - delivered
+          - returning
+          - returned
+          - incident
+          - requestercancel
+          - internalcancel
+          - pickupfailed
+          - onroutetopickup
+          - readytopickup
+          - onroutetofinalhub
+          - receivedonfinalhub
+          - readytodispatch
+          - onroutetodelivery
+          - undelivered
+          - onroutetoreturn
+          - returnrejected
+        state_updated_at:
+          type: string
+          format: date-time
+          description: Timestamp when the parcel transitioned into this state, formatted according to RFC 3339, section 5.6.
+          example: '2021-12-02T10:12:07.753Z'
+    Asset:
+      type: object
+      description: Details of the vehicle assigned to the delivery.
+      properties:
+        reg_plate:
+          type:
+          - string
+          - 'null'
+          description: Vehicle registration plate number.
+          example: 1111AAA
+        name:
+          type: string
+          description: Vehicle model name.
+          example: Audi A3
+        color:
+          type: string
+          description: Vehicle color.
+          example: black
+        asset_kind:
+          $ref: '#/components/schemas/AssetKind'
+    Modality:
+      type: string
+      description: 'The delivery modality determines the timing and service level of the shipment. - `express`: On-demand delivery, typically within 1 hour. - `same_day`: Delivery scheduled for the same calendar day. - `next_day`: Delivery scheduled for the following calendar day. - `groceries`: Optimised for grocery and fresh-food deliveries.
+
+        '
+      example: same_day
+      enum:
+      - express
+      - same_day
+      - next_day
+      - groceries
+    AssetKind:
+      type: string
+      description: The type of vehicle assigned to carry the parcel.
+      enum:
+      - bicycle
+      - car
+      - moped
+      - scooter
+      - van
     ParcelStatus:
       type: object
       properties:
@@ -336,104 +430,6 @@ components:
               example: Same day default
             modality:
               $ref: '#/components/schemas/Modality'
-    AssetKind:
-      type: string
-      description: The type of vehicle assigned to carry the parcel.
-      enum:
-      - bicycle
-      - car
-      - moped
-      - scooter
-      - van
-    ParcelTimeline:
-      type: object
-      required:
-      - id
-      - timeline
-      properties:
-        id:
-          type: string
-          format: uuid
-          description: System-generated UUID for this parcel.
-          example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
-        external_id:
-          type: string
-          description: Your own identifier for this parcel, as provided when the parcel was created.
-          example: parcel_001
-        timeline:
-          type: array
-          description: Chronological list of state-change events for this parcel.
-          items:
-            $ref: '#/components/schemas/TimelineEvent'
-    TimelineEvent:
-      type: object
-      required:
-      - state
-      - state_updated_at
-      properties:
-        state:
-          type: string
-          description: 'The lifecycle state the parcel transitioned into. See [parcel states](https://developers.cabify.com/reference/logistics-introduction#parcel) for a full description of each value.
-
-            '
-          enum:
-          - ready
-          - qualifiedforpickup
-          - pickingup
-          - intransit
-          - delivering
-          - delivered
-          - returning
-          - returned
-          - incident
-          - requestercancel
-          - internalcancel
-          - pickupfailed
-          - onroutetopickup
-          - readytopickup
-          - onroutetofinalhub
-          - receivedonfinalhub
-          - readytodispatch
-          - onroutetodelivery
-          - undelivered
-          - onroutetoreturn
-          - returnrejected
-        state_updated_at:
-          type: string
-          format: date-time
-          description: Timestamp when the parcel transitioned into this state, formatted according to RFC 3339, section 5.6.
-          example: '2021-12-02T10:12:07.753Z'
-    Asset:
-      type: object
-      description: Details of the vehicle assigned to the delivery.
-      properties:
-        reg_plate:
-          type:
-          - string
-          - 'null'
-          description: Vehicle registration plate number.
-          example: 1111AAA
-        name:
-          type: string
-          description: Vehicle model name.
-          example: Audi A3
-        color:
-          type: string
-          description: Vehicle color.
-          example: black
-        asset_kind:
-          $ref: '#/components/schemas/AssetKind'
-    Modality:
-      type: string
-      description: 'The delivery modality determines the timing and service level of the shipment. - `express`: On-demand delivery, typically within 1 hour. - `same_day`: Delivery scheduled for the same calendar day. - `next_day`: Delivery scheduled for the following calendar day. - `groceries`: Optimised for grocery and fresh-food deliveries.
-
-        '
-      example: same_day
-      enum:
-      - express
-      - same_day
-      - next_day
-      - groceries
   securitySchemes:
     bearer_token:
       type: http
