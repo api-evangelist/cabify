@@ -304,6 +304,15 @@ paths:
       description: Sandbox
 components:
   schemas:
+    UnauthorizedRequest:
+      description: The token used is invalid either because it is expired or because it is incorrect.
+      example:
+        error: Unauthorized
+      properties:
+        error:
+          type: string
+      title: UnauthorizedRequest
+      type: object
     HubObject:
       description: A hub is a large venue (e.g. airport, train station) with designated pick-up/drop-off meeting points.
       example:
@@ -392,6 +401,13 @@ components:
       type:
       - object
       - 'null'
+    HubResponse:
+      description: Hub information for a given set of coordinates. Returns null inside the data field when no hub exists at those coordinates.
+      properties:
+        data:
+          $ref: '#/components/schemas/HubObject'
+      title: HubResponse
+      type: object
     BadRequest:
       description: Indicates that the server cannot or will not process the request due to something that is perceived to be a client error (for example, malformed request syntax, invalid request message framing, or deceptive request routing).
       example:
@@ -400,22 +416,6 @@ components:
         message:
           type: string
       title: BadRequest
-      type: object
-    UnauthorizedRequest:
-      description: The token used is invalid either because it is expired or because it is incorrect.
-      example:
-        error: Unauthorized
-      properties:
-        error:
-          type: string
-      title: UnauthorizedRequest
-      type: object
-    HubResponse:
-      description: Hub information for a given set of coordinates. Returns null inside the data field when no hub exists at those coordinates.
-      properties:
-        data:
-          $ref: '#/components/schemas/HubObject'
-      title: HubResponse
       type: object
   securitySchemes:
     bearer_token:

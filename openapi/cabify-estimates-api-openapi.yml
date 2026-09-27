@@ -117,6 +117,33 @@ paths:
       - Estimates
 components:
   schemas:
+    InternalServerError:
+      description: indicates that an internal server error occurred
+      example:
+        error: Something went wrong
+      properties:
+        error:
+          type: string
+      title: InternalServerError
+      type: object
+    UnauthorizedRequest:
+      description: The token used is invalid either because it is expired or because it is incorrect.
+      example:
+        error: Unauthorized
+      properties:
+        error:
+          type: string
+      title: UnauthorizedRequest
+      type: object
+    BadRequest:
+      description: Indicates that the server cannot or will not process the request due to something that is perceived to be a client error (for example, malformed request syntax, invalid request message framing, or deceptive request routing).
+      example:
+        error: Bad Request error message
+      properties:
+        message:
+          type: string
+      title: BadRequest
+      type: object
     EstimateRequest:
       additionalProperties: false
       description: 'Request an estimate before creating a journey.
@@ -382,33 +409,6 @@ components:
       type:
       - object
       - 'null'
-    InternalServerError:
-      description: indicates that an internal server error occurred
-      example:
-        error: Something went wrong
-      properties:
-        error:
-          type: string
-      title: InternalServerError
-      type: object
-    UnauthorizedRequest:
-      description: The token used is invalid either because it is expired or because it is incorrect.
-      example:
-        error: Unauthorized
-      properties:
-        error:
-          type: string
-      title: UnauthorizedRequest
-      type: object
-    BadRequest:
-      description: Indicates that the server cannot or will not process the request due to something that is perceived to be a client error (for example, malformed request syntax, invalid request message framing, or deceptive request routing).
-      example:
-        error: Bad Request error message
-      properties:
-        message:
-          type: string
-      title: BadRequest
-      type: object
   securitySchemes:
     access_token:
       scheme: bearer

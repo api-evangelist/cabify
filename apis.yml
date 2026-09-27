@@ -73,7 +73,7 @@ maintainers:
   email: info@apis.io
 apis:
 - aid: cabify:cabify-delivery-api
-  name: Cabify delivery API
+  name: Cabify Delivery API
   description: >-
     Operations for managing the delivery lifecycle. Use these endpoints to trigger a shipment, cancel
     an active delivery, or check whether a pickup location falls within an operating area.
@@ -113,7 +113,7 @@ apis:
   - type: APIReference
     url: https://developers.cabify.com/reference/addparcels
 - aid: cabify:cabify-hubs-api
-  name: Cabify hubs API
+  name: Cabify Hubs API
   description: >-
     A hub is a physical location (such as a warehouse or store) where parcels are stored until they are
     ready to be picked up by a driver. You can reference a hub in pickup or drop-off information using
@@ -153,7 +153,7 @@ apis:
   - type: APIReference
     url: https://developers.cabify.com/reference/addparcels
 - aid: cabify:cabify-label-api
-  name: Cabify label API
+  name: Cabify Label API
   description: The label API from Cabify — 1 operation(s) for label.
   humanURL: https://developers.cabify.com/docs/ride-hailing
   baseURL: https://cabify.com/api/v4
@@ -194,7 +194,7 @@ apis:
   - type: APIReference
     url: https://developers.cabify.com/reference/addparcels
 - aid: cabify:cabify-parcels-api
-  name: Cabify parcels API
+  name: Cabify Parcels API
   description: >-
     A parcel is the package you need to ship. Each parcel is identified by a unique ID and contains a
     pickup point (where the driver collects the package) and a drop-off point (the destination). Parcels
@@ -237,7 +237,7 @@ apis:
   - type: APIReference
     url: https://developers.cabify.com/reference/addparcels
 - aid: cabify:cabify-shipment-api
-  name: Cabify shipment API
+  name: Cabify Shipment API
   description: The shipment API from Cabify — 2 operation(s) for shipment.
   humanURL: https://developers.cabify.com/docs/ride-hailing
   baseURL: https://cabify.com/api/v4
@@ -255,7 +255,7 @@ apis:
   - type: APIReference
     url: https://developers.cabify.com/reference/addparcels
 - aid: cabify:cabify-shipping-types-api
-  name: Cabify shipping_types API
+  name: Cabify Shipping Types API
   description: The shipping_types API from Cabify — 1 operation(s) for shipping_types.
   humanURL: https://developers.cabify.com/docs/ride-hailing
   baseURL: https://cabify.com/api/v4
@@ -273,7 +273,7 @@ apis:
   - type: APIReference
     url: https://developers.cabify.com/reference/addparcels
 - aid: cabify:cabify-status-api
-  name: Cabify status API
+  name: Cabify Status API
   description: >-
     Track the real-time status and location of your parcels at any point during their delivery.
   humanURL: https://developers.cabify.com/docs/ride-hailing
@@ -292,7 +292,7 @@ apis:
   - type: APIReference
     url: https://developers.cabify.com/reference/addparcels
 - aid: cabify:cabify-users-api
-  name: Cabify users API
+  name: Cabify Users API
   description: The users API from Cabify — 4 operation(s) for users.
   humanURL: https://developers.cabify.com/docs/ride-hailing
   baseURL: https://cabify.com/api/v4
@@ -310,7 +310,7 @@ apis:
   - type: APIReference
     url: https://developers.cabify.com/reference/addparcels
 - aid: cabify:cabify-webhooks-api
-  name: Cabify webhooks API
+  name: Cabify Webhooks API
   description: >-
     Subscribe to event-driven notifications to receive live updates about parcel status changes, location
     updates, and proof of delivery codes.
