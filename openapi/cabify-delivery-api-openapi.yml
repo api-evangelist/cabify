@@ -78,17 +78,6 @@ paths:
       - bearer_token: []
 components:
   schemas:
-    RequestError:
-      type: object
-      description: Standard error response body returned when a request fails.
-      required:
-      - errors
-      properties:
-        errors:
-          type: array
-          description: List of human-readable error messages describing what went wrong.
-          items:
-            type: string
     CancelParcels:
       type: object
       required:
@@ -100,6 +89,17 @@ components:
           items:
             type: string
             format: uuid
+    RequestError:
+      type: object
+      description: Standard error response body returned when a request fails.
+      required:
+      - errors
+      properties:
+        errors:
+          type: array
+          description: List of human-readable error messages describing what went wrong.
+          items:
+            type: string
   securitySchemes:
     bearer_token:
       type: http

@@ -304,15 +304,6 @@ paths:
       description: Sandbox
 components:
   schemas:
-    UnauthorizedRequest:
-      description: The token used is invalid either because it is expired or because it is incorrect.
-      example:
-        error: Unauthorized
-      properties:
-        error:
-          type: string
-      title: UnauthorizedRequest
-      type: object
     HubObject:
       description: A hub is a large venue (e.g. airport, train station) with designated pick-up/drop-off meeting points.
       example:
@@ -416,6 +407,15 @@ components:
         message:
           type: string
       title: BadRequest
+      type: object
+    UnauthorizedRequest:
+      description: The token used is invalid either because it is expired or because it is incorrect.
+      example:
+        error: Unauthorized
+      properties:
+        error:
+          type: string
+      title: UnauthorizedRequest
       type: object
   securitySchemes:
     bearer_token:

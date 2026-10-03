@@ -518,24 +518,89 @@ paths:
       - bearer_token: []
 components:
   schemas:
-    Parcels:
+    PaginatedParcels:
       type: object
       required:
       - parcels
+      - page
+      - page_size
+      - more_pages
       properties:
         parcels:
           type: array
           items:
             $ref: '#/components/schemas/Parcel'
-    NewParcels:
+        page:
+          type: number
+          description: The current page number returned.
+          example: 2
+        page_size:
+          type: number
+          description: The number of parcels returned per page.
+          example: 20
+        more_pages:
+          type: boolean
+          description: Whether additional pages of results are available.
+          example: true
+    NewParcel:
       type: object
       required:
-      - parcels
+      - pickup_info
+      - dropoff_info
       properties:
-        parcels:
+        external_id:
+          type: string
+          description: 'Your own identifier for this parcel. Use this field to correlate parcels in the Cabify system with records in your own system. Must be unique across all your parcels.
+
+            '
+          example: parcel_001
+        pickup_info:
+          $ref: '#/components/schemas/ParcelPointPickupInfo'
+        dropoff_info:
+          $ref: '#/components/schemas/ParcelPointDropoffInfo'
+        dimensions:
+          $ref: '#/components/schemas/ParcelDimensions'
+        weight:
+          $ref: '#/components/schemas/ParcelWeight'
+        price:
+          $ref: '#/components/schemas/Price'
+        delivery_from:
+          type: string
+          format: date-time
+          description: 'Start of the requested delivery time window, formatted according to RFC 3339, section 5.6. The parcel will not be delivered before this time.
+
+            '
+          example: '2021-12-02T10:12:07.753Z'
+        delivery_to:
+          type: string
+          format: date-time
+          description: 'End of the requested delivery time window, formatted according to RFC 3339, section 5.6. The parcel should be delivered before this time.
+
+            '
+          example: '2021-12-02T10:12:07.753Z'
+    RequestError:
+      type: object
+      description: Standard error response body returned when a request fails.
+      required:
+      - errors
+      properties:
+        errors:
           type: array
+          description: List of human-readable error messages describing what went wrong.
           items:
-            $ref: '#/components/schemas/NewParcel'
+            type: string
+    CreateTip:
+      required:
+      - amount
+      type: object
+      properties:
+        amount:
+          minimum: 0
+          type: integer
+          description: 'Tip amount in the smallest currency unit, following the ISO 4217 standard (e.g. €6.30 → `630`).
+
+            '
+          example: 100
     DeleteParcels:
       type: object
       required:
@@ -547,94 +612,23 @@ components:
           items:
             type: string
             format: uuid
-    ParcelDimensions:
+    Point:
       type: object
-      description: Physical dimensions of the parcel.
+      description: A geographic coordinate expressed as latitude and longitude.
+      required:
+      - lat
+      - lon
       properties:
-        height:
-          type: integer
-          minimum: 0
-          example: 10
-        length:
-          type: integer
-          minimum: 0
-          example: 10
-        width:
-          type: integer
-          minimum: 0
-          example: 10
-        unit:
-          type: string
-          description: Unit of measure for the dimensions. Defaults to `cm` if omitted or set to an invalid value.
-          enum:
-          - cm
-    Tip:
-      type: object
-      properties:
-        parcel_id:
-          type: string
-          format: uuid
-          description: UUID of the parcel this tip is associated with.
-          example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
-        amount:
-          minimum: 0
-          type: integer
-          description: 'Tip amount in the smallest currency unit, following the ISO 4217 standard (e.g. €6.30 → `630`).
-
-            '
-          example: 100
-        currency:
-          type: string
-          description: ISO 4217 currency code.
-          example: ARS
-    CreateProofConfiguration:
-      type: object
-      description: Request body for creating or replacing proof of delivery configuration for a parcel.
-      properties:
-        delivered_proofs:
-          type: object
-          description: Configuration for each proof of delivery method. Methods not included in the request will be set to inactive.
-          properties:
-            code_proof:
-              type: object
-              description: 'Configuration for code-based proof of delivery. Omitting this field sets the method as inactive. This method is **mutually exclusive** with the other proof methods — it can only be activated on its own.
-
-                '
-              properties:
-                active:
-                  type: boolean
-                  description: Activates or deactivates this proof method. Defaults to `false` if omitted.
-                  example: true
-                hashed_code:
-                  type: string
-                  description: 'SHA-256 hash of the verification code. If omitted, a 4-digit code will be automatically generated and returned in the response.
-
-                    '
-                  example: 6eef362598bc0d76139d3c4df61347a7faad5fa0a535347e46420214c68558a7
-            ic_proof:
-              type: object
-              description: Configuration for identity card (IC) based proof of delivery. Omitting this field sets the method as inactive.
-              properties:
-                active:
-                  type: boolean
-                  description: Activates or deactivates this proof method. Defaults to `false` if omitted.
-                  example: true
-            photo_proof:
-              type: object
-              description: Configuration for photo-based proof of delivery. Omitting this field sets the method as inactive.
-              properties:
-                active:
-                  type: boolean
-                  description: Activates or deactivates this proof method. Defaults to `false` if omitted.
-                  example: true
-            comment_proof:
-              type: object
-              description: Configuration for comment-based proof of delivery. Omitting this field sets the method as inactive.
-              properties:
-                active:
-                  type: boolean
-                  description: Activates or deactivates this proof method. Defaults to `false` if omitted.
-                  example: true
+        lat:
+          type: number
+          format: float
+          description: Latitude in decimal degrees.
+          example: 40.4489254
+        lon:
+          type: number
+          format: float
+          description: Longitude in decimal degrees.
+          example: -3.6730293
     ParcelPointDropoffInfo:
       type: object
       required:
@@ -661,80 +655,6 @@ components:
           type: string
           description: External ID of a client hub to use as the drop-off location.
           example: magic_store_santa_fe
-    PaginatedParcels:
-      type: object
-      required:
-      - parcels
-      - page
-      - page_size
-      - more_pages
-      properties:
-        parcels:
-          type: array
-          items:
-            $ref: '#/components/schemas/Parcel'
-        page:
-          type: number
-          description: The current page number returned.
-          example: 2
-        page_size:
-          type: number
-          description: The number of parcels returned per page.
-          example: 20
-        more_pages:
-          type: boolean
-          description: Whether additional pages of results are available.
-          example: true
-    NewParcelDropoffContact:
-      type: object
-      properties:
-        name:
-          type: string
-          description: Name of the recipient at the drop-off location.
-          example: John
-        phone:
-          type:
-          - string
-          - 'null'
-          description: Phone number of the recipient at the drop-off location.
-          example: '+34666000000'
-    Point:
-      type: object
-      description: A geographic coordinate expressed as latitude and longitude.
-      required:
-      - lat
-      - lon
-      properties:
-        lat:
-          type: number
-          format: float
-          description: Latitude in decimal degrees.
-          example: 40.4489254
-        lon:
-          type: number
-          format: float
-          description: Longitude in decimal degrees.
-          example: -3.6730293
-    Price:
-      type: object
-      description: Price information for the parcel, used in cash-on-delivery scenarios.
-      properties:
-        declared_value:
-          type: integer
-          description: 'Declared value of the parcel''s contents, in the smallest currency unit following the ISO 4217 standard (e.g. €6.30 → `630`).
-
-            '
-          example: 630
-        collected_value:
-          type: integer
-          description: 'Amount to be collected from the recipient upon delivery, in the smallest currency unit following the ISO 4217 standard (e.g. €6.30 → `630`).
-
-            '
-          example: 630
-        currency:
-          type: string
-          description: ISO 4217 currency code.
-          example: EUR
     NewParcelPickupContact:
       type: object
       properties:
@@ -816,30 +736,15 @@ components:
           example: '2021-12-02T10:12:07.753Z'
         price:
           $ref: '#/components/schemas/Price'
-    ParcelWeight:
+    NewParcels:
       type: object
-      description: Weight of the parcel.
-      properties:
-        value:
-          type: integer
-          minimum: 0
-          example: 1500
-        unit:
-          type: string
-          description: Unit of weight. Defaults to `g` (grams) if omitted or set to an invalid value.
-          enum:
-          - g
-    RequestError:
-      type: object
-      description: Standard error response body returned when a request fails.
       required:
-      - errors
+      - parcels
       properties:
-        errors:
+        parcels:
           type: array
-          description: List of human-readable error messages describing what went wrong.
           items:
-            type: string
+            $ref: '#/components/schemas/NewParcel'
     ProofConfiguration:
       type: object
       description: The proof of delivery methods configured for a parcel.
@@ -909,6 +814,39 @@ components:
                   type: boolean
                   description: Whether this proof method is active for the parcel.
                   example: true
+    Price:
+      type: object
+      description: Price information for the parcel, used in cash-on-delivery scenarios.
+      properties:
+        declared_value:
+          type: integer
+          description: 'Declared value of the parcel''s contents, in the smallest currency unit following the ISO 4217 standard (e.g. €6.30 → `630`).
+
+            '
+          example: 630
+        collected_value:
+          type: integer
+          description: 'Amount to be collected from the recipient upon delivery, in the smallest currency unit following the ISO 4217 standard (e.g. €6.30 → `630`).
+
+            '
+          example: 630
+        currency:
+          type: string
+          description: ISO 4217 currency code.
+          example: EUR
+    ParcelWeight:
+      type: object
+      description: Weight of the parcel.
+      properties:
+        value:
+          type: integer
+          minimum: 0
+          example: 1500
+        unit:
+          type: string
+          description: Unit of weight. Defaults to `g` (grams) if omitted or set to an invalid value.
+          enum:
+          - g
     Parcel:
       type: object
       properties:
@@ -941,11 +879,14 @@ components:
           format: date-time
           description: Timestamp of the most recent update to the parcel, formatted according to RFC 3339, section 5.6.
           example: '2021-12-02T10:12:07.753Z'
-    CreateTip:
-      required:
-      - amount
+    Tip:
       type: object
       properties:
+        parcel_id:
+          type: string
+          format: uuid
+          description: UUID of the parcel this tip is associated with.
+          example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
         amount:
           minimum: 0
           type: integer
@@ -953,42 +894,101 @@ components:
 
             '
           example: 100
-    NewParcel:
+        currency:
+          type: string
+          description: ISO 4217 currency code.
+          example: ARS
+    ParcelDimensions:
+      type: object
+      description: Physical dimensions of the parcel.
+      properties:
+        height:
+          type: integer
+          minimum: 0
+          example: 10
+        length:
+          type: integer
+          minimum: 0
+          example: 10
+        width:
+          type: integer
+          minimum: 0
+          example: 10
+        unit:
+          type: string
+          description: Unit of measure for the dimensions. Defaults to `cm` if omitted or set to an invalid value.
+          enum:
+          - cm
+    Parcels:
       type: object
       required:
-      - pickup_info
-      - dropoff_info
+      - parcels
       properties:
-        external_id:
-          type: string
-          description: 'Your own identifier for this parcel. Use this field to correlate parcels in the Cabify system with records in your own system. Must be unique across all your parcels.
+        parcels:
+          type: array
+          items:
+            $ref: '#/components/schemas/Parcel'
+    CreateProofConfiguration:
+      type: object
+      description: Request body for creating or replacing proof of delivery configuration for a parcel.
+      properties:
+        delivered_proofs:
+          type: object
+          description: Configuration for each proof of delivery method. Methods not included in the request will be set to inactive.
+          properties:
+            code_proof:
+              type: object
+              description: 'Configuration for code-based proof of delivery. Omitting this field sets the method as inactive. This method is **mutually exclusive** with the other proof methods — it can only be activated on its own.
 
-            '
-          example: parcel_001
-        pickup_info:
-          $ref: '#/components/schemas/ParcelPointPickupInfo'
-        dropoff_info:
-          $ref: '#/components/schemas/ParcelPointDropoffInfo'
-        dimensions:
-          $ref: '#/components/schemas/ParcelDimensions'
-        weight:
-          $ref: '#/components/schemas/ParcelWeight'
-        price:
-          $ref: '#/components/schemas/Price'
-        delivery_from:
-          type: string
-          format: date-time
-          description: 'Start of the requested delivery time window, formatted according to RFC 3339, section 5.6. The parcel will not be delivered before this time.
+                '
+              properties:
+                active:
+                  type: boolean
+                  description: Activates or deactivates this proof method. Defaults to `false` if omitted.
+                  example: true
+                hashed_code:
+                  type: string
+                  description: 'SHA-256 hash of the verification code. If omitted, a 4-digit code will be automatically generated and returned in the response.
 
-            '
-          example: '2021-12-02T10:12:07.753Z'
-        delivery_to:
+                    '
+                  example: 6eef362598bc0d76139d3c4df61347a7faad5fa0a535347e46420214c68558a7
+            ic_proof:
+              type: object
+              description: Configuration for identity card (IC) based proof of delivery. Omitting this field sets the method as inactive.
+              properties:
+                active:
+                  type: boolean
+                  description: Activates or deactivates this proof method. Defaults to `false` if omitted.
+                  example: true
+            photo_proof:
+              type: object
+              description: Configuration for photo-based proof of delivery. Omitting this field sets the method as inactive.
+              properties:
+                active:
+                  type: boolean
+                  description: Activates or deactivates this proof method. Defaults to `false` if omitted.
+                  example: true
+            comment_proof:
+              type: object
+              description: Configuration for comment-based proof of delivery. Omitting this field sets the method as inactive.
+              properties:
+                active:
+                  type: boolean
+                  description: Activates or deactivates this proof method. Defaults to `false` if omitted.
+                  example: true
+    NewParcelDropoffContact:
+      type: object
+      properties:
+        name:
           type: string
-          format: date-time
-          description: 'End of the requested delivery time window, formatted according to RFC 3339, section 5.6. The parcel should be delivered before this time.
-
-            '
-          example: '2021-12-02T10:12:07.753Z'
+          description: Name of the recipient at the drop-off location.
+          example: John
+        phone:
+          type:
+          - string
+          - 'null'
+          description: Phone number of the recipient at the drop-off location.
+          example: '+34666000000'
   securitySchemes:
     bearer_token:
       type: http

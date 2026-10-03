@@ -45,17 +45,6 @@ paths:
       - bearer_token: []
 components:
   schemas:
-    Modality:
-      type: string
-      description: 'The delivery modality determines the timing and service level of the shipment. - `express`: On-demand delivery, typically within 1 hour. - `same_day`: Delivery scheduled for the same calendar day. - `next_day`: Delivery scheduled for the following calendar day. - `groceries`: Optimised for grocery and fresh-food deliveries.
-
-        '
-      example: same_day
-      enum:
-      - express
-      - same_day
-      - next_day
-      - groceries
     ShippingType:
       type: object
       required:
@@ -79,6 +68,17 @@ components:
           type: string
           description: Human-readable description of the shipping type.
           example: Same day delivery
+    Modality:
+      type: string
+      description: 'The delivery modality determines the timing and service level of the shipment. - `express`: On-demand delivery, typically within 1 hour. - `same_day`: Delivery scheduled for the same calendar day. - `next_day`: Delivery scheduled for the following calendar day. - `groceries`: Optimised for grocery and fresh-food deliveries.
+
+        '
+      example: same_day
+      enum:
+      - express
+      - same_day
+      - next_day
+      - groceries
   securitySchemes:
     bearer_token:
       type: http

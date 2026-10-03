@@ -116,27 +116,32 @@ paths:
       - bearer_token: []
 components:
   schemas:
-    ParcelDimensions:
+    DeliveryEstimate:
       type: object
-      description: Physical dimensions of the parcel.
+      required:
+      - estimation
       properties:
-        height:
-          type: integer
-          minimum: 0
-          example: 10
-        length:
-          type: integer
-          minimum: 0
-          example: 10
-        width:
-          type: integer
-          minimum: 0
-          example: 10
-        unit:
+        parcels:
+          type: array
+          items:
+            $ref: '#/components/schemas/EstimateLocation'
+        estimation:
+          $ref: '#/components/schemas/DeliveryEstimation'
+    ShipParcelsResponse:
+      type: object
+      required:
+      - parcels
+      - shipping_type_id
+      properties:
+        parcels:
+          type: array
+          description: List of parcels with their assigned tracking URLs.
+          items:
+            $ref: '#/components/schemas/ParcelShipment'
+        shipping_type_id:
           type: string
-          description: Unit of measure for the dimensions. Defaults to `cm` if omitted or set to an invalid value.
-          enum:
-          - cm
+          format: uuid
+          description: UUID of the shipping type used for this shipment.
     EstimateV3Response:
       type: object
       required:
@@ -187,93 +192,19 @@ components:
           format: float
           description: Longitude in decimal degrees.
           example: -3.6730293
-    Money:
+    ParcelWeight:
       type: object
-      description: A monetary amount represented in the smallest currency unit (e.g. cents).
-      required:
-      - amount
-      - currency
+      description: Weight of the parcel.
       properties:
-        amount:
-          description: 'Amount in the smallest currency unit, following the ISO 4217 standard (e.g. €6.30 → `630`).
-
-            '
+        value:
           type: integer
-          example: 630
-        currency:
+          minimum: 0
+          example: 1500
+        unit:
           type: string
-          description: ISO 4217 currency code.
-          example: EUR
-    ParcelShipment:
-      type: object
-      description: Summary of a parcel after it has been submitted for shipment.
-      required:
-      - id
-      - shipping_type_id
-      properties:
-        id:
-          type: string
-          format: uuid
-          description: System-generated UUID for this parcel.
-          example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
-        tracking_url:
-          type: string
-          description: Public URL where the parcel's live tracking can be viewed.
-          example: https://logistics.follow.cabify.com/abcdefghi/e
-          format: url
-    Address:
-      type: object
-      required:
-      - address
-      properties:
-        address:
-          type: string
-          description: Address of the location
-          example: Calle de la Princesa, 1, 28008 Madrid
-    ShipParcelsResponse:
-      type: object
-      required:
-      - parcels
-      - shipping_type_id
-      properties:
-        parcels:
-          type: array
-          description: List of parcels with their assigned tracking URLs.
-          items:
-            $ref: '#/components/schemas/ParcelShipment'
-        shipping_type_id:
-          type: string
-          format: uuid
-          description: UUID of the shipping type used for this shipment.
-    AssetKind:
-      type: string
-      description: The type of vehicle assigned to carry the parcel.
-      enum:
-      - bicycle
-      - car
-      - moped
-      - scooter
-      - van
-    DeliveryEstimation:
-      type: object
-      description: Estimated cost and timing details for a single parcel delivery.
-      required:
-      - price
-      properties:
-        price:
-          $ref: '#/components/schemas/Money'
-        asset_kind:
-          $ref: '#/components/schemas/AssetKind'
-        eta_to_pickup:
-          type: string
-          format: date-time
-          description: Estimated time when the driver will arrive at the pickup location.
-          example: '2021-12-02T10:12:07.753Z'
-        eta_to_delivery:
-          type: string
-          format: date-time
-          description: Estimated time when the parcel will be delivered to the recipient.
-          example: '2021-12-02T10:12:47.753Z'
+          description: Unit of weight. Defaults to `g` (grams) if omitted or set to an invalid value.
+          enum:
+          - g
     EstimateLocation:
       type: object
       description: A single parcel's pickup and drop-off locations used to calculate a shipping estimate.
@@ -299,30 +230,69 @@ components:
           $ref: '#/components/schemas/ParcelDimensions'
         weight:
           $ref: '#/components/schemas/ParcelWeight'
-    ParcelWeight:
+    ParcelShipment:
       type: object
-      description: Weight of the parcel.
+      description: Summary of a parcel after it has been submitted for shipment.
+      required:
+      - id
+      - shipping_type_id
       properties:
-        value:
-          type: integer
-          minimum: 0
-          example: 1500
-        unit:
+        id:
           type: string
-          description: Unit of weight. Defaults to `g` (grams) if omitted or set to an invalid value.
-          enum:
-          - g
-    DeliveryEstimate:
+          format: uuid
+          description: System-generated UUID for this parcel.
+          example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+        tracking_url:
+          type: string
+          description: Public URL where the parcel's live tracking can be viewed.
+          example: https://logistics.follow.cabify.com/abcdefghi/e
+          format: url
+    DeliveryEstimation:
+      type: object
+      description: Estimated cost and timing details for a single parcel delivery.
+      required:
+      - price
+      properties:
+        price:
+          $ref: '#/components/schemas/Money'
+        asset_kind:
+          $ref: '#/components/schemas/AssetKind'
+        eta_to_pickup:
+          type: string
+          format: date-time
+          description: Estimated time when the driver will arrive at the pickup location.
+          example: '2021-12-02T10:12:07.753Z'
+        eta_to_delivery:
+          type: string
+          format: date-time
+          description: Estimated time when the parcel will be delivered to the recipient.
+          example: '2021-12-02T10:12:47.753Z'
+    Address:
       type: object
       required:
-      - estimation
+      - address
       properties:
-        parcels:
-          type: array
-          items:
-            $ref: '#/components/schemas/EstimateLocation'
-        estimation:
-          $ref: '#/components/schemas/DeliveryEstimation'
+        address:
+          type: string
+          description: Address of the location
+          example: Calle de la Princesa, 1, 28008 Madrid
+    Money:
+      type: object
+      description: A monetary amount represented in the smallest currency unit (e.g. cents).
+      required:
+      - amount
+      - currency
+      properties:
+        amount:
+          description: 'Amount in the smallest currency unit, following the ISO 4217 standard (e.g. €6.30 → `630`).
+
+            '
+          type: integer
+          example: 630
+        currency:
+          type: string
+          description: ISO 4217 currency code.
+          example: EUR
     RequestError:
       type: object
       description: Standard error response body returned when a request fails.
@@ -334,6 +304,36 @@ components:
           description: List of human-readable error messages describing what went wrong.
           items:
             type: string
+    AssetKind:
+      type: string
+      description: The type of vehicle assigned to carry the parcel.
+      enum:
+      - bicycle
+      - car
+      - moped
+      - scooter
+      - van
+    ParcelDimensions:
+      type: object
+      description: Physical dimensions of the parcel.
+      properties:
+        height:
+          type: integer
+          minimum: 0
+          example: 10
+        length:
+          type: integer
+          minimum: 0
+          example: 10
+        width:
+          type: integer
+          minimum: 0
+          example: 10
+        unit:
+          type: string
+          description: Unit of measure for the dimensions. Defaults to `cm` if omitted or set to an invalid value.
+          enum:
+          - cm
     EstimateV3Request:
       type: object
       required:

@@ -163,6 +163,16 @@ paths:
                   description: Success
 components:
   schemas:
+    PhotoProofOfPickUp:
+      type: object
+      description: Photo evidence captured by the driver at the pickup location.
+      properties:
+        photo_urls:
+          type: array
+          description: List of URLs to the photos taken by the driver during pickup.
+          items:
+            type: string
+            format: url
     ParcelLocation:
       type: object
       description: Payload sent to your webhook callback URL with the driver's real-time location.
@@ -203,119 +213,6 @@ components:
           enum:
           - onroutetopickup
           - intransit
-    Header:
-      type: object
-      required:
-      - name
-      - value
-      properties:
-        name:
-          type: string
-          description: Header name
-          example: Authorization
-        value:
-          type: string
-          description: Header value
-          example: Bearer 000111222333444
-    PickupFailed:
-      type: object
-      description: '**Deprecated.** Use `pickup_attempt` instead. Details of a failed pickup attempt.
-
-        '
-      properties:
-        reason:
-          type: string
-          description: 'Reason why the pickup failed. See [pickup failed reasons](https://developers.cabify.com/reference/parcel-information#pickup-failed-reason) for a description of each value.
-
-            '
-          enum:
-          - sender_no_show
-          - sender_too_late
-          - address_wrong
-          - address_not_found
-          - address_unsafe
-          - parcel_suspicious
-          - parcel_packaging
-          - parcel_too_big_or_heavy
-          - payment_requested
-          - payment_fake
-          - other_with_feedback
-          - place_closed
-          - delivery_not_found
-          - already_picked_up
-          - delivery_cancelled
-          example: address_wrong
-        failed_at:
-          type: string
-          format: date-time
-          description: Timestamp of the failed pickup event, formatted according to RFC 3339, section 5.6.
-          example: '2021-12-02T10:12:07.753Z'
-        driver_comments:
-          type: string
-          description: Comments left by the driver explaining why the pickup failed.
-          example: can't find the address
-    PickupAttempt:
-      type: object
-      description: Details of a pickup attempt, whether successful or not.
-      required:
-      - status
-      - attempted_at
-      - address
-      properties:
-        fail_reason:
-          type: string
-          description: 'If the attempt was unsuccessful, the reason why it failed. See [pickup failed reasons](https://developers.cabify.com/reference/parcel-information#pickup-failed-reason) for a description of each value.
-
-            '
-          enum:
-          - sender_no_show
-          - sender_too_late
-          - address_wrong
-          - address_not_found
-          - address_unsafe
-          - parcel_suspicious
-          - parcel_packaging
-          - parcel_too_big_or_heavy
-          - payment_requested
-          - payment_fake
-          - other_with_feedback
-          - place_closed
-          - delivery_not_found
-          - already_picked_up
-          - delivery_cancelled
-        status:
-          type: string
-          description: Outcome of the pickup attempt.
-          enum:
-          - PickupAttemptStatusPickedUp
-          - PickupAttemptStatusPickupFailed
-        attempted_at:
-          type: string
-          format: date-time
-          description: Timestamp of the pickup attempt, formatted according to RFC 3339, section 5.6.
-          example: '2021-12-02T10:12:07.753Z'
-        address:
-          type: string
-          description: Address where the pickup attempt was made.
-          example: Calle de la Princesa, 1, 28008 Madrid
-        feedback:
-          type: string
-          description: Comments left by the driver about the pickup attempt.
-          example: can't find the address
-        photo_proof_of_pickup:
-          $ref: '#/components/schemas/PhotoProofOfPickUp'
-        comment_proof_of_pickup:
-          $ref: '#/components/schemas/CommentProofOfPickUp'
-    PhotoProofOfPickUp:
-      type: object
-      description: Photo evidence captured by the driver at the pickup location.
-      properties:
-        photo_urls:
-          type: array
-          description: List of URLs to the photos taken by the driver during pickup.
-          items:
-            type: string
-            format: url
     ParcelStatusRoute:
       type: object
       description: Route information between two points during a delivery.
@@ -331,117 +228,6 @@ components:
           type: string
           example: fhdsa98fha87sdfhas76dgf8a
           description: Encoded polyline representing the route path.
-    CommentProofOfPickUp:
-      type: object
-      description: Written note left by the driver as confirmation of the pickup.
-      properties:
-        comment:
-          type: string
-          description: Comment left by the driver at the time of pickup.
-    ResponseWebhookSubscription:
-      type: object
-      required:
-      - id
-      - callback_url
-      - hook
-      properties:
-        id:
-          type: number
-          description: Internal identifier of the webhook subscription.
-        hook:
-          type: string
-          enum:
-          - parcel
-          description: The event type this subscription listens to. Receive a notification for every individual parcel status change.
-        callback_url:
-          type: string
-          format: uri
-          example: http://example.com/your/callback/here
-          description: Your endpoint URL. The API will send a POST request to this URL each time the subscribed event occurs.
-        headers:
-          type: array
-          items:
-            $ref: '#/components/schemas/Header'
-          description: Custom headers included in every webhook request (e.g. for authentication).
-    ProofCodeGenerated:
-      type: object
-      description: Payload sent to your webhook callback when a proof of delivery code is generated for a parcel.
-      required:
-      - parcel_id
-      - code
-      properties:
-        parcel_id:
-          type: string
-          format: uuid
-          description: UUID of the parcel this code was generated for.
-          example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
-        code:
-          type: string
-          description: Four-digit code generated for the delivery. The recipient must provide this code to the driver to confirm receipt.
-          example: '1234'
-    AssetKind:
-      type: string
-      description: The type of vehicle assigned to carry the parcel.
-      enum:
-      - bicycle
-      - car
-      - moped
-      - scooter
-      - van
-    ResponseWebhookSubscriptions:
-      type: object
-      required:
-      - subscriptions
-      properties:
-        subscriptions:
-          type: array
-          items:
-            $ref: '#/components/schemas/ResponseWebhookSubscription'
-    WebhookSubscription:
-      type: object
-      required:
-      - callback_url
-      - hook
-      properties:
-        hook:
-          type: string
-          enum:
-          - parcel
-          - parcelLocation
-          - proofCodeGenerated
-          description: 'The event type to subscribe to: - `parcel`: Triggered on every parcel status change. - `parcelLocation`: Triggered when the driver''s location is updated. - `proofCodeGenerated`: Triggered when a proof of delivery code is generated for a parcel.
-
-            '
-        callback_url:
-          type: string
-          format: uri
-          example: http://example.com/your/callback/here
-          description: Your endpoint URL. The API will send a POST request to this URL each time the subscribed event occurs.
-        headers:
-          type: array
-          items:
-            $ref: '#/components/schemas/Header'
-          description: Custom headers to include in every webhook request sent to your endpoint (e.g. for authentication).
-    Asset:
-      type: object
-      description: Details of the vehicle assigned to the delivery.
-      properties:
-        reg_plate:
-          type:
-          - string
-          - 'null'
-          description: Vehicle registration plate number.
-          example: 1111AAA
-        name:
-          type: string
-          description: Vehicle model name.
-          example: Audi A3
-        color:
-          type: string
-          description: Vehicle color.
-          example: black
-        asset_kind:
-          $ref: '#/components/schemas/AssetKind'
     ParcelStatusHook:
       type: object
       description: Payload sent to your webhook callback URL whenever a parcel's status changes.
@@ -641,6 +427,104 @@ components:
           - $ref: '#/components/schemas/PickupFailed'
         pickup_attempt:
           $ref: '#/components/schemas/PickupAttempt'
+    ProofCodeGenerated:
+      type: object
+      description: Payload sent to your webhook callback when a proof of delivery code is generated for a parcel.
+      required:
+      - parcel_id
+      - code
+      properties:
+        parcel_id:
+          type: string
+          format: uuid
+          description: UUID of the parcel this code was generated for.
+          example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+        code:
+          type: string
+          description: Four-digit code generated for the delivery. The recipient must provide this code to the driver to confirm receipt.
+          example: '1234'
+    WebhookSubscription:
+      type: object
+      required:
+      - callback_url
+      - hook
+      properties:
+        hook:
+          type: string
+          enum:
+          - parcel
+          - parcelLocation
+          - proofCodeGenerated
+          description: 'The event type to subscribe to: - `parcel`: Triggered on every parcel status change. - `parcelLocation`: Triggered when the driver''s location is updated. - `proofCodeGenerated`: Triggered when a proof of delivery code is generated for a parcel.
+
+            '
+        callback_url:
+          type: string
+          format: uri
+          example: http://example.com/your/callback/here
+          description: Your endpoint URL. The API will send a POST request to this URL each time the subscribed event occurs.
+        headers:
+          type: array
+          items:
+            $ref: '#/components/schemas/Header'
+          description: Custom headers to include in every webhook request sent to your endpoint (e.g. for authentication).
+    Asset:
+      type: object
+      description: Details of the vehicle assigned to the delivery.
+      properties:
+        reg_plate:
+          type:
+          - string
+          - 'null'
+          description: Vehicle registration plate number.
+          example: 1111AAA
+        name:
+          type: string
+          description: Vehicle model name.
+          example: Audi A3
+        color:
+          type: string
+          description: Vehicle color.
+          example: black
+        asset_kind:
+          $ref: '#/components/schemas/AssetKind'
+    PickupFailed:
+      type: object
+      description: '**Deprecated.** Use `pickup_attempt` instead. Details of a failed pickup attempt.
+
+        '
+      properties:
+        reason:
+          type: string
+          description: 'Reason why the pickup failed. See [pickup failed reasons](https://developers.cabify.com/reference/parcel-information#pickup-failed-reason) for a description of each value.
+
+            '
+          enum:
+          - sender_no_show
+          - sender_too_late
+          - address_wrong
+          - address_not_found
+          - address_unsafe
+          - parcel_suspicious
+          - parcel_packaging
+          - parcel_too_big_or_heavy
+          - payment_requested
+          - payment_fake
+          - other_with_feedback
+          - place_closed
+          - delivery_not_found
+          - already_picked_up
+          - delivery_cancelled
+          example: address_wrong
+        failed_at:
+          type: string
+          format: date-time
+          description: Timestamp of the failed pickup event, formatted according to RFC 3339, section 5.6.
+          example: '2021-12-02T10:12:07.753Z'
+        driver_comments:
+          type: string
+          description: Comments left by the driver explaining why the pickup failed.
+          example: can't find the address
     RequestError:
       type: object
       description: Standard error response body returned when a request fails.
@@ -652,6 +536,122 @@ components:
           description: List of human-readable error messages describing what went wrong.
           items:
             type: string
+    ResponseWebhookSubscription:
+      type: object
+      required:
+      - id
+      - callback_url
+      - hook
+      properties:
+        id:
+          type: number
+          description: Internal identifier of the webhook subscription.
+        hook:
+          type: string
+          enum:
+          - parcel
+          description: The event type this subscription listens to. Receive a notification for every individual parcel status change.
+        callback_url:
+          type: string
+          format: uri
+          example: http://example.com/your/callback/here
+          description: Your endpoint URL. The API will send a POST request to this URL each time the subscribed event occurs.
+        headers:
+          type: array
+          items:
+            $ref: '#/components/schemas/Header'
+          description: Custom headers included in every webhook request (e.g. for authentication).
+    Header:
+      type: object
+      required:
+      - name
+      - value
+      properties:
+        name:
+          type: string
+          description: Header name
+          example: Authorization
+        value:
+          type: string
+          description: Header value
+          example: Bearer 000111222333444
+    AssetKind:
+      type: string
+      description: The type of vehicle assigned to carry the parcel.
+      enum:
+      - bicycle
+      - car
+      - moped
+      - scooter
+      - van
+    PickupAttempt:
+      type: object
+      description: Details of a pickup attempt, whether successful or not.
+      required:
+      - status
+      - attempted_at
+      - address
+      properties:
+        fail_reason:
+          type: string
+          description: 'If the attempt was unsuccessful, the reason why it failed. See [pickup failed reasons](https://developers.cabify.com/reference/parcel-information#pickup-failed-reason) for a description of each value.
+
+            '
+          enum:
+          - sender_no_show
+          - sender_too_late
+          - address_wrong
+          - address_not_found
+          - address_unsafe
+          - parcel_suspicious
+          - parcel_packaging
+          - parcel_too_big_or_heavy
+          - payment_requested
+          - payment_fake
+          - other_with_feedback
+          - place_closed
+          - delivery_not_found
+          - already_picked_up
+          - delivery_cancelled
+        status:
+          type: string
+          description: Outcome of the pickup attempt.
+          enum:
+          - PickupAttemptStatusPickedUp
+          - PickupAttemptStatusPickupFailed
+        attempted_at:
+          type: string
+          format: date-time
+          description: Timestamp of the pickup attempt, formatted according to RFC 3339, section 5.6.
+          example: '2021-12-02T10:12:07.753Z'
+        address:
+          type: string
+          description: Address where the pickup attempt was made.
+          example: Calle de la Princesa, 1, 28008 Madrid
+        feedback:
+          type: string
+          description: Comments left by the driver about the pickup attempt.
+          example: can't find the address
+        photo_proof_of_pickup:
+          $ref: '#/components/schemas/PhotoProofOfPickUp'
+        comment_proof_of_pickup:
+          $ref: '#/components/schemas/CommentProofOfPickUp'
+    CommentProofOfPickUp:
+      type: object
+      description: Written note left by the driver as confirmation of the pickup.
+      properties:
+        comment:
+          type: string
+          description: Comment left by the driver at the time of pickup.
+    ResponseWebhookSubscriptions:
+      type: object
+      required:
+      - subscriptions
+      properties:
+        subscriptions:
+          type: array
+          items:
+            $ref: '#/components/schemas/ResponseWebhookSubscription'
   securitySchemes:
     bearer_token:
       type: http

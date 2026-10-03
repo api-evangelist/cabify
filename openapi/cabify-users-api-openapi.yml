@@ -389,14 +389,21 @@ components:
       - id
       title: UpdateUser
       type: object
-    InternalServerError:
-      description: indicates that an internal server error occurred
+    CreateUsersRequest:
+      description: List of new data to create new Users with it
+      items:
+        $ref: '#/components/schemas/CreateUser'
+      minItems: 1
+      title: CreateUsersRequest
+      type: array
+    BadRequest:
+      description: Indicates that the server cannot or will not process the request due to something that is perceived to be a client error (for example, malformed request syntax, invalid request message framing, or deceptive request routing).
       example:
-        error: Something went wrong
+        error: Bad Request error message
       properties:
-        error:
+        message:
           type: string
-      title: InternalServerError
+      title: BadRequest
       type: object
     UnauthorizedRequest:
       description: The token used is invalid either because it is expired or because it is incorrect.
@@ -406,88 +413,6 @@ components:
         error:
           type: string
       title: UnauthorizedRequest
-      type: object
-    User_2:
-      example:
-        email: john.doe@example.com
-        id: 9a0e2da7f93a4b24bce47a8b10d3997a
-        mobile_cc: '34'
-        mobile_num: '612345678'
-        name: John
-        surname: Doe
-      properties:
-        can_manage:
-          description: Whether User is an admin or regular User
-          type: boolean
-        can_order_for_others:
-          description: If true, user will be able to order journeys for others
-          type: boolean
-        default_charge_code:
-          description: User's Default Charge Code
-          type: string
-        disabled:
-          description: Whether the User is enabled or disabled
-          type: boolean
-        email:
-          description: Email of User. Must be unique
-          format: email
-          type: string
-        email_cc:
-          description: List of email addresses (for journey related emails only)
-          items:
-            type: string
-          type: array
-        employee_code:
-          description: User's Employee Code, useful to map with company's code
-          type: string
-        id:
-          description: id of the User, UUIDv4 format without hyphens
-          pattern: ^[a-f0-9]{32}$
-          type: string
-        locale:
-          description: 'User''s Locale. Syntax consists of language two-letter tag which then will be suffixed with Client''s country, e.g.: es-ES'
-          type: string
-        mobile_cc:
-          description: 'Mobile Country Code. Can be checked here: https://countrycode.org/'
-          type: string
-        mobile_num:
-          description: Mobile Number of User
-          type: string
-        name:
-          description: Name of the User
-          type: string
-        permission_group_id:
-          description: User's TravelPolicy
-          type:
-          - string
-          - 'null'
-        surname:
-          description: Surname of the User
-          type: string
-      required:
-      - id
-      - email
-      - name
-      - surname
-      - mobile_cc
-      - mobile_num
-      title: User
-      type: object
-    CreateUsersRequest:
-      description: List of new data to create new Users with it
-      items:
-        $ref: '#/components/schemas/CreateUser'
-      minItems: 1
-      title: CreateUsersRequest
-      type: array
-    NotFound:
-      description: The server did not find a current representation for the target resource
-      example:
-        error: user with provided ID does not exist
-      properties:
-        message:
-          type: string
-      title: NotFound
       type: object
     CreateUser:
       example:
@@ -555,6 +480,15 @@ components:
       - mobile_num
       title: CreateUser
       type: object
+    NotFound:
+      description: The server did not find a current representation for the target resource
+      example:
+        error: user with provided ID does not exist
+      properties:
+        message:
+          type: string
+      title: NotFound
+      type: object
     UpdateUsersRequest:
       description: List of Users update data
       items:
@@ -608,14 +542,80 @@ components:
       - job_id
       title: MutationResponse
       type: object
-    BadRequest:
-      description: Indicates that the server cannot or will not process the request due to something that is perceived to be a client error (for example, malformed request syntax, invalid request message framing, or deceptive request routing).
+    InternalServerError:
+      description: indicates that an internal server error occurred
       example:
-        error: Bad Request error message
+        error: Something went wrong
       properties:
-        message:
+        error:
           type: string
-      title: BadRequest
+      title: InternalServerError
+      type: object
+    User_2:
+      example:
+        email: john.doe@example.com
+        id: 9a0e2da7f93a4b24bce47a8b10d3997a
+        mobile_cc: '34'
+        mobile_num: '612345678'
+        name: John
+        surname: Doe
+      properties:
+        can_manage:
+          description: Whether User is an admin or regular User
+          type: boolean
+        can_order_for_others:
+          description: If true, user will be able to order journeys for others
+          type: boolean
+        default_charge_code:
+          description: User's Default Charge Code
+          type: string
+        disabled:
+          description: Whether the User is enabled or disabled
+          type: boolean
+        email:
+          description: Email of User. Must be unique
+          format: email
+          type: string
+        email_cc:
+          description: List of email addresses (for journey related emails only)
+          items:
+            type: string
+          type: array
+        employee_code:
+          description: User's Employee Code, useful to map with company's code
+          type: string
+        id:
+          description: id of the User, UUIDv4 format without hyphens
+          pattern: ^[a-f0-9]{32}$
+          type: string
+        locale:
+          description: 'User''s Locale. Syntax consists of language two-letter tag which then will be suffixed with Client''s country, e.g.: es-ES'
+          type: string
+        mobile_cc:
+          description: 'Mobile Country Code. Can be checked here: https://countrycode.org/'
+          type: string
+        mobile_num:
+          description: Mobile Number of User
+          type: string
+        name:
+          description: Name of the User
+          type: string
+        permission_group_id:
+          description: User's TravelPolicy
+          type:
+          - string
+          - 'null'
+        surname:
+          description: Surname of the User
+          type: string
+      required:
+      - id
+      - email
+      - name
+      - surname
+      - mobile_cc
+      - mobile_num
+      title: User
       type: object
   securitySchemes:
     bearer_token:

@@ -209,14 +209,23 @@ paths:
       - Labels
 components:
   schemas:
-    InternalServerError:
-      description: indicates that an internal server error occurred
+    BadRequest:
+      description: Indicates that the server cannot or will not process the request due to something that is perceived to be a client error (for example, malformed request syntax, invalid request message framing, or deceptive request routing).
       example:
-        error: Something went wrong
+        error: Bad Request error message
+      properties:
+        message:
+          type: string
+      title: BadRequest
+      type: object
+    UnauthorizedRequest:
+      description: The token used is invalid either because it is expired or because it is incorrect.
+      example:
+        error: Unauthorized
       properties:
         error:
           type: string
-      title: InternalServerError
+      title: UnauthorizedRequest
       type: object
     Label:
       example:
@@ -250,14 +259,58 @@ components:
       - slug
       title: Label
       type: object
-    UnauthorizedRequest:
-      description: The token used is invalid either because it is expired or because it is incorrect.
+    LabelRequest:
+      additionalProperties: false
+      description: POST body for creating a label
       example:
-        error: Unauthorized
+        active: true
+        description: Some description of the label
+        name: Cabify label example
+      properties:
+        active:
+          description: If false the Label is disabled
+          type: boolean
+        description:
+          description: Description of the Label
+          type: string
+        name:
+          description: Name of the Label
+          type: string
+      required:
+      - name
+      title: LabelRequest
+      type: object
+    NotFound:
+      description: The server did not find a current representation for the target resource
+      example:
+        error: user with provided ID does not exist
+      properties:
+        message:
+          type: string
+      title: NotFound
+      type: object
+    LabelResponse:
+      description: Response schema for single label
+      example:
+        active: true
+        client_id: 5ad782201d2e111dba689aa86d149702
+        description: Cabify label example
+        id: 9a0e2da7-f93a-4b24-bce4-7a8b10d3997a
+        name: ' Name of the Label'
+        slug: name-of-the-label
+      properties:
+        data:
+          $ref: '#/components/schemas/Label'
+      title: LabelResponse
+      type: object
+    InternalServerError:
+      description: indicates that an internal server error occurred
+      example:
+        error: Something went wrong
       properties:
         error:
           type: string
-      title: UnauthorizedRequest
+      title: InternalServerError
       type: object
     PaginatedLabelResponse:
       description: Response schema for a list of labels
@@ -293,27 +346,6 @@ components:
           type: integer
       title: PaginatedLabelResponse
       type: object
-    LabelRequest:
-      additionalProperties: false
-      description: POST body for creating a label
-      example:
-        active: true
-        description: Some description of the label
-        name: Cabify label example
-      properties:
-        active:
-          description: If false the Label is disabled
-          type: boolean
-        description:
-          description: Description of the Label
-          type: string
-        name:
-          description: Name of the Label
-          type: string
-      required:
-      - name
-      title: LabelRequest
-      type: object
     LabelUpdateRequest:
       additionalProperties: false
       description: Payload for updating a label
@@ -328,38 +360,6 @@ components:
           description: Description of the Label
           type: string
       title: LabelUpdateRequest
-      type: object
-    NotFound:
-      description: The server did not find a current representation for the target resource
-      example:
-        error: user with provided ID does not exist
-      properties:
-        message:
-          type: string
-      title: NotFound
-      type: object
-    LabelResponse:
-      description: Response schema for single label
-      example:
-        active: true
-        client_id: 5ad782201d2e111dba689aa86d149702
-        description: Cabify label example
-        id: 9a0e2da7-f93a-4b24-bce4-7a8b10d3997a
-        name: ' Name of the Label'
-        slug: name-of-the-label
-      properties:
-        data:
-          $ref: '#/components/schemas/Label'
-      title: LabelResponse
-      type: object
-    BadRequest:
-      description: Indicates that the server cannot or will not process the request due to something that is perceived to be a client error (for example, malformed request syntax, invalid request message framing, or deceptive request routing).
-      example:
-        error: Bad Request error message
-      properties:
-        message:
-          type: string
-      title: BadRequest
       type: object
   securitySchemes:
     access_token:
