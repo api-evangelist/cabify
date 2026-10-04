@@ -117,112 +117,6 @@ paths:
       - Estimates
 components:
   schemas:
-    HubObject:
-      description: A hub is a large venue (e.g. airport, train station) with designated pick-up/drop-off meeting points.
-      example:
-        active: true
-        location_id: location-4
-        meeting_points:
-        - bottom_image_url: https://example.com/t1-bottom.png
-          coordinates:
-            latitude: 40.4722
-            longitude: -3.5608
-          header_image_url: https://example.com/t1-header.png
-          instructions:
-          - en: Head to the main gate of Terminal 1
-            es: Dirígete a la puerta principal de la Terminal 1
-            step_image_url: https://example.com/step1.png
-          title:
-            en: Terminal 1
-            es: Terminal 1
-          uid: mp-loc4-1
-        title:
-          en: Madrid Barajas
-          es: Madrid Barajas
-        uid: hub-loc4
-      properties:
-        active:
-          description: Whether the hub is currently active.
-          type: boolean
-        location_id:
-          description: Location identifier used to look up this hub.
-          type: string
-        meeting_points:
-          description: Designated pick-up/drop-off points within the hub. Present one of these to the user as their boarding location.
-          items:
-            properties:
-              bottom_image_url:
-                description: URL for the bottom image of the meeting point.
-                type:
-                - string
-                - 'null'
-              coordinates:
-                description: GPS coordinates of the meeting point.
-                properties:
-                  latitude:
-                    type: number
-                  longitude:
-                    type: number
-                type: object
-              header_image_url:
-                description: URL for the header image of the meeting point.
-                type:
-                - string
-                - 'null'
-              instructions:
-                description: Step-by-step instructions to reach the meeting point.
-                items:
-                  properties:
-                    en:
-                      type: string
-                    es:
-                      type: string
-                    step_image_url:
-                      type:
-                      - string
-                      - 'null'
-                  type: object
-                type: array
-              title:
-                additionalProperties:
-                  type: string
-                description: Localized name of the meeting point, keyed by BCP 47 language tag.
-                type: object
-              uid:
-                description: Unique identifier of the meeting point.
-                type: string
-            type: object
-          type: array
-        title:
-          additionalProperties:
-            type: string
-          description: Localized name of the hub, keyed by BCP 47 language tag.
-          type: object
-        uid:
-          description: Unique identifier of the hub.
-          type: string
-      title: HubObject
-      type:
-      - object
-      - 'null'
-    BadRequest:
-      description: Indicates that the server cannot or will not process the request due to something that is perceived to be a client error (for example, malformed request syntax, invalid request message framing, or deceptive request routing).
-      example:
-        error: Bad Request error message
-      properties:
-        message:
-          type: string
-      title: BadRequest
-      type: object
-    UnauthorizedRequest:
-      description: The token used is invalid either because it is expired or because it is incorrect.
-      example:
-        error: Unauthorized
-      properties:
-        error:
-          type: string
-      title: UnauthorizedRequest
-      type: object
     EstimateResponse:
       description: 'List of available products with pricing for the requested route.
 
@@ -337,6 +231,121 @@ components:
         type: object
       title: EstimateResponse
       type: array
+    UnauthorizedRequest:
+      description: The token used is invalid either because it is expired or because it is incorrect.
+      example:
+        error: Unauthorized
+      properties:
+        error:
+          type: string
+      title: UnauthorizedRequest
+      type: object
+    BadRequest:
+      description: Indicates that the server cannot or will not process the request due to something that is perceived to be a client error (for example, malformed request syntax, invalid request message framing, or deceptive request routing).
+      example:
+        error: Bad Request error message
+      properties:
+        message:
+          type: string
+      title: BadRequest
+      type: object
+    HubObject:
+      description: A hub is a large venue (e.g. airport, train station) with designated pick-up/drop-off meeting points.
+      example:
+        active: true
+        location_id: location-4
+        meeting_points:
+        - bottom_image_url: https://example.com/t1-bottom.png
+          coordinates:
+            latitude: 40.4722
+            longitude: -3.5608
+          header_image_url: https://example.com/t1-header.png
+          instructions:
+          - en: Head to the main gate of Terminal 1
+            es: Dirígete a la puerta principal de la Terminal 1
+            step_image_url: https://example.com/step1.png
+          title:
+            en: Terminal 1
+            es: Terminal 1
+          uid: mp-loc4-1
+        title:
+          en: Madrid Barajas
+          es: Madrid Barajas
+        uid: hub-loc4
+      properties:
+        active:
+          description: Whether the hub is currently active.
+          type: boolean
+        location_id:
+          description: Location identifier used to look up this hub.
+          type: string
+        meeting_points:
+          description: Designated pick-up/drop-off points within the hub. Present one of these to the user as their boarding location.
+          items:
+            properties:
+              bottom_image_url:
+                description: URL for the bottom image of the meeting point.
+                type:
+                - string
+                - 'null'
+              coordinates:
+                description: GPS coordinates of the meeting point.
+                properties:
+                  latitude:
+                    type: number
+                  longitude:
+                    type: number
+                type: object
+              header_image_url:
+                description: URL for the header image of the meeting point.
+                type:
+                - string
+                - 'null'
+              instructions:
+                description: Step-by-step instructions to reach the meeting point.
+                items:
+                  properties:
+                    en:
+                      type: string
+                    es:
+                      type: string
+                    step_image_url:
+                      type:
+                      - string
+                      - 'null'
+                  type: object
+                type: array
+              title:
+                additionalProperties:
+                  type: string
+                description: Localized name of the meeting point, keyed by BCP 47 language tag.
+                type: object
+              uid:
+                description: Unique identifier of the meeting point.
+                type: string
+            type: object
+          type: array
+        title:
+          additionalProperties:
+            type: string
+          description: Localized name of the hub, keyed by BCP 47 language tag.
+          type: object
+        uid:
+          description: Unique identifier of the hub.
+          type: string
+      title: HubObject
+      type:
+      - object
+      - 'null'
+    InternalServerError:
+      description: indicates that an internal server error occurred
+      example:
+        error: Something went wrong
+      properties:
+        error:
+          type: string
+      title: InternalServerError
+      type: object
     EstimateRequest:
       additionalProperties: false
       description: 'Request an estimate before creating a journey.
@@ -399,15 +408,6 @@ components:
       - requester_id
       - stops
       title: EstimateRequest
-      type: object
-    InternalServerError:
-      description: indicates that an internal server error occurred
-      example:
-        error: Something went wrong
-      properties:
-        error:
-          type: string
-      title: InternalServerError
       type: object
   securitySchemes:
     access_token:

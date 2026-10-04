@@ -328,6 +328,47 @@ components:
           type: boolean
           description: Whether the user has a valid payment method configured.
           example: true
+    NotFound:
+      description: The server did not find a current representation for the target resource
+      example:
+        error: user with provided ID does not exist
+      properties:
+        message:
+          type: string
+      title: NotFound
+      type: object
+    UpdateUsersRequest:
+      description: List of Users update data
+      items:
+        $ref: '#/components/schemas/UpdateUser'
+      minItems: 1
+      title: UpdateUsersRequest
+      type: array
+    UnauthorizedRequest:
+      description: The token used is invalid either because it is expired or because it is incorrect.
+      example:
+        error: Unauthorized
+      properties:
+        error:
+          type: string
+      title: UnauthorizedRequest
+      type: object
+    BadRequest:
+      description: Indicates that the server cannot or will not process the request due to something that is perceived to be a client error (for example, malformed request syntax, invalid request message framing, or deceptive request routing).
+      example:
+        error: Bad Request error message
+      properties:
+        message:
+          type: string
+      title: BadRequest
+      type: object
+    CreateUsersRequest:
+      description: List of new data to create new Users with it
+      items:
+        $ref: '#/components/schemas/CreateUser'
+      minItems: 1
+      title: CreateUsersRequest
+      type: array
     UpdateUser:
       example:
         email: john.doe@example.com
@@ -388,31 +429,6 @@ components:
       required:
       - id
       title: UpdateUser
-      type: object
-    CreateUsersRequest:
-      description: List of new data to create new Users with it
-      items:
-        $ref: '#/components/schemas/CreateUser'
-      minItems: 1
-      title: CreateUsersRequest
-      type: array
-    BadRequest:
-      description: Indicates that the server cannot or will not process the request due to something that is perceived to be a client error (for example, malformed request syntax, invalid request message framing, or deceptive request routing).
-      example:
-        error: Bad Request error message
-      properties:
-        message:
-          type: string
-      title: BadRequest
-      type: object
-    UnauthorizedRequest:
-      description: The token used is invalid either because it is expired or because it is incorrect.
-      example:
-        error: Unauthorized
-      properties:
-        error:
-          type: string
-      title: UnauthorizedRequest
       type: object
     CreateUser:
       example:
@@ -479,55 +495,6 @@ components:
       - mobile_cc
       - mobile_num
       title: CreateUser
-      type: object
-    NotFound:
-      description: The server did not find a current representation for the target resource
-      example:
-        error: user with provided ID does not exist
-      properties:
-        message:
-          type: string
-      title: NotFound
-      type: object
-    UpdateUsersRequest:
-      description: List of Users update data
-      items:
-        $ref: '#/components/schemas/UpdateUser'
-      minItems: 1
-      title: UpdateUsersRequest
-      type: array
-    PageResponse:
-      example:
-        data: []
-        page: 2
-        pages: 0
-        per: 1
-        total: 0
-      properties:
-        data:
-          description: List of Users
-          items:
-            $ref: '#/components/schemas/User_2'
-          type: array
-        page:
-          description: Number of page returned
-          type: number
-        pages:
-          description: Number of total available pages
-          type: number
-        per:
-          description: Number of elements per page
-          type: number
-        total:
-          description: Number of total available elements
-          type: number
-      required:
-      - data
-      - per
-      - page
-      - total
-      - pages
-      title: PageResponse
       type: object
     MutationResponse:
       description: Response coming either from a Create or Update request
@@ -616,6 +583,39 @@ components:
       - mobile_cc
       - mobile_num
       title: User
+      type: object
+    PageResponse:
+      example:
+        data: []
+        page: 2
+        pages: 0
+        per: 1
+        total: 0
+      properties:
+        data:
+          description: List of Users
+          items:
+            $ref: '#/components/schemas/User_2'
+          type: array
+        page:
+          description: Number of page returned
+          type: number
+        pages:
+          description: Number of total available pages
+          type: number
+        per:
+          description: Number of elements per page
+          type: number
+        total:
+          description: Number of total available elements
+          type: number
+      required:
+      - data
+      - per
+      - page
+      - total
+      - pages
+      title: PageResponse
       type: object
   securitySchemes:
     bearer_token:

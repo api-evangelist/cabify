@@ -116,95 +116,32 @@ paths:
       - bearer_token: []
 components:
   schemas:
-    DeliveryEstimate:
+    ParcelShipment:
       type: object
+      description: Summary of a parcel after it has been submitted for shipment.
       required:
-      - estimation
-      properties:
-        parcels:
-          type: array
-          items:
-            $ref: '#/components/schemas/EstimateLocation'
-        estimation:
-          $ref: '#/components/schemas/DeliveryEstimation'
-    ShipParcelsResponse:
-      type: object
-      required:
-      - parcels
+      - id
       - shipping_type_id
       properties:
-        parcels:
-          type: array
-          description: List of parcels with their assigned tracking URLs.
-          items:
-            $ref: '#/components/schemas/ParcelShipment'
-        shipping_type_id:
+        id:
           type: string
           format: uuid
-          description: UUID of the shipping type used for this shipment.
-    EstimateV3Response:
-      type: object
-      required:
-      - deliveries
-      properties:
-        deliveries:
-          type: array
-          items:
-            $ref: '#/components/schemas/DeliveryEstimate'
-    ShipParcels:
-      type: object
-      required:
-      - parcel_ids
-      - shipping_type_id
-      properties:
-        parcel_ids:
-          type: array
-          description: IDs of the parcels to ship.
-          items:
-            type: string
-            format: uuid
-        shipping_type_id:
+          description: System-generated UUID for this parcel.
+          example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+        tracking_url:
           type: string
-          description: 'UUID of the shipping type to use. Use [GET /v1/shipping_types/available](https://developers.cabify.com/reference/shippingtypesavailable) to retrieve valid IDs.
-
-            '
-        pickup_time:
-          type: string
-          format: date-time
-          description: 'Desired pickup time. Only applicable for the `express` modality. Formatted according to RFC 3339, section 5.6.
-
-            '
-          example: '2021-12-02T10:12:07.753Z'
-    Point:
-      type: object
-      description: A geographic coordinate expressed as latitude and longitude.
-      required:
-      - lat
-      - lon
-      properties:
-        lat:
-          type: number
-          format: float
-          description: Latitude in decimal degrees.
-          example: 40.4489254
-        lon:
-          type: number
-          format: float
-          description: Longitude in decimal degrees.
-          example: -3.6730293
-    ParcelWeight:
-      type: object
-      description: Weight of the parcel.
-      properties:
-        value:
-          type: integer
-          minimum: 0
-          example: 1500
-        unit:
-          type: string
-          description: Unit of weight. Defaults to `g` (grams) if omitted or set to an invalid value.
-          enum:
-          - g
+          description: Public URL where the parcel's live tracking can be viewed.
+          example: https://logistics.follow.cabify.com/abcdefghi/e
+          format: url
+    AssetKind:
+      type: string
+      description: The type of vehicle assigned to carry the parcel.
+      enum:
+      - bicycle
+      - car
+      - moped
+      - scooter
+      - van
     EstimateLocation:
       type: object
       description: A single parcel's pickup and drop-off locations used to calculate a shipping estimate.
@@ -230,52 +167,43 @@ components:
           $ref: '#/components/schemas/ParcelDimensions'
         weight:
           $ref: '#/components/schemas/ParcelWeight'
-    ParcelShipment:
+    ParcelWeight:
       type: object
-      description: Summary of a parcel after it has been submitted for shipment.
+      description: Weight of the parcel.
+      properties:
+        value:
+          type: integer
+          minimum: 0
+          example: 1500
+        unit:
+          type: string
+          description: Unit of weight. Defaults to `g` (grams) if omitted or set to an invalid value.
+          enum:
+          - g
+    ShipParcelsResponse:
+      type: object
       required:
-      - id
+      - parcels
       - shipping_type_id
       properties:
-        id:
+        parcels:
+          type: array
+          description: List of parcels with their assigned tracking URLs.
+          items:
+            $ref: '#/components/schemas/ParcelShipment'
+        shipping_type_id:
           type: string
           format: uuid
-          description: System-generated UUID for this parcel.
-          example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
-        tracking_url:
-          type: string
-          description: Public URL where the parcel's live tracking can be viewed.
-          example: https://logistics.follow.cabify.com/abcdefghi/e
-          format: url
-    DeliveryEstimation:
-      type: object
-      description: Estimated cost and timing details for a single parcel delivery.
-      required:
-      - price
-      properties:
-        price:
-          $ref: '#/components/schemas/Money'
-        asset_kind:
-          $ref: '#/components/schemas/AssetKind'
-        eta_to_pickup:
-          type: string
-          format: date-time
-          description: Estimated time when the driver will arrive at the pickup location.
-          example: '2021-12-02T10:12:07.753Z'
-        eta_to_delivery:
-          type: string
-          format: date-time
-          description: Estimated time when the parcel will be delivered to the recipient.
-          example: '2021-12-02T10:12:47.753Z'
-    Address:
+          description: UUID of the shipping type used for this shipment.
+    EstimateV3Response:
       type: object
       required:
-      - address
+      - deliveries
       properties:
-        address:
-          type: string
-          description: Address of the location
-          example: Calle de la Princesa, 1, 28008 Madrid
+        deliveries:
+          type: array
+          items:
+            $ref: '#/components/schemas/DeliveryEstimate'
     Money:
       type: object
       description: A monetary amount represented in the smallest currency unit (e.g. cents).
@@ -293,26 +221,6 @@ components:
           type: string
           description: ISO 4217 currency code.
           example: EUR
-    RequestError:
-      type: object
-      description: Standard error response body returned when a request fails.
-      required:
-      - errors
-      properties:
-        errors:
-          type: array
-          description: List of human-readable error messages describing what went wrong.
-          items:
-            type: string
-    AssetKind:
-      type: string
-      description: The type of vehicle assigned to carry the parcel.
-      enum:
-      - bicycle
-      - car
-      - moped
-      - scooter
-      - van
     ParcelDimensions:
       type: object
       description: Physical dimensions of the parcel.
@@ -334,6 +242,23 @@ components:
           description: Unit of measure for the dimensions. Defaults to `cm` if omitted or set to an invalid value.
           enum:
           - cm
+    Point:
+      type: object
+      description: A geographic coordinate expressed as latitude and longitude.
+      required:
+      - lat
+      - lon
+      properties:
+        lat:
+          type: number
+          format: float
+          description: Latitude in decimal degrees.
+          example: 40.4489254
+        lon:
+          type: number
+          format: float
+          description: Longitude in decimal degrees.
+          example: -3.6730293
     EstimateV3Request:
       type: object
       required:
@@ -356,6 +281,81 @@ components:
           format: date-time
           description: Desired pickup time, formatted according to RFC 3339, section 5.6.
           example: '2021-12-02T10:12:07.753Z'
+    RequestError:
+      type: object
+      description: Standard error response body returned when a request fails.
+      required:
+      - errors
+      properties:
+        errors:
+          type: array
+          description: List of human-readable error messages describing what went wrong.
+          items:
+            type: string
+    ShipParcels:
+      type: object
+      required:
+      - parcel_ids
+      - shipping_type_id
+      properties:
+        parcel_ids:
+          type: array
+          description: IDs of the parcels to ship.
+          items:
+            type: string
+            format: uuid
+        shipping_type_id:
+          type: string
+          description: 'UUID of the shipping type to use. Use [GET /v1/shipping_types/available](https://developers.cabify.com/reference/shippingtypesavailable) to retrieve valid IDs.
+
+            '
+        pickup_time:
+          type: string
+          format: date-time
+          description: 'Desired pickup time. Only applicable for the `express` modality. Formatted according to RFC 3339, section 5.6.
+
+            '
+          example: '2021-12-02T10:12:07.753Z'
+    DeliveryEstimate:
+      type: object
+      required:
+      - estimation
+      properties:
+        parcels:
+          type: array
+          items:
+            $ref: '#/components/schemas/EstimateLocation'
+        estimation:
+          $ref: '#/components/schemas/DeliveryEstimation'
+    Address:
+      type: object
+      required:
+      - address
+      properties:
+        address:
+          type: string
+          description: Address of the location
+          example: Calle de la Princesa, 1, 28008 Madrid
+    DeliveryEstimation:
+      type: object
+      description: Estimated cost and timing details for a single parcel delivery.
+      required:
+      - price
+      properties:
+        price:
+          $ref: '#/components/schemas/Money'
+        asset_kind:
+          $ref: '#/components/schemas/AssetKind'
+        eta_to_pickup:
+          type: string
+          format: date-time
+          description: Estimated time when the driver will arrive at the pickup location.
+          example: '2021-12-02T10:12:07.753Z'
+        eta_to_delivery:
+          type: string
+          format: date-time
+          description: Estimated time when the parcel will be delivered to the recipient.
+          example: '2021-12-02T10:12:47.753Z'
   securitySchemes:
     bearer_token:
       type: http
