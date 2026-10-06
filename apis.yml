@@ -42,7 +42,7 @@ accessModel:
 image: https://cabify.com/static/head/cover.png
 specificationVersion: '0.23'
 created: '2026-07-17'
-modified: '2026-07-18'
+modified: '2026-10-06'
 x-docs-platform: readme
 x-docs-platform-confidence: medium
 x-docs-platform-checked: 2026-09-21
@@ -330,6 +330,8 @@ apis:
   - type: APIReference
     url: https://developers.cabify.com/reference/addparcels
 common:
+- url: https://cabify.com/es/empresas/blog
+  type: Blog
 - type: CapabilityMap
   url: capabilities/cabify-capability-edges.yml
   name: Cabify Business Capability Map
