@@ -1,20 +1,252 @@
-generated: '2026-07-18'
+generated: '2026-09-23'
 method: generated
-source: openapi/cabify-logistics-openapi.yml, openapi/cabify-ride-hailing-openapi.yml
+source: openapi/cabify-delivery-api-openapi.yml, openapi/cabify-estimates-api-openapi.yml, openapi/cabify-hubs-api-openapi.yml,
+  openapi/cabify-journeys-api-openapi.yml, openapi/cabify-label-api-openapi.yml, openapi/cabify-labels-api-openapi.yml,
+  openapi/cabify-parcels-api-openapi.yml, openapi/cabify-sales-api-openapi.yml, openapi/cabify-shipment-api-openapi.yml,
+  openapi/cabify-shipping-types-api-openapi.yml, openapi/cabify-status-api-openapi.yml, openapi/cabify-users-api-openapi.yml,
+  openapi/cabify-webhooks-api-openapi.yml
 description: Recommended x-agentic-access execution contracts, classified heuristically from
   the OpenAPI. A governance starting point for exposing this API to AI agents — review and bind
   audience per deployment. See research/curity/agentic-governance/.
 summary:
   operations: 46
   by_action_class:
-    acting: 21
-    connected: 25
+    acting: 20
+    connected: 26
   by_consequence:
-    write: 19
-    read: 25
+    write: 18
+    read: 26
     physical: 2
   human_in_the_loop_required: 0
 operations:
+- path: /v1/parcels/deliver/cancel
+  method: post
+  operationId: cancelParcels
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /v1/parcels/deliver/pickup
+  method: get
+  operationId: deliverPickup
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v4/estimates
+  method: post
+  operationId: getEstimation
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/hubs
+  method: get
+  operationId: getV1Hubs
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/hubs
+  method: post
+  operationId: postV1Hubs
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /v1/hubs/none/{hub_external_id}
+  method: get
+  operationId: getV1HubsNoneByHubExternalId
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v1/hubs/none/{hub_external_id}
+  method: put
+  operationId: putV1HubsNoneByHubExternalId
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/v4/hub
+  method: get
+  operationId: getHub
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v4/journey/{id}/state
+  method: post
+  operationId: cancelJourney
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/v4/journey/{id}/state
+  method: get
+  operationId: getJourneyState
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v4/journey
+  method: post
+  operationId: createJourney
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/v4/journey/{journey_id}
+  method: get
+  operationId: getJourney
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v4/journey/{id}/keep_searching
+  method: post
+  operationId: keepSearching
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /v1/parcels/{parcel_id}/warehouse/label
+  method: get
+  operationId: warehouseLabelParcel
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v4/labels
+  method: post
+  operationId: createLabel
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/v4/labels
+  method: get
+  operationId: getLabels
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v4/labels
+  method: patch
+  operationId: updateLabel
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/v4/labels/{id}
+  method: get
+  operationId: getLabelById
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
 - path: /v1/parcels
   method: post
   operationId: addParcels
@@ -41,22 +273,6 @@ operations:
     token:
       max-ttl: 3600
     audit: none
-- path: /v1/parcels/deliver/cancel
-  method: post
-  operationId: cancelParcels
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
 - path: /v1/parcels/{parcel_id}/proof_configuration
   method: post
   operationId: createProofConfigurationParcel
@@ -86,98 +302,6 @@ operations:
 - path: /v1/parcels/delete
   method: post
   operationId: deleteParcels
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /v1/webhooks/{hook}
-  method: delete
-  operationId: deleteWebhook
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /v1/parcels/deliver/pickup
-  method: get
-  operationId: deliverPickup
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /v3/parcels/estimate
-  method: post
-  operationId: EstimateShipParcels
-  x-agentic-access:
-    action-class: acting
-    consequence: physical
-    subject: required
-    audience: null
-    token:
-      max-ttl: 300
-      exchange: true
-      purpose-required: true
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /v1/hubs
-  method: get
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /v1/hubs
-  method: post
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /v1/hubs/none/{hub_external_id}
-  method: get
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /v1/hubs/none/{hub_external_id}
-  method: put
   x-agentic-access:
     action-class: acting
     consequence: write
@@ -243,42 +367,6 @@ operations:
       - abnormal
       - high-value
     audit: required
-- path: /v1/users
-  method: get
-  operationId: getUsers
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /v1/webhooks
-  method: get
-  operationId: getWebhook
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /v1/webhooks
-  method: post
-  operationId: subscribeWebhook
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
 - path: /v1/parcels/{parcel_id}/label
   method: get
   operationId: labelParcel
@@ -299,6 +387,54 @@ operations:
     audience: null
     token:
       max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /api/v4/journey/{journey_id}/sales
+  method: get
+  operationId: getJourneySales
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v4/sales
+  method: get
+  operationId: getSales
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /api/v4/user/{user_id}/sales
+  method: get
+  operationId: getUserSales
+  x-agentic-access:
+    action-class: connected
+    consequence: read
+    subject: optional
+    token:
+      max-ttl: 3600
+    audit: none
+- path: /v3/parcels/estimate
+  method: post
+  operationId: EstimateShipParcels
+  x-agentic-access:
+    action-class: acting
+    consequence: physical
+    subject: required
+    audience: null
+    token:
+      max-ttl: 300
+      exchange: true
+      purpose-required: true
     escalation:
       human-in-the-loop: conditional
       triggers:
@@ -353,9 +489,9 @@ operations:
     token:
       max-ttl: 3600
     audit: none
-- path: /v1/parcels/{parcel_id}/warehouse/label
+- path: /v1/users
   method: get
-  operationId: warehouseLabelParcel
+  operationId: getUsers
   x-agentic-access:
     action-class: connected
     consequence: read
@@ -363,90 +499,6 @@ operations:
     token:
       max-ttl: 3600
     audit: none
-- path: /api/v4/journey/{id}/state
-  method: post
-  operationId: cancelJourney
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /api/v4/journey/{id}/state
-  method: get
-  operationId: getJourneyState
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /api/v4/journey
-  method: post
-  operationId: createJourney
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /api/v4/labels
-  method: post
-  operationId: createLabel
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /api/v4/labels
-  method: get
-  operationId: getLabels
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /api/v4/labels
-  method: patch
-  operationId: updateLabel
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
 - path: /api/v4/users
   method: post
   operationId: createUsers
@@ -489,72 +541,6 @@ operations:
       - abnormal
       - high-value
     audit: required
-- path: /api/v4/estimates
-  method: post
-  operationId: getEstimation
-  x-agentic-access:
-    action-class: acting
-    consequence: write
-    subject: required
-    audience: null
-    token:
-      max-ttl: 900
-    escalation:
-      human-in-the-loop: conditional
-      triggers:
-      - abnormal
-      - high-value
-    audit: required
-- path: /api/v4/hub
-  method: get
-  operationId: getHub
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /api/v4/journey/{journey_id}
-  method: get
-  operationId: getJourney
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /api/v4/journey/{journey_id}/sales
-  method: get
-  operationId: getJourneySales
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /api/v4/labels/{id}
-  method: get
-  operationId: getLabelById
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
-- path: /api/v4/sales
-  method: get
-  operationId: getSales
-  x-agentic-access:
-    action-class: connected
-    consequence: read
-    subject: optional
-    token:
-      max-ttl: 3600
-    audit: none
 - path: /api/v4/users/email/{email}
   method: get
   operationId: getUserByEmail
@@ -575,9 +561,25 @@ operations:
     token:
       max-ttl: 3600
     audit: none
-- path: /api/v4/user/{user_id}/sales
+- path: /v1/webhooks/{hook}
+  method: delete
+  operationId: deleteWebhook
+  x-agentic-access:
+    action-class: acting
+    consequence: write
+    subject: required
+    audience: null
+    token:
+      max-ttl: 900
+    escalation:
+      human-in-the-loop: conditional
+      triggers:
+      - abnormal
+      - high-value
+    audit: required
+- path: /v1/webhooks
   method: get
-  operationId: getUserSales
+  operationId: getWebhook
   x-agentic-access:
     action-class: connected
     consequence: read
@@ -585,9 +587,9 @@ operations:
     token:
       max-ttl: 3600
     audit: none
-- path: /api/v4/journey/{id}/keep_searching
+- path: /v1/webhooks
   method: post
-  operationId: keepSearching
+  operationId: subscribeWebhook
   x-agentic-access:
     action-class: acting
     consequence: write
