@@ -74,105 +74,6 @@ paths:
       - bearer_token: []
 components:
   schemas:
-    PickupFailed:
-      type: object
-      description: '**Deprecated.** Use `pickup_attempt` instead. Details of a failed pickup attempt.
-
-        '
-      properties:
-        reason:
-          type: string
-          description: 'Reason why the pickup failed. See [pickup failed reasons](https://developers.cabify.com/reference/parcel-information#pickup-failed-reason) for a description of each value.
-
-            '
-          enum:
-          - sender_no_show
-          - sender_too_late
-          - address_wrong
-          - address_not_found
-          - address_unsafe
-          - parcel_suspicious
-          - parcel_packaging
-          - parcel_too_big_or_heavy
-          - payment_requested
-          - payment_fake
-          - other_with_feedback
-          - place_closed
-          - delivery_not_found
-          - already_picked_up
-          - delivery_cancelled
-          example: address_wrong
-        failed_at:
-          type: string
-          format: date-time
-          description: Timestamp of the failed pickup event, formatted according to RFC 3339, section 5.6.
-          example: '2021-12-02T10:12:07.753Z'
-        driver_comments:
-          type: string
-          description: Comments left by the driver explaining why the pickup failed.
-          example: can't find the address
-    TimelineEvent:
-      type: object
-      required:
-      - state
-      - state_updated_at
-      properties:
-        state:
-          type: string
-          description: 'The lifecycle state the parcel transitioned into. See [parcel states](https://developers.cabify.com/reference/logistics-introduction#parcel) for a full description of each value.
-
-            '
-          enum:
-          - ready
-          - qualifiedforpickup
-          - pickingup
-          - intransit
-          - delivering
-          - delivered
-          - returning
-          - returned
-          - incident
-          - requestercancel
-          - internalcancel
-          - pickupfailed
-          - onroutetopickup
-          - readytopickup
-          - onroutetofinalhub
-          - receivedonfinalhub
-          - readytodispatch
-          - onroutetodelivery
-          - undelivered
-          - onroutetoreturn
-          - returnrejected
-        state_updated_at:
-          type: string
-          format: date-time
-          description: Timestamp when the parcel transitioned into this state, formatted according to RFC 3339, section 5.6.
-          example: '2021-12-02T10:12:07.753Z'
-    AssetKind:
-      type: string
-      description: The type of vehicle assigned to carry the parcel.
-      enum:
-      - bicycle
-      - car
-      - moped
-      - scooter
-      - van
-    ParcelStatusRoute:
-      type: object
-      description: Route information between two points during a delivery.
-      required:
-      - eta
-      - path
-      properties:
-        eta:
-          type: integer
-          example: 120
-          description: Estimated time of arrival in seconds.
-        path:
-          type: string
-          example: fhdsa98fha87sdfhas76dgf8a
-          description: Encoded polyline representing the route path.
     ParcelStatus:
       type: object
       properties:
@@ -399,6 +300,92 @@ components:
           description: Chronological list of state-change events for this parcel.
           items:
             $ref: '#/components/schemas/TimelineEvent'
+    TimelineEvent:
+      type: object
+      required:
+      - state
+      - state_updated_at
+      properties:
+        state:
+          type: string
+          description: 'The lifecycle state the parcel transitioned into. See [parcel states](https://developers.cabify.com/reference/logistics-introduction#parcel) for a full description of each value.
+
+            '
+          enum:
+          - ready
+          - qualifiedforpickup
+          - pickingup
+          - intransit
+          - delivering
+          - delivered
+          - returning
+          - returned
+          - incident
+          - requestercancel
+          - internalcancel
+          - pickupfailed
+          - onroutetopickup
+          - readytopickup
+          - onroutetofinalhub
+          - receivedonfinalhub
+          - readytodispatch
+          - onroutetodelivery
+          - undelivered
+          - onroutetoreturn
+          - returnrejected
+        state_updated_at:
+          type: string
+          format: date-time
+          description: Timestamp when the parcel transitioned into this state, formatted according to RFC 3339, section 5.6.
+          example: '2021-12-02T10:12:07.753Z'
+    PickupFailed:
+      type: object
+      description: '**Deprecated.** Use `pickup_attempt` instead. Details of a failed pickup attempt.
+
+        '
+      properties:
+        reason:
+          type: string
+          description: 'Reason why the pickup failed. See [pickup failed reasons](https://developers.cabify.com/reference/parcel-information#pickup-failed-reason) for a description of each value.
+
+            '
+          enum:
+          - sender_no_show
+          - sender_too_late
+          - address_wrong
+          - address_not_found
+          - address_unsafe
+          - parcel_suspicious
+          - parcel_packaging
+          - parcel_too_big_or_heavy
+          - payment_requested
+          - payment_fake
+          - other_with_feedback
+          - place_closed
+          - delivery_not_found
+          - already_picked_up
+          - delivery_cancelled
+          example: address_wrong
+        failed_at:
+          type: string
+          format: date-time
+          description: Timestamp of the failed pickup event, formatted according to RFC 3339, section 5.6.
+          example: '2021-12-02T10:12:07.753Z'
+        driver_comments:
+          type: string
+          description: Comments left by the driver explaining why the pickup failed.
+          example: can't find the address
+    Modality:
+      type: string
+      description: 'The delivery modality determines the timing and service level of the shipment. - `express`: On-demand delivery, typically within 1 hour. - `same_day`: Delivery scheduled for the same calendar day. - `next_day`: Delivery scheduled for the following calendar day. - `groceries`: Optimised for grocery and fresh-food deliveries.
+
+        '
+      example: same_day
+      enum:
+      - express
+      - same_day
+      - next_day
+      - groceries
     Asset:
       type: object
       description: Details of the vehicle assigned to the delivery.
@@ -419,17 +406,30 @@ components:
           example: black
         asset_kind:
           $ref: '#/components/schemas/AssetKind'
-    Modality:
+    AssetKind:
       type: string
-      description: 'The delivery modality determines the timing and service level of the shipment. - `express`: On-demand delivery, typically within 1 hour. - `same_day`: Delivery scheduled for the same calendar day. - `next_day`: Delivery scheduled for the following calendar day. - `groceries`: Optimised for grocery and fresh-food deliveries.
-
-        '
-      example: same_day
+      description: The type of vehicle assigned to carry the parcel.
       enum:
-      - express
-      - same_day
-      - next_day
-      - groceries
+      - bicycle
+      - car
+      - moped
+      - scooter
+      - van
+    ParcelStatusRoute:
+      type: object
+      description: Route information between two points during a delivery.
+      required:
+      - eta
+      - path
+      properties:
+        eta:
+          type: integer
+          example: 120
+          description: Estimated time of arrival in seconds.
+        path:
+          type: string
+          example: fhdsa98fha87sdfhas76dgf8a
+          description: Encoded polyline representing the route path.
   securitySchemes:
     bearer_token:
       type: http

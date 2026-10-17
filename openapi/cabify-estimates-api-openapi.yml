@@ -231,15 +231,6 @@ components:
         type: object
       title: EstimateResponse
       type: array
-    UnauthorizedRequest:
-      description: The token used is invalid either because it is expired or because it is incorrect.
-      example:
-        error: Unauthorized
-      properties:
-        error:
-          type: string
-      title: UnauthorizedRequest
-      type: object
     BadRequest:
       description: Indicates that the server cannot or will not process the request due to something that is perceived to be a client error (for example, malformed request syntax, invalid request message framing, or deceptive request routing).
       example:
@@ -408,6 +399,15 @@ components:
       - requester_id
       - stops
       title: EstimateRequest
+      type: object
+    UnauthorizedRequest:
+      description: The token used is invalid either because it is expired or because it is incorrect.
+      example:
+        error: Unauthorized
+      properties:
+        error:
+          type: string
+      title: UnauthorizedRequest
       type: object
   securitySchemes:
     access_token:

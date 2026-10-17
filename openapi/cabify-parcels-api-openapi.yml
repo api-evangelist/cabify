@@ -518,98 +518,19 @@ paths:
       - bearer_token: []
 components:
   schemas:
-    Price:
+    NewParcelDropoffContact:
       type: object
-      description: Price information for the parcel, used in cash-on-delivery scenarios.
       properties:
-        declared_value:
-          type: integer
-          description: 'Declared value of the parcel''s contents, in the smallest currency unit following the ISO 4217 standard (e.g. €6.30 → `630`).
-
-            '
-          example: 630
-        collected_value:
-          type: integer
-          description: 'Amount to be collected from the recipient upon delivery, in the smallest currency unit following the ISO 4217 standard (e.g. €6.30 → `630`).
-
-            '
-          example: 630
-        currency:
+        name:
           type: string
-          description: ISO 4217 currency code.
-          example: EUR
-    DeleteParcels:
-      type: object
-      required:
-      - parcel_ids
-      properties:
-        parcel_ids:
-          type: array
-          description: List of parcels to be deleted
-          items:
-            type: string
-            format: uuid
-    ParcelWeight:
-      type: object
-      description: Weight of the parcel.
-      properties:
-        value:
-          type: integer
-          minimum: 0
-          example: 1500
-        unit:
-          type: string
-          description: Unit of weight. Defaults to `g` (grams) if omitted or set to an invalid value.
-          enum:
-          - g
-    CreateProofConfiguration:
-      type: object
-      description: Request body for creating or replacing proof of delivery configuration for a parcel.
-      properties:
-        delivered_proofs:
-          type: object
-          description: Configuration for each proof of delivery method. Methods not included in the request will be set to inactive.
-          properties:
-            code_proof:
-              type: object
-              description: 'Configuration for code-based proof of delivery. Omitting this field sets the method as inactive. This method is **mutually exclusive** with the other proof methods — it can only be activated on its own.
-
-                '
-              properties:
-                active:
-                  type: boolean
-                  description: Activates or deactivates this proof method. Defaults to `false` if omitted.
-                  example: true
-                hashed_code:
-                  type: string
-                  description: 'SHA-256 hash of the verification code. If omitted, a 4-digit code will be automatically generated and returned in the response.
-
-                    '
-                  example: 6eef362598bc0d76139d3c4df61347a7faad5fa0a535347e46420214c68558a7
-            ic_proof:
-              type: object
-              description: Configuration for identity card (IC) based proof of delivery. Omitting this field sets the method as inactive.
-              properties:
-                active:
-                  type: boolean
-                  description: Activates or deactivates this proof method. Defaults to `false` if omitted.
-                  example: true
-            photo_proof:
-              type: object
-              description: Configuration for photo-based proof of delivery. Omitting this field sets the method as inactive.
-              properties:
-                active:
-                  type: boolean
-                  description: Activates or deactivates this proof method. Defaults to `false` if omitted.
-                  example: true
-            comment_proof:
-              type: object
-              description: Configuration for comment-based proof of delivery. Omitting this field sets the method as inactive.
-              properties:
-                active:
-                  type: boolean
-                  description: Activates or deactivates this proof method. Defaults to `false` if omitted.
-                  example: true
+          description: Name of the recipient at the drop-off location.
+          example: John
+        phone:
+          type:
+          - string
+          - 'null'
+          description: Phone number of the recipient at the drop-off location.
+          example: '+34666000000'
     ParcelDimensions:
       type: object
       description: Physical dimensions of the parcel.
@@ -631,112 +552,120 @@ components:
           description: Unit of measure for the dimensions. Defaults to `cm` if omitted or set to an invalid value.
           enum:
           - cm
-    PaginatedParcels:
+    CreateTip:
+      required:
+      - amount
+      type: object
+      properties:
+        amount:
+          minimum: 0
+          type: integer
+          description: 'Tip amount in the smallest currency unit, following the ISO 4217 standard (e.g. €6.30 → `630`).
+
+            '
+          example: 100
+    ParcelPointDropoffInfo:
+      type: object
+      required:
+      - contact
+      description: 'Information about the drop-off (destination) point. You must provide exactly one of the following location fields: `loc` (coordinates), `addr` (address string), or `hub_external_id` (reference to a registered hub).
+
+        '
+      properties:
+        addr:
+          type: string
+          description: Full address where the parcel should be delivered.
+          example: Calle de Pradillo, 42, Madrid
+        contact:
+          $ref: '#/components/schemas/NewParcelDropoffContact'
+        instr:
+          type:
+          - string
+          - 'null'
+          description: Additional instructions for the driver at the drop-off location.
+          example: Knock the door three times
+        loc:
+          $ref: '#/components/schemas/Point'
+        hub_external_id:
+          type: string
+          description: External ID of a client hub to use as the drop-off location.
+          example: magic_store_santa_fe
+    Parcels:
       type: object
       required:
       - parcels
-      - page
-      - page_size
-      - more_pages
       properties:
         parcels:
           type: array
           items:
             $ref: '#/components/schemas/Parcel'
-        page:
-          type: number
-          description: The current page number returned.
-          example: 2
-        page_size:
-          type: number
-          description: The number of parcels returned per page.
-          example: 20
-        more_pages:
-          type: boolean
-          description: Whether additional pages of results are available.
-          example: true
-    NewParcelDropoffContact:
+    DeleteParcels:
       type: object
-      properties:
-        name:
-          type: string
-          description: Name of the recipient at the drop-off location.
-          example: John
-        phone:
-          type:
-          - string
-          - 'null'
-          description: Phone number of the recipient at the drop-off location.
-          example: '+34666000000'
-    ProofConfiguration:
-      type: object
-      description: The proof of delivery methods configured for a parcel.
       required:
-      - parcel_id
-      - delivered_proofs
+      - parcel_ids
       properties:
-        parcel_id:
+        parcel_ids:
+          type: array
+          description: List of parcels to be deleted
+          items:
+            type: string
+            format: uuid
+    RequestError:
+      type: object
+      description: Standard error response body returned when a request fails.
+      required:
+      - errors
+      properties:
+        errors:
+          type: array
+          description: List of human-readable error messages describing what went wrong.
+          items:
+            type: string
+    ParcelWeight:
+      type: object
+      description: Weight of the parcel.
+      properties:
+        value:
+          type: integer
+          minimum: 0
+          example: 1500
+        unit:
+          type: string
+          description: Unit of weight. Defaults to `g` (grams) if omitted or set to an invalid value.
+          enum:
+          - g
+    Parcel:
+      type: object
+      properties:
+        id:
           type: string
           format: uuid
-          description: UUID of the parcel this configuration applies to.
+          description: System-generated UUID for this parcel.
           example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
-        delivered_proofs:
-          type: object
-          required:
-          - code_proof
-          - ic_proof
-          - photo_proof
-          - comment_proof
-          description: Configuration for each available proof of delivery method.
-          properties:
-            code_proof:
-              type: object
-              required:
-              - active
-              description: Configuration for code-based proof of delivery.
-              properties:
-                active:
-                  type: boolean
-                  description: Whether this proof method is active for the parcel.
-                  example: true
-                code:
-                  type: string
-                  description: Four-digit code shown to the driver (only present if no `hashed_code` was provided).
-                  example: '1234'
-                hashed_code:
-                  type: string
-                  description: SHA-256 hash of the code (only present if a hashed code was supplied).
-                  example: 6eef362598bc0d76139d3c4df61347a7faad5fa0a535347e46420214c68558a7
-            ic_proof:
-              type: object
-              required:
-              - active
-              description: Configuration for identity card (IC) based proof of delivery.
-              properties:
-                active:
-                  type: boolean
-                  description: Whether this proof method is active for the parcel.
-                  example: true
-            photo_proof:
-              type: object
-              required:
-              - active
-              description: Configuration for photo-based proof of delivery.
-              properties:
-                active:
-                  type: boolean
-                  description: Whether this proof method is active for the parcel.
-                  example: true
-            comment_proof:
-              type: object
-              required:
-              - active
-              description: Configuration for comment-based proof of delivery.
-              properties:
-                active:
-                  type: boolean
-                  description: Whether this proof method is active for the parcel.
-                  example: true
+        external_id:
+          type: string
+          description: Your own identifier for this parcel, as provided when the parcel was created.
+          example: parcel_001
+        pickup_info:
+          $ref: '#/components/schemas/ParcelPointPickupInfo'
+        dropoff_info:
+          $ref: '#/components/schemas/ParcelPointDropoffInfo'
+        dimensions:
+          $ref: '#/components/schemas/ParcelDimensions'
+        weight:
+          $ref: '#/components/schemas/ParcelWeight'
+        price:
+          $ref: '#/components/schemas/Price'
+        created_at:
+          type: string
+          format: date-time
+          description: Timestamp when the parcel was created, formatted according to RFC 3339, section 5.6.
+          example: '2021-12-02T10:12:07.753Z'
+        updated_at:
+          type: string
+          format: date-time
+          description: Timestamp of the most recent update to the parcel, formatted according to RFC 3339, section 5.6.
+          example: '2021-12-02T10:12:07.753Z'
     NewParcels:
       type: object
       required:
@@ -746,6 +675,45 @@ components:
           type: array
           items:
             $ref: '#/components/schemas/NewParcel'
+    Tip:
+      type: object
+      properties:
+        parcel_id:
+          type: string
+          format: uuid
+          description: UUID of the parcel this tip is associated with.
+          example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
+        amount:
+          minimum: 0
+          type: integer
+          description: 'Tip amount in the smallest currency unit, following the ISO 4217 standard (e.g. €6.30 → `630`).
+
+            '
+          example: 100
+        currency:
+          type: string
+          description: ISO 4217 currency code.
+          example: ARS
+    Price:
+      type: object
+      description: Price information for the parcel, used in cash-on-delivery scenarios.
+      properties:
+        declared_value:
+          type: integer
+          description: 'Declared value of the parcel''s contents, in the smallest currency unit following the ISO 4217 standard (e.g. €6.30 → `630`).
+
+            '
+          example: 630
+        collected_value:
+          type: integer
+          description: 'Amount to be collected from the recipient upon delivery, in the smallest currency unit following the ISO 4217 standard (e.g. €6.30 → `630`).
+
+            '
+          example: 630
+        currency:
+          type: string
+          description: ISO 4217 currency code.
+          example: EUR
     NewParcel:
       type: object
       required:
@@ -816,94 +784,147 @@ components:
           type: string
           description: External ID of a client hub to use as the pickup location.
           example: magic_store_santa_fe
-    RequestError:
+    PaginatedParcels:
       type: object
-      description: Standard error response body returned when a request fails.
       required:
-      - errors
+      - parcels
+      - page
+      - page_size
+      - more_pages
       properties:
-        errors:
+        parcels:
           type: array
-          description: List of human-readable error messages describing what went wrong.
           items:
-            type: string
-    Tip:
+            $ref: '#/components/schemas/Parcel'
+        page:
+          type: number
+          description: The current page number returned.
+          example: 2
+        page_size:
+          type: number
+          description: The number of parcels returned per page.
+          example: 20
+        more_pages:
+          type: boolean
+          description: Whether additional pages of results are available.
+          example: true
+    ProofConfiguration:
       type: object
+      description: The proof of delivery methods configured for a parcel.
+      required:
+      - parcel_id
+      - delivered_proofs
       properties:
         parcel_id:
           type: string
           format: uuid
-          description: UUID of the parcel this tip is associated with.
+          description: UUID of the parcel this configuration applies to.
           example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
-        amount:
-          minimum: 0
-          type: integer
-          description: 'Tip amount in the smallest currency unit, following the ISO 4217 standard (e.g. €6.30 → `630`).
+        delivered_proofs:
+          type: object
+          required:
+          - code_proof
+          - ic_proof
+          - photo_proof
+          - comment_proof
+          description: Configuration for each available proof of delivery method.
+          properties:
+            code_proof:
+              type: object
+              required:
+              - active
+              description: Configuration for code-based proof of delivery.
+              properties:
+                active:
+                  type: boolean
+                  description: Whether this proof method is active for the parcel.
+                  example: true
+                code:
+                  type: string
+                  description: Four-digit code shown to the driver (only present if no `hashed_code` was provided).
+                  example: '1234'
+                hashed_code:
+                  type: string
+                  description: SHA-256 hash of the code (only present if a hashed code was supplied).
+                  example: 6eef362598bc0d76139d3c4df61347a7faad5fa0a535347e46420214c68558a7
+            ic_proof:
+              type: object
+              required:
+              - active
+              description: Configuration for identity card (IC) based proof of delivery.
+              properties:
+                active:
+                  type: boolean
+                  description: Whether this proof method is active for the parcel.
+                  example: true
+            photo_proof:
+              type: object
+              required:
+              - active
+              description: Configuration for photo-based proof of delivery.
+              properties:
+                active:
+                  type: boolean
+                  description: Whether this proof method is active for the parcel.
+                  example: true
+            comment_proof:
+              type: object
+              required:
+              - active
+              description: Configuration for comment-based proof of delivery.
+              properties:
+                active:
+                  type: boolean
+                  description: Whether this proof method is active for the parcel.
+                  example: true
+    CreateProofConfiguration:
+      type: object
+      description: Request body for creating or replacing proof of delivery configuration for a parcel.
+      properties:
+        delivered_proofs:
+          type: object
+          description: Configuration for each proof of delivery method. Methods not included in the request will be set to inactive.
+          properties:
+            code_proof:
+              type: object
+              description: 'Configuration for code-based proof of delivery. Omitting this field sets the method as inactive. This method is **mutually exclusive** with the other proof methods — it can only be activated on its own.
 
-            '
-          example: 100
-        currency:
-          type: string
-          description: ISO 4217 currency code.
-          example: ARS
-    ParcelPointDropoffInfo:
-      type: object
-      required:
-      - contact
-      description: 'Information about the drop-off (destination) point. You must provide exactly one of the following location fields: `loc` (coordinates), `addr` (address string), or `hub_external_id` (reference to a registered hub).
+                '
+              properties:
+                active:
+                  type: boolean
+                  description: Activates or deactivates this proof method. Defaults to `false` if omitted.
+                  example: true
+                hashed_code:
+                  type: string
+                  description: 'SHA-256 hash of the verification code. If omitted, a 4-digit code will be automatically generated and returned in the response.
 
-        '
-      properties:
-        addr:
-          type: string
-          description: Full address where the parcel should be delivered.
-          example: Calle de Pradillo, 42, Madrid
-        contact:
-          $ref: '#/components/schemas/NewParcelDropoffContact'
-        instr:
-          type:
-          - string
-          - 'null'
-          description: Additional instructions for the driver at the drop-off location.
-          example: Knock the door three times
-        loc:
-          $ref: '#/components/schemas/Point'
-        hub_external_id:
-          type: string
-          description: External ID of a client hub to use as the drop-off location.
-          example: magic_store_santa_fe
-    NewParcelPickupContact:
-      type: object
-      properties:
-        name:
-          type:
-          - string
-          - 'null'
-          description: Name of the contact person at the pickup location.
-          example: John
-        phone:
-          type:
-          - string
-          - 'null'
-          description: Phone number of the contact person at the pickup location.
-          example: '+34666000000'
-    Point:
-      type: object
-      description: A geographic coordinate expressed as latitude and longitude.
-      required:
-      - lat
-      - lon
-      properties:
-        lat:
-          type: number
-          format: float
-          description: Latitude in decimal degrees.
-          example: 40.4489254
-        lon:
-          type: number
-          format: float
-          description: Longitude in decimal degrees.
-          example: -3.6730293
+                    '
+                  example: 6eef362598bc0d76139d3c4df61347a7faad5fa0a535347e46420214c68558a7
+            ic_proof:
+              type: object
+              description: Configuration for identity card (IC) based proof of delivery. Omitting this field sets the method as inactive.
+              properties:
+                active:
+                  type: boolean
+                  description: Activates or deactivates this proof method. Defaults to `false` if omitted.
+                  example: true
+            photo_proof:
+              type: object
+              description: Configuration for photo-based proof of delivery. Omitting this field sets the method as inactive.
+              properties:
+                active:
+                  type: boolean
+                  description: Activates or deactivates this proof method. Defaults to `false` if omitted.
+                  example: true
+            comment_proof:
+              type: object
+              description: Configuration for comment-based proof of delivery. Omitting this field sets the method as inactive.
+              properties:
+                active:
+                  type: boolean
+                  description: Activates or deactivates this proof method. Defaults to `false` if omitted.
+                  example: true
     UpdateParcel:
       type: object
       description: Fields that can be updated on an existing parcel. Only fields included in the request will be modified.
@@ -936,59 +957,38 @@ components:
           example: '2021-12-02T10:12:07.753Z'
         price:
           $ref: '#/components/schemas/Price'
-    Parcel:
+    NewParcelPickupContact:
       type: object
       properties:
-        id:
-          type: string
-          format: uuid
-          description: System-generated UUID for this parcel.
-          example: 3fa85f64-5717-4562-b3fc-2c963f66afa6
-        external_id:
-          type: string
-          description: Your own identifier for this parcel, as provided when the parcel was created.
-          example: parcel_001
-        pickup_info:
-          $ref: '#/components/schemas/ParcelPointPickupInfo'
-        dropoff_info:
-          $ref: '#/components/schemas/ParcelPointDropoffInfo'
-        dimensions:
-          $ref: '#/components/schemas/ParcelDimensions'
-        weight:
-          $ref: '#/components/schemas/ParcelWeight'
-        price:
-          $ref: '#/components/schemas/Price'
-        created_at:
-          type: string
-          format: date-time
-          description: Timestamp when the parcel was created, formatted according to RFC 3339, section 5.6.
-          example: '2021-12-02T10:12:07.753Z'
-        updated_at:
-          type: string
-          format: date-time
-          description: Timestamp of the most recent update to the parcel, formatted according to RFC 3339, section 5.6.
-          example: '2021-12-02T10:12:07.753Z'
-    CreateTip:
+        name:
+          type:
+          - string
+          - 'null'
+          description: Name of the contact person at the pickup location.
+          example: John
+        phone:
+          type:
+          - string
+          - 'null'
+          description: Phone number of the contact person at the pickup location.
+          example: '+34666000000'
+    Point:
+      type: object
+      description: A geographic coordinate expressed as latitude and longitude.
       required:
-      - amount
-      type: object
+      - lat
+      - lon
       properties:
-        amount:
-          minimum: 0
-          type: integer
-          description: 'Tip amount in the smallest currency unit, following the ISO 4217 standard (e.g. €6.30 → `630`).
-
-            '
-          example: 100
-    Parcels:
-      type: object
-      required:
-      - parcels
-      properties:
-        parcels:
-          type: array
-          items:
-            $ref: '#/components/schemas/Parcel'
+        lat:
+          type: number
+          format: float
+          description: Latitude in decimal degrees.
+          example: 40.4489254
+        lon:
+          type: number
+          format: float
+          description: Longitude in decimal degrees.
+          example: -3.6730293
   securitySchemes:
     bearer_token:
       type: http
