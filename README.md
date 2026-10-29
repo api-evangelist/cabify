@@ -64,6 +64,153 @@
 > Full detail: **[Where this data comes from](https://apievangelist.com/about/where-our-data-comes-from)**
 <!-- API-EVANGELIST-PROVENANCE:END -->
 
-Cabify is a company surfaced as a portfolio company of 500-global, hv-capital and added to the API Evangelist network as a stub for enrichment. This profile is a lead awaiting the enrichment pipeline.
+Cabify is a Spanish multi-mobility company founded in 2011 and headquartered in Madrid, operating ride-hailing, corporate mobility, and last-mile logistics across Spain and Latin America (6+ countries and 40+ cities). Its public developer platform exposes two authenticated REST APIs: a Ride-Hailing API (v4) for price estimation, journey booking, real-time state tracking, rider and label management, and sales reporting; and a Logistics API (v1) for creating, shipping, tracking, and configuring proof of delivery for parcels, including ecommerce integrations with Shopify, Tiendanube, and VTEX. Both APIs authenticate with OAuth2 client-credentials access tokens (Bearer), publish independent sandbox environments, and deliver asynchronous updates via webhooks.
 
-Backed by: 500-global, hv-capital — https://cabify.com
+**Areas:** Company · Transportation · Ride Hailing · Mobility · Logistics · Delivery · Last Mile Delivery · Webhook · Authentication
+
+## Cabify on APIs.io
+
+Everything profiled for Cabify is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/cabify/](https://apis.io/providers/cabify/)** — or go straight to one of the APIs or properties below.
+
+### APIs (13)
+
+- [Cabify Delivery API](https://apis.io/apis/cabify/cabify-delivery-api/) — Operations for managing the delivery lifecycle. Use these endpoints to trigger a shipment, cancel an active delivery, or check whether a pickup location…
+- [Cabify Estimates API](https://apis.io/apis/cabify/cabify-estimates-api/) — This method returns prices, Id's and all the information for products that are available at the origin point. Before requesting a journey as a first step it…
+- [Cabify Hubs API](https://apis.io/apis/cabify/cabify-hubs-api/) — A hub is a physical location (such as a warehouse or store) where parcels are stored until they are ready to be picked up by a driver. You can reference a…
+- [Cabify Journeys API](https://apis.io/apis/cabify/cabify-journeys-api/) — This section covers the mobility solution for all companies looking to transport their employees in a simple, safe and comfortable way. We offer different…
+- [Cabify Label API](https://apis.io/apis/cabify/cabify-label-api/) — The label API from Cabify — 1 operation(s) for label.
+- [Cabify Labels API](https://apis.io/apis/cabify/cabify-labels-api/) — Cabify offers to its clients a feature where the client’s employees have to input a journey motive or a project or a dynamic cost center associated with the…
+- [Cabify Parcels API](https://apis.io/apis/cabify/cabify-parcels-api/) — A parcel is the package you need to ship. Each parcel is identified by a unique ID and contains a pickup point (where the driver collects the package) and a…
+- [Cabify Sales API](https://apis.io/apis/cabify/cabify-sales-api/) — Sales objects are created once a journey transitions into the terminated state and they are associated with the user who requested the journey (which not…
+- [Cabify Shipment API](https://apis.io/apis/cabify/cabify-shipment-api/) — The shipment API from Cabify — 2 operation(s) for shipment.
+- [Cabify Shipping Types API](https://apis.io/apis/cabify/cabify-shipping-types-api/) — The shipping_types API from Cabify — 1 operation(s) for shipping_types.
+- [Cabify Status API](https://apis.io/apis/cabify/cabify-status-api/) — Track the real-time status and location of your parcels at any point during their delivery.
+- [Cabify Users API](https://apis.io/apis/cabify/cabify-users-api/) — The users API from Cabify — 4 operation(s) for users.
+- [Cabify Webhooks API](https://apis.io/apis/cabify/cabify-webhooks-api/) — Subscribe to event-driven notifications to receive live updates about parcel status changes, location updates, and proof of delivery codes.
+
+### Published properties
+
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
+
+#### AsyncAPI (1)
+
+Event-driven and webhook contracts.
+
+- [Cabify Webhooks](https://apis.io/asyncapis/cabify/cabify-webhooks/)
+
+#### MCP servers (1)
+
+Model Context Protocol servers that expose the API to agents.
+
+- [cabify](https://apis.io/servers/cabify/cabify/)
+
+#### Agentic access (1)
+
+Which operations an agent can call, which act, and which need a human in the loop.
+
+- [Cabify Agentic Access](https://apis.io/agentic-access/cabify/cabify-agentic-access/)
+
+#### Collections (13)
+
+Postman and Open Collection request collections.
+
+- [Cabify Logistics delivery API](https://apis.io/collections/cabify/open-cabify-delivery-api/)
+- [Cabify Logistics delivery Estimates API](https://apis.io/collections/cabify/open-cabify-estimates-api/)
+- [Cabify Logistics delivery hubs API](https://apis.io/collections/cabify/open-cabify-hubs-api/)
+- [Cabify Logistics delivery Journeys API](https://apis.io/collections/cabify/open-cabify-journeys-api/)
+- [Cabify Logistics delivery label API](https://apis.io/collections/cabify/open-cabify-label-api/)
+- [Cabify Logistics delivery Labels API](https://apis.io/collections/cabify/open-cabify-labels-api/)
+- [Cabify Logistics delivery parcels API](https://apis.io/collections/cabify/open-cabify-parcels-api/)
+- [Cabify Logistics delivery Sales API](https://apis.io/collections/cabify/open-cabify-sales-api/)
+- [Cabify Logistics delivery shipment API](https://apis.io/collections/cabify/open-cabify-shipment-api/)
+- [Cabify Logistics delivery shipping_types API](https://apis.io/collections/cabify/open-cabify-shipping-types-api/)
+- [Cabify Logistics delivery status API](https://apis.io/collections/cabify/open-cabify-status-api/)
+- [Cabify Logistics delivery users API](https://apis.io/collections/cabify/open-cabify-users-api/)
+- [Cabify Logistics delivery webhooks API](https://apis.io/collections/cabify/open-cabify-webhooks-api/)
+
+#### Overlays (2)
+
+OpenAPI overlays, including conversational phrasing for each operation.
+
+- [Cabify Logistics Overlay](https://apis.io/overlays/cabify/cabify-logistics-overlay/)
+- [Cabify Ride Hailing Overlay](https://apis.io/overlays/cabify/cabify-ride-hailing-overlay/)
+
+#### Security (3)
+
+Authentication, trust centre, and vulnerability disclosure.
+
+- [Cabify Authentication](https://apis.io/security/cabify/cabify-authentication/)
+- [Cabify Domain Security](https://apis.io/security/cabify/cabify-domain-security/)
+- [Cabify Vulnerability Disclosure](https://apis.io/security/cabify/cabify-vulnerability-disclosure/)
+
+## Where to find this API
+
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
+
+- [Website](https://cabify.com)
+- [Documentation](https://developers.cabify.com/docs/getting-started)
+- [Getting started](https://developers.cabify.com/docs/quickstart)
+- [API reference](https://developers.cabify.com/reference/createjourney)
+- [Sign up](https://cabify.com/app)
+- [Support](https://developers.cabify.com/page/cabify-api-support)
+- [Blog](https://cabify.com/es/empresas/blog)
+- [Security](https://cabify.com/.well-known/security.txt)
+- [Terms of service](https://cabify.com/en/legal)
+- [Privacy policy](https://cabify.com/en/legal/privacy)
+- [GitHub](https://github.com/cabify)
+- [Status](https://cabify.statuspage.io)
+
+## API Evangelist rating
+
+**Kin Score 53.9** — developing · rubric 0.25.0 · scored 2026-10-23
+
+| Facet | Score |
+|---|---|
+| Discoverability | 73.2 |
+| Contract quality | 59.1 |
+| Contract governance | 4.5 |
+| Operational transparency | 52.6 |
+| Developer ergonomics | 66.1 |
+| Access clarity | 34.2 |
+
+**Agent readiness 36.9** — agent-ready
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | derived (partial credit) |
+| Reversibility Documented | verified |
+| MCP Server | — |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | — |
+| Error Semantics | verified |
+| OpenAPI Examples | partial |
+| Rate Limit Signal | — |
+| Event Surface Described | yes |
+| Agent Skills | derived (partial credit) |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | — |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+| Pagination Ratio | partial |
+| Operation Distinctiveness | distinct |
+
+**Regulatory alignment 30.4** — Horizontal (data, software, accessibility, platform)
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/cabify/](https://apis.io/providers/cabify/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for Cabify: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/cabify/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
